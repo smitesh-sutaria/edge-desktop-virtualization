@@ -1,0 +1,4 @@
+[submodule "gfx-virtualization"]
+	path = gfx-virtualization
+	url = https://github.com/intel-sandbox/applications.virtualization.mf-tiberos-itep.git
+	branch = itep-demo-k
