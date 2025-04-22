@@ -5,3 +5,6 @@
 [submodule "intel-kubevirt"]
 	path = intel-kubevirt
 	url = https://github.com/smitesh-sutaria/kubevirt.git
+[submodule "device-plugins"]
+	path = device-plugins
+	url = https://github.com/intel-innersource/applications.virtualization.maverickflats-deviceplugin-itep.git
