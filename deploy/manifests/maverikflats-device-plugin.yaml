@@ -47,7 +47,7 @@ spec:
                   echo "Path $path exists, changing ownership to $USER_ID_TO_USE:$GROUP_ID_TO_USE"
                   #chown -R root:qemu $path
                   chown -R $USER_ID_TO_USE:$GROUP_ID_TO_USE $path
-                  chmod 666 $path
+                  chmod 777 $path
                 else
                   echo "Path $path does not exist, skipping"
                 fi
