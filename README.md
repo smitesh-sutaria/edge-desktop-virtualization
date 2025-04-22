@@ -6,8 +6,11 @@ Clone all the submodules with git command:
 git submodule update --init --recursive
 ```
 
-## Different components:
-  1. custom intel kubevirt. (includes patched qemu)
-  2. device plugins.
-  3. sidecar hook to pass required qemu parameters.
-  4. deployment package.
+# Steps to bring:
+  1. [System Bring Up](docs/tiber_flash_partition.md)
+  2. [Installing Kubernetes](Link)
+  3. [Install Intel Kubevirt (includes patched qemu)](Link)
+  4. [Install Device Plugin](https://github.com/intel-innersource/applications.virtualization.maverickflats-deviceplugin-itep?tab=readme-ov-file#deployment)
+  5. Deployment Package - includes Sidecar and VM deployment Helm charts.
+     1. [Discrete VM Helm chart to deployment](Link)
+     2. [Single Helm deployment](Link)
