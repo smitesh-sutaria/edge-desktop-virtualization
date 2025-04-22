@@ -1,0 +1,8 @@
+devicePlugin:
+  enabled: true
+image:
+  repository: localhost:5000/mvf-device-plugin
+  tag: "v1-test"
+mvfPluginEnabled: true
+userId: "107"
+groupId: "107"
