@@ -1,0 +1,80 @@
+# Deployment of Virtual Machines using individual scripts
+
+This directory contains mapped Sidecar and Virtual Machine Deployment charts.
+1. Sidecar scripts, patches Libvirt XML with QEMU Commandline parameters inside Virt-Launcher pod.
+   - *deployment/discrete/sidecar/[connector].yaml*
+2. Virtual Machine deployment Helm charts to run VM on respecitive monitors (HDMI-1, HDMI-2, DP-1 and DP-3).
+   - *deployment/discrete/helm-win11_[connector]*
+
+**Mapping of Sidecar script with VM deployment Helm chart**
+
+<table><tr><td>Each VM has been configured with 3 CPU, 12GB RAM, 60 GB Disk space.</td></tr></table>
+
+| VM Name | Monitor  | Sidecar    | VM Helm Chart    | CDI Image Name  | RDP Port |
+| :-----: | :------: | :--------: | :--------------: | :-------------: | :------: |
+| vm1     | HDMI-1   | hdmi1.yaml | helm-win11_hdmi1 | vm1-win11-image | 3390     |
+| vm2     | HDMI-2   | hdmi2.yaml | helm-win11_hdmi2 | vm2-win11-image | 3391     |
+| vm3     | DP-1     | dp1.yaml   | helm-win11_dp1   | vm3-win11-image | 3392     |
+| vm4     | DP-3     | dp3.yaml   | helm-win11_dp3   | vm4-win11-image | 3393     |
+
+## Edit Sidecar script to attach USB peripherals to Virtual Machine
+
+Get the list of USB devices connected to Host machine
+```sh
+lsusb -t
+```
+Output:
+```
+/:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/1p, 480M
+/:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/3p, 20000M/x2
+/:  Bus 003.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/12p, 480M
+    |__ Port 002: Dev 002, If 0, Class=Hub, Driver=hub/4p, 480M
+        |__ Port 001: Dev 004, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 002: Dev 006, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 002: Dev 006, If 1, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 003: Dev 010, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 004: Dev 013, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+    |__ Port 003: Dev 003, If 0, Class=Hub, Driver=hub/4p, 480M
+        |__ Port 001: Dev 007, If 0, Class=Human Interface Device, Driver=usbfs, 1.5M
+        |__ Port 002: Dev 009, If 0, Class=Human Interface Device, Driver=usbfs, 1.5M
+        |__ Port 003: Dev 012, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 004: Dev 016, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 004: Dev 016, If 1, Class=Human Interface Device, Driver=usbhid, 1.5M
+    |__ Port 005: Dev 005, If 0, Class=Billboard, Driver=[none], 480M
+    |__ Port 006: Dev 008, If 0, Class=Vendor Specific Class, Driver=[none], 12M
+    |__ Port 007: Dev 011, If 0, Class=Hub, Driver=hub/4p, 480M
+        |__ Port 001: Dev 015, If 0, Class=Audio, Driver=[none], 12M
+        |__ Port 001: Dev 015, If 1, Class=Audio, Driver=[none], 12M
+        |__ Port 001: Dev 015, If 2, Class=Audio, Driver=[none], 12M
+        |__ Port 001: Dev 015, If 3, Class=Human Interface Device, Driver=usbhid, 12M
+    |__ Port 010: Dev 014, If 0, Class=Wireless, Driver=btusb, 12M
+    |__ Port 010: Dev 014, If 1, Class=Wireless, Driver=btusb, 12M
+/:  Bus 004.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/4p, 10000M
+    |__ Port 002: Dev 002, If 0, Class=Hub, Driver=hub/4p, 5000M
+```
+
+To attach USB peripherals to VM, edit Sidecar script of respective VM. Ex. VM to run on HDMI-1
+```sh
+vi deployment/discrete/sidecar/hdmi1.yaml
+```
+Add line 
+```xml
+<qemu:arg value='-usb'/> <qemu:arg value='-device'/> <qemu:arg value='usb-host,hostbus=x,hostport=y.z'/>
+``` 
+where **x** is USB Bus ID, **y.z** are Ports for that device, before `</qemu:commandline>`
+
+Ex. in *deployment/discrete/sidecar/hdmi1.yaml* is mapped with
+```xml
+<qemu:arg value='-usb'/> <qemu:arg value='-device'/> <qemu:arg value='usb-host,hostbus=3,hostport=3.1'/> <qemu:arg value='-usb'/> <qemu:arg value='-device'/> <qemu:arg value='usb-host,hostbus=3,hostport=3.2'/>
+```
+
+## Deploy Sidecar
+```sh
+kubectl apply -f deployment/discrete/sidecar/hdmi1.yaml
+```
+
+## Deploy Virtual Machine
+```sh
+cd deployment/discrete/helm-win11_hdmi1
+helm install vm1 .
+```

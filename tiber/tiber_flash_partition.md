@@ -1,6 +1,6 @@
-# Flashing TiberOS 3.0 SRIOV Image and creating partitions on Host System
+# Flashing TiberOS 3.0 SR-IOV Image and creating partitions on Host System
 
-This guide provides instructions to bring up the TiberOS 3.0 SRIOV image onto a host system. 
+This guide provides instructions to bring up the TiberOS 3.0 SR-IOV image onto a host system. 
 The steps include 
 1. Booting Host system with Ubuntu Live CD.
 2. Setting up the environment to flash and create partitions. 
@@ -63,7 +63,7 @@ The steps include
       - /dev/sda for SSD
     - *Ex. for NVME*
       ```sh
-      sudo ./scripts/partition_image.sh /dev/nvme0n1 ~/Downloads/edge-readonly-mf-dev-3.0.20250321.0803.raw.gz
+      sudo ./tiber/scripts/partition_image.sh /dev/nvme0n1 ~/Downloads/edge-readonly-mf-dev-3.0.20250321.0803.raw.gz
       ```
 
 **TiberOS 3.0 SR-IOV Image is now flashed onto NVME/SSD, reboot the system**
