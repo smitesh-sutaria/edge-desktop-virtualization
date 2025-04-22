@@ -78,15 +78,19 @@ func scanUSBBus() ([]*pluginapi.ContainerAllocateResponse, error) {
 // Allocate provides the required mounts for USB
 func (r *ResourceUSB) Allocate(deviceIDs []string) []*pluginapi.ContainerAllocateResponse {
 	log.Printf("usb deviceIds - %v\n", deviceIDs)
-	return []*pluginapi.ContainerAllocateResponse{
-		{
-			Mounts: []*pluginapi.Mount{
-				{
-					ContainerPath: constants.UsbDevicePath,
-					HostPath:      constants.UsbDevicePath,
-					ReadOnly:      false,
+	response, err := scanUSBBus()
+	if err != nil {
+		return []*pluginapi.ContainerAllocateResponse{
+			{
+				Mounts: []*pluginapi.Mount{
+					{
+						ContainerPath: constants.UsbDevicePath,
+						HostPath:      constants.UsbDevicePath,
+						ReadOnly:      false,
+					},
 				},
 			},
-		},
+		}
 	}
+	return response
 }

@@ -13,17 +13,17 @@
 - [Usage](#usage)
 - [Contributing](#contributing)
 
-This repository contains a device plugin for MaverikFlats that exposes three custom resources: `intel.com/x11`, `intel.com/udma`, and `intel.com/igpu`. This plugin allows you to request these resources in your pod specifications, enabling the mounting of necessary drivers, say `/dev/dri`, `/tmp/.X11-unix` and `/dev/udmabuf`, and environment variables, say `DISPLAY` into your containers.
+This repository contains a device plugin for MaverikFlats that exposes five custom resources: `intel.com/x11`, `intel.com/udma`, `intel.com/vfio`, `intel.com/igpu` and `intel.com/usb`. This plugin allows you to request these resources in your pod specifications, enabling the mounting of necessary drivers/devices.
 
 ## Overview
 
-Device plugins enable Kubernetes to manage specialized hardware resources, such as GPUs or high-performance network interfaces. This device plugin follows the Kubernetes device plugin API to advertise and manage the custom resources `intel.com/x11`, `intel.com/udma`, and `intel.com/igpu`.
+Device plugins enable Kubernetes to manage specialized hardware resources, such as GPUs or high-performance network interfaces. This device plugin follows the Kubernetes device plugin API to advertise and manage the custom resources `intel.com/x11`, `intel.com/udma`, `intel.com/vfio`, `intel.com/igpu` and `intel.com/usb`.
 
 ## Functionality
 
 The device plugin handles the following key functions[1]:
 
-*   **Resource Advertisement:** The plugin advertises the availability of `intel.com/x11`, `intel.com/udma`, and `intel.com/igpu` resources to the kubelet.
+*   **Resource Advertisement:** The plugin advertises the availability of `intel.com/x11`, `intel.com/udma`, `intel.com/vfio`, `intel.com/igpu` and `intel.com/usb` resources to the kubelet.
 *   **Allocation:** When a pod requests one or more of these resources, the kubelet calls the plugin's `Allocate` function.  The plugin then performs any device-specific setup and provides container runtime configurations to enable access to the requested resources. This may include:
     *   Mounting necessary device nodes
     *   Setting environment variables
@@ -55,7 +55,7 @@ TEST SUITE: None
 ➜ kubectl get po -A
 NAMESPACE     NAME                                                    READY   STATUS      RESTARTS   AGE
 .
-kube-system   device-plugin-maverikflats-device-plugin-zxkqm          3/3     Running     0          3s
+kube-system   device-plugin-maverikflats-device-plugin-zxkqm          1/1     Running     0          3s
 .
 ```
 
@@ -98,6 +98,8 @@ Allocatable:
   intel.com/igpu:                 1k
   intel.com/udma:                 1k
   intel.com/x11:                  1k
+  intel.com/usb:                  1k
+  intel.com/vfio:                 1k
   memory:                         527946700Ki
   pods:                           110
 System Info:
@@ -120,6 +122,8 @@ Allocated resources:
   intel.com/igpu                 0            0
   intel.com/udma                 0            0
   intel.com/x11                  0            0
+  intel.com/x11                  0            0
+  intel.com/x11                  0            0
 Events:                          <none>
 ```
 
@@ -131,7 +135,7 @@ To consume the custom resources, define them in your pod's resource requests.
 apiVersion: v1
 kind: Pod
 metadata:
-  name: x11-udma-dri-test-pod
+  name: mvf-test-pod
 spec:
   containers:
     - name: test-container
@@ -142,6 +146,8 @@ spec:
           intel.com/x11: 1
           intel.com/udma: 1
           intel.com/igpu: 1
+          intel.com/vfio: 1
+          intel.com/usb: 1
 ```
 
 ## Contributing
