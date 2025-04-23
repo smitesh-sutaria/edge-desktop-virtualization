@@ -1,6 +1,6 @@
 # Setup Hugepages
 To setup Hugepages with pagesize 2048M, for 4 VMs with each VM RAM set to 12GB
-```
+```sh
 sudo su
 
 echo 24576 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
@@ -8,7 +8,7 @@ echo 24576 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
 
 # Set USB permissions
 To use USB peripherals connected to Host machine with Virtual machines, set the USB devices permission to user `qemu`
-```
+```sh
 sudo chown -R qemu:root /dev/bus/usb/
 ```
 > [!Note]
@@ -48,18 +48,18 @@ XSERVER is installed by default, make the below settings before starting X serve
 
 
 ## Start X Server
-```
+```sh
 sudo X
 ```
 - You can now see Black screen on monitors
 
 ### Check Monitor's resolution
 Open SSH session to the Host system
-```
+```sh
 DISPLAY=:0 xrandr
 ```
 -   Output:
-    ```
+    ```sh
     Screen 0: minimum 320 x 200, current 7680 x 1080, maximum 16384 x 16384
     HDMI-1 connected primary 1920x1080+0+0 (normal left inverted right x axis y axis) 521mm x 293mm
     1920x1080     60.00*+  50.00    59.94
@@ -144,11 +144,11 @@ DISPLAY=:0 xrandr
 > This is needed if VM doesn't scale to full-screen after launching
 
 ### Install Docker in MF image:
-```
+```sh
 sudo tdnf install -y moby-engine moby-cli ca-certificates
 ```
 ### Create a http-proxy.conf file with below contents to let docker work in Intel network with proxy.
-```
+```sh
 sudo mkdir -p /etc/systemd/system/docker.service.d/
 
 sudo vi /etc/systemd/system/docker.service.d/http-proxy.conf
@@ -161,7 +161,7 @@ Environment="HTTP_PROXY=http://proxy-dmz.intel.com:911"
 Environment="NO_PROXY=localhost,127.0.0.0/8,172.16.0.0/20,192.168.0.0/16,10.0.0.0/8,.intel.com,intel.com"
 ```
 Restart Docker
-```
+```sh
 sudo systemctl enable docker.service
 
 sudo systemctl daemon-reload
@@ -181,12 +181,12 @@ sudo docker run -it --rm --name tiber-resize-container \
     alpine:latest
 ```
 #### From container set proxy, install xdotool and rescale VM:
-```
+```sh
 export https_proxy=http://proxy-dmz.intel.com:912
 
 apk add xdotool
 ```
 -   To resize Virtual Machine Window
-    ```
+    ```sh
     xdotool search --onlyvisible --name "vm1" windowsize 1920 1080
     ```

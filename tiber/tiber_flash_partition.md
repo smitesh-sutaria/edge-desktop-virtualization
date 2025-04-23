@@ -19,7 +19,7 @@ The steps include
     ```
 
 3. Set Proxy for APT:
-    ```
+    ```sh
     sudo nano /etc/apt/apt.conf
     ```
     Add below lines
@@ -85,7 +85,7 @@ The steps include
     sudo dmesg | grep -i i915
     ```
     - Output:
-        ```
+        ```sh
         [6.246297] i915 0000:00:02.0: [drm] Found ALDERLAKE_P/RPL-P (device ID a7a0) display version 13.00 stepping E0
         [6.246313] i915 0000:00:02.0: Running in SR-IOV PF mode
         [6.246876] i915 0000:00:02.0: [drm] VT-d active for gfx access
@@ -110,7 +110,7 @@ The steps include
     lsblk
     ```
     - Output
-        ```
+        ```sh
         guest@TiberOS [ ~ ]$ lsblk
         NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
         sda           8:0    1     0B  0 disk
