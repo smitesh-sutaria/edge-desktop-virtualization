@@ -8,7 +8,8 @@ This directory contains mapped Sidecar and Virtual Machine Deployment charts.
 
 **Mapping of Sidecar script with VM deployment Helm chart**
 
-<table><tr><td>Each VM has been configured with 3 CPU, 12GB RAM, 60 GB Disk space.</td></tr></table>
+Each VM has been configured with 3 CPU, 12GB RAM, 60 GB Disk space.\
+Refer `deployment/discrete/helm-win11_[connector]/values.yaml` to edit
 
 | VM Name | Monitor  | Sidecar    | VM Helm Chart    | CDI Image Name  | RDP Port |
 | :-----: | :------: | :--------: | :--------------: | :-------------: | :------: |
@@ -16,6 +17,32 @@ This directory contains mapped Sidecar and Virtual Machine Deployment charts.
 | vm2     | HDMI-2   | hdmi2.yaml | helm-win11_hdmi2 | vm2-win11-image | 3391     |
 | vm3     | DP-1     | dp1.yaml   | helm-win11_dp1   | vm3-win11-image | 3392     |
 | vm4     | DP-3     | dp3.yaml   | helm-win11_dp3   | vm4-win11-image | 3393     |
+
+## Upload VM bootimage to CDI
+Ex. for `vm1` the image name in CDI is `vm1-win11-image`
+
+-   Get IP of CDI
+    ```
+    $ kubectl get service -A | grep cdi-uploadproxy
+
+    NAMESPACE     NAME                          TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                  AGE
+    cdi           cdi-uploadproxy               ClusterIP      10.43.51.68     <none>          443/TCP                  19d
+    ```
+-   Upload image
+    ```
+    virtctl image-upload --uploadproxy-url=https://10.43.51.68 --insecure dv vm1-win11-image --size=100Gi --access-mode=ReadWriteOnce --force-bind --image-path=/home/guest/disk.qcow2 --force-bind
+    ```
+    To check status
+    ```
+    $ kubectl get datavolumes.cdi.kubevirt.io
+    
+    NAME              PHASE       PROGRESS   RESTARTS   AGE
+    vm1-win11-image   Succeeded   N/A                   18d
+    vm2-win11-image   Succeeded   N/A                   16d
+    vm3-win11-image   Succeeded   N/A                   16d
+    vm4-win11-image   Succeeded   N/A                   15d
+    ```
+  
 
 ## Edit Sidecar script to attach USB peripherals to Virtual Machine
 
@@ -57,11 +84,11 @@ To attach USB peripherals to VM, edit Sidecar script of respective VM. Ex. VM to
 ```sh
 vi deployment/discrete/sidecar/hdmi1.yaml
 ```
-Add line 
+Add line, before `</qemu:commandline>`
 ```xml
 <qemu:arg value='-usb'/> <qemu:arg value='-device'/> <qemu:arg value='usb-host,hostbus=x,hostport=y.z'/>
 ``` 
-where **x** is USB Bus ID, **y.z** are Ports for that device, before `</qemu:commandline>`
+where **x** is USB Bus ID, **y.z** are Ports for that device
 
 Ex. in *deployment/discrete/sidecar/hdmi1.yaml* is mapped with
 ```xml
@@ -72,9 +99,45 @@ Ex. in *deployment/discrete/sidecar/hdmi1.yaml* is mapped with
 ```sh
 kubectl apply -f deployment/discrete/sidecar/hdmi1.yaml
 ```
+Output:
+```
+configmap/sidecar-script-hdmi2 configured
+```
+Accordingly make changes to other sidecar YAML files and deploy.\
+To check status
+```
+$ kubectl get configmaps
+
+NAME                   DATA   AGE
+kube-root-ca.crt       1      19d
+sidecar-script-dp1     1      15d
+sidecar-script-dp3     1      15d
+sidecar-script-hdmi1   1      18d
+sidecar-script-hdmi2   1      16d
+
+```
 
 ## Deploy Virtual Machine
 ```sh
 cd deployment/discrete/helm-win11_hdmi1
 helm install vm1 .
+```
+Output
+```
+NAME: vm1
+LAST DEPLOYED: Wed Apr 16 17:19:33 2025
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+```
+To check status of VMs running
+```
+$ kubectl get vmi
+
+NAME           AGE    PHASE     IP            NODENAME                READY
+win11-vm1-vm   6d4h   Running   10.42.0.104   edgemicrovisortoolkit   True
+win11-vm2-vm   6d4h   Running   10.42.0.106   edgemicrovisortoolkit   True
+win11-vm3-vm   6d4h   Running   10.42.0.108   edgemicrovisortoolkit   True
+win11-vm4-vm   6d4h   Running   10.42.0.110   edgemicrovisortoolkit   True
 ```
