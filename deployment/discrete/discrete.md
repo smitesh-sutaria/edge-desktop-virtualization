@@ -18,7 +18,7 @@ Refer `deployment/discrete/helm-win11_[connector]/values.yaml` to edit
 | vm3     | DP-1     | dp1.yaml   | helm-win11_dp1   | vm3-win11-image | 3392     |
 | vm4     | DP-3     | dp3.yaml   | helm-win11_dp3   | vm4-win11-image | 3393     |
 
-## Upload VM bootimage to CDI
+## 1. Upload VM bootimage to CDI
 Ex. for `vm1` the image name in CDI is `vm1-win11-image`
 
 -   Get IP of CDI
@@ -44,7 +44,7 @@ Ex. for `vm1` the image name in CDI is `vm1-win11-image`
     ```
   
 
-## Edit Sidecar script to attach USB peripherals to Virtual Machine
+## 2. Edit Sidecar script to attach USB peripherals to Virtual Machine
 
 Get the list of USB devices connected to Host machine
 ```sh
@@ -95,7 +95,7 @@ Ex. in *deployment/discrete/sidecar/hdmi1.yaml* is mapped with
 <qemu:arg value='-usb'/> <qemu:arg value='-device'/> <qemu:arg value='usb-host,hostbus=3,hostport=3.1'/> <qemu:arg value='-usb'/> <qemu:arg value='-device'/> <qemu:arg value='usb-host,hostbus=3,hostport=3.2'/>
 ```
 
-## Deploy Sidecar
+## 3. Deploy Sidecar
 ```sh
 kubectl apply -f deployment/discrete/sidecar/hdmi1.yaml
 ```
@@ -117,7 +117,7 @@ sidecar-script-hdmi2   1      16d
 
 ```
 
-## Deploy Virtual Machine
+## 4. Deploy Virtual Machine
 ```sh
 cd deployment/discrete/helm-win11_hdmi1
 helm install vm1 .

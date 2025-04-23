@@ -6,7 +6,7 @@ The steps include
 2. Setting up the environment to flash and create partitions. 
 3. Flashing TiberOS onto NVMe/SSD and creating partitions.
 
-## Boot Ubuntu Live Disk and Setup Flashing Environment
+## 1. Boot Ubuntu Live Disk and Setup Flashing Environment
 
 1. Boot from Ubuntu Live Disk:
    - Insert the Ubuntu Live Disk into the host system and boot from it.
@@ -74,7 +74,7 @@ The steps include
     ```
 **Now you should see TiberOS booting on your Host machine**
 
-## Verify Graphics SR-IOV and partition on Host machine booted with TiberOS Image
+## 2. Verify Graphics SR-IOV and partition on Host machine booted with TiberOS Image
 
 1. SSH to TiberOS, default credentials
    - Username : guest

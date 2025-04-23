@@ -1,4 +1,4 @@
-# Setup Hugepages
+# 1. Setup Hugepages
 To setup Hugepages with pagesize 2048M, for 4 VMs with each VM RAM set to 12GB
 ```sh
 sudo su
@@ -6,7 +6,7 @@ sudo su
 echo 24576 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
 ```
 
-# Set USB permissions
+# 2. Set USB permissions
 To use USB peripherals connected to Host machine with Virtual machines, set the USB devices permission to user `qemu`
 ```sh
 sudo chown -R qemu:root /dev/bus/usb/
@@ -14,12 +14,12 @@ sudo chown -R qemu:root /dev/bus/usb/
 > [!Note]
 > This has to be done everytime USB device is hot-plugged
 
-# Display setup for TiberOS
+# 3. Display setup for TiberOS
 
 TiberOS boots with no GUI and prompts for user login, login using default credentials\
 XSERVER is installed by default, make the below settings before starting X server
 
-## Disable DPMS and screen blanking on the X Window System
+## 3.1 Disable DPMS and screen blanking on the X Window System
 
 -   DPMS Disable
     ```sh
@@ -47,13 +47,13 @@ XSERVER is installed by default, make the below settings before starting X serve
     ```
 
 
-## Start X Server
+## 3.2 Start X Server
 ```sh
 sudo X
 ```
 - You can now see Black screen on monitors
 
-### Check Monitor's resolution
+### 3.2.1 Check Monitor's resolution
 Open SSH session to the Host system
 ```sh
 DISPLAY=:0 xrandr
@@ -139,15 +139,15 @@ DISPLAY=:0 xrandr
     DP-4 disconnected (normal left inverted right x axis y axis)
     ```
 
-## Setup XDOTOOL in a container to scale applications to full-screen
+## 3.3 Setup XDOTOOL in a container to scale applications to full-screen
 > [!Note]
 > This is needed if VM doesn't scale to full-screen after launching
 
-### Install Docker in MF image:
+### 3.3.1 Install Docker in MF image:
 ```sh
 sudo tdnf install -y moby-engine moby-cli ca-certificates
 ```
-### Create a http-proxy.conf file with below contents to let docker work in Intel network with proxy.
+### 3.3.2 Create a http-proxy.conf file with below contents to let docker work in Intel network with proxy.
 ```sh
 sudo mkdir -p /etc/systemd/system/docker.service.d/
 
@@ -168,7 +168,7 @@ sudo systemctl daemon-reload
 
 sudo systemctl start docker.service
 ```
-### Create alpine container and install XDOTOOL
+### 3.3.3 Create alpine container and install XDOTOOL
 ```
 sudo docker network create tiber-bridge-network
 
@@ -180,7 +180,7 @@ sudo docker run -it --rm --name tiber-resize-container \
     --network tiber-bridge-network \
     alpine:latest
 ```
-#### From container set proxy, install xdotool and rescale VM:
+#### 3.3.3.1 From container set proxy, install xdotool and rescale VM:
 ```sh
 export https_proxy=http://proxy-dmz.intel.com:912
 
