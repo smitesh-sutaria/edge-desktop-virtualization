@@ -112,11 +112,40 @@ The steps include
     - Output
         ```sh
         guest@TiberOS [ ~ ]$ lsblk
+
         NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
-        sda           8:0    1     0B  0 disk
-        sr0          11:0    1  1024M  0 rom
         nvme0n1     259:0    0 931.5G  0 disk
         ├─nvme0n1p1 259:1    0   299M  0 part /boot/efi
         ├─nvme0n1p2 259:2    0 453.8G  0 part /
-        └─nvme0n1p3 259:3    0 477.4G  0 part /var
+        └─nvme0n1p3 259:3    0 477.4G  0 part /var/edge-node/pua
+                                              /etc/intel_manageability.conf_bak
+                                              /etc/intel_manageability.conf
+                                              /etc/dispatcher.environment
+                                              /var/log/inbm-update-log.log
+                                              /var/log/inbm-update-status.log
+                                              /var/lib/dispatcher
+                                              /etc/intel-manageability
+                                              /var/cache/manageability
+                                              /var/intel-manageability
+                                              /var/lib/rancher
+                                              /etc/default
+                                              /etc/lvm/backup
+                                              /etc/lvm/archive
+                                              /etc/kubernetes
+                                              /etc/cni
+                                              /etc/netplan
+                                              /etc/rancher
+                                              /etc/sysconfig
+                                              /etc/cloud
+                                              /etc/udev
+                                              /etc/systemd
+                                              /etc/ssh
+                                              /etc/pki
+                                              /etc/machine-id
+                                              /etc/intel_edge_node
+                                              /etc/hosts
+                                              /etc/environment
+                                              /etc/fstab
+                                              /home
+                                              /opt
         ```
