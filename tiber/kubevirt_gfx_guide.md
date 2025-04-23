@@ -89,6 +89,7 @@ sudo systemctl enable gfx-virtual-func.service
 
 sudo reboot
 ```
+
 #### Check the `configvfs.sh` log and `gfx-virtual-func.service` daemon status for any error
 ```sh
 sudo systemctl status gfx-virtual-func.service
@@ -110,6 +111,7 @@ sudo systemctl status gfx-virtual-func.service
     Apr 04 16:49:47 EdgeMicrovisorToolkit bash[1833]: VF enabled: 7
     Apr 04 16:49:47 EdgeMicrovisorToolkit systemd[1]: Finished gfx-virtual-func.service - Intel Graphics SR-IOV Virtual Function Manager.
     ```
+
 ### Install Intel Built Kubevirt
 Refer [Intel-Innersource-Kubevirt](https://github.com/intel-innersource/applications.virtualization.maverickflats-kubevirt-itep) for setup and build steps
 
@@ -133,6 +135,7 @@ mirrors:
     endpoint:
       - "http://10.223.97.134:5000"
 ```
+
 #### Update Proxy for K3S
 ```sh
 sudo vi /etc/systemd/system/k3s.service.env
@@ -143,10 +146,12 @@ HTTPS_PROXY="http://proxy-dmz.intel.com:912"
 HTTP_PROXY="http://proxy-dmz.intel.com:911"
 NO_PROXY="localhost,::1,127.0.0.1,.intel.com,10.190.167.198,10.223.97.134"
 ```
+
 #### Restart K3S
 ```sh
 sudo systemctl restart k3s
 ```
+
 #### Install Kubevirt
 ```sh
 kubectl apply -f kubevirt-operator.yaml
@@ -219,6 +224,15 @@ Allocated resources:
 > [!Note] 
 > Please wait for all virt-handler pods to complete restarts\
 > The value of **Requests** and **Limits** will increase upon successful resource allocation to running pods/VMs
+
+## Create Windows-10/11 Image
+
+Refer [Installation](https://github.com/intel/kubevirt-gfx-sriov/blob/main/docs/deploy-windows-vm.md#installation) section
+
+> [!Note]
+> Change paths which uses `/var` to `/opt` in `kubevirt-gfx-sriov/manifests/overlays/win10-install` and `kubevirt-gfx-sriov/manifests/overlays/win10-deploy` before starting the process
+
+Once after steps are complete, search and copy the QCOW2 from `/opt/vm/images/win10`
 
 ## Uninstall
 
