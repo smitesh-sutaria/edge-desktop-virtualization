@@ -186,6 +186,27 @@ export https_proxy=http://proxy-dmz.intel.com:912
 
 apk add xdotool
 ```
+-   Output
+    ```sh
+    fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/main/x86_64/APKINDEX.tar.gz
+    fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/community/x86_64/APKINDEX.tar.gz
+    (1/14) Installing libxau (1.0.11-r4)
+    (2/14) Installing libmd (1.1.0-r0)
+    (3/14) Installing libbsd (0.12.2-r0)
+    (4/14) Installing libxdmcp (1.1.5-r1)
+    (5/14) Installing libxcb (1.16.1-r0)
+    (6/14) Installing libx11 (1.8.10-r0)
+    (7/14) Installing libxext (1.3.6-r2)
+    (8/14) Installing libxinerama (1.1.5-r4)
+    (9/14) Installing libxtst (1.2.5-r0)
+    (10/14) Installing xkeyboard-config (2.43-r0)
+    (11/14) Installing xz-libs (5.6.3-r0)
+    (12/14) Installing libxml2 (2.13.4-r5)
+    (13/14) Installing libxkbcommon (1.7.0-r1)
+    (14/14) Installing xdotool (3.20211022.1-r1)
+    Executing busybox-1.37.0-r12.trigger
+    OK: 15 MiB in 29 packages
+    ```
 -   To resize Virtual Machine Window
     ```sh
     xdotool search --onlyvisible --name "vm1" windowsize 1920 1080
