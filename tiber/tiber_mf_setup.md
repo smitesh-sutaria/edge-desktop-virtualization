@@ -1,4 +1,20 @@
-# Enable Windowing for TiberOS
+# Setup Hugepages
+To setup Hugepages with pagesize 2048M, for 4 VMs with each VM RAM set to 12GB
+```
+sudo su
+
+echo 24576 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+```
+
+# Set USB permissions
+To use USB peripherals connected to Host machine with Virtual machines, set the USB devices permission to user `qemu`
+```
+sudo chown -R qemu:root /dev/bus/usb/
+```
+> [!Note]
+> This has to be done everytime USB device is hot-plugged
+
+# Display setup for TiberOS
 
 TiberOS boots with no GUI and prompts for user login, login using default credentials\
 XSERVER is installed by default
@@ -125,7 +141,7 @@ DP-4 disconnected (normal left inverted right x axis y axis)
 
 ## Setup XDOTOOL in a container to scale applications to full-screen
 
-### Install docker in MF image:
+### Install Docker in MF image:
 ```
 sudo tdnf install -y moby-engine moby-cli ca-certificates
 ```
