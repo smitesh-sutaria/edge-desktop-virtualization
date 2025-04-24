@@ -17,10 +17,10 @@ Minor changes has been made to it to work on TiberOS and to support Intel's cust
       externalResourceProvider: false
     ```
 
-## 2. Installation
+## 1. Installation
 Below steps are customized for TiberOS and derived from [Manual Install](../kubevirt-gfx-sriov/docs/manual-install.md) of kubevirt-gfx-sriov, for more details follow the same link
 
-### 2.1 Install K3s
+### 1.1 Install K3s
 
 This step will setup a single node cluster where the host function as both the server/control plane and the worker node.\
 This step is only required if you don't already have a Kubernetes cluster setup that you can use
@@ -34,7 +34,7 @@ cd kubevirt-gfx-sriov
 ./scripts/setuptools.sh -ik
 ```
 
-### 2.2 Enable Graphics VFs on boot
+### 1.2 Enable Graphics VFs on boot
 
 Add systemd service unit file to enable graphics VFs on boot.
 ```sh
@@ -55,7 +55,7 @@ sudo systemctl enable gfx-virtual-func.service
 sudo reboot
 ```
 
-#### 2.2.1 Check the `configvfs.sh` log and `gfx-virtual-func.service` daemon status for any error
+#### 1.2.1 Check the `configvfs.sh` log and `gfx-virtual-func.service` daemon status for any error
 ```sh
 sudo systemctl status gfx-virtual-func.service
 ```
@@ -77,7 +77,7 @@ sudo systemctl status gfx-virtual-func.service
     Apr 04 16:49:47 EdgeMicrovisorToolkit systemd[1]: Finished gfx-virtual-func.service - Intel Graphics SR-IOV Virtual Function Manager.
     ```
 
-### 2.3 Install Intel Built Kubevirt
+### 1.3 Install Intel Built Kubevirt
 [Maverick-Flats-Kubevirt](https://github.com/intel-innersource/applications.virtualization.maverickflats-kubevirt-itep) version hosted in Intel-Innersource, clone and [follow](https://github.com/intel-innersource/applications.virtualization.maverickflats-kubevirt-itep/blob/v1.5.0/docs/build-the-builder.md) to build.
 
 Obtain the `kubevirt-operator.yaml` and `kubevirt-cr.yaml` from where the Intel custom Kubevirt is hosted
@@ -86,7 +86,7 @@ Refer `kubevirt-operator.yaml` for server details, add that in `registries.yaml`
 
 Ex: If Localserver is 10.223.97.134:5000 from `kubevirt-operator.yaml`
 
-#### 2.3.1 Update the Registry for K3S to pull Kubevirt from server
+#### 1.3.1 Update the Registry for K3S to pull Kubevirt from server
 ```sh
 sudo vi /etc/rancher/k3s/registries.yaml
 ```
@@ -101,7 +101,7 @@ mirrors:
       - "http://10.223.97.134:5000"
 ```
 
-#### 2.3.2 Update Proxy for K3S
+#### 1.3.2 Update Proxy for K3S
 ```sh
 sudo vi /etc/systemd/system/k3s.service.env
 ```
@@ -112,12 +112,12 @@ HTTP_PROXY="http://proxy-dmz.intel.com:911"
 NO_PROXY="localhost,::1,127.0.0.1,.intel.com,10.190.167.198,10.223.97.134"
 ```
 
-#### 2.3.3 Restart K3S
+#### 1.3.3 Restart K3S
 ```sh
 sudo systemctl restart k3s
 ```
 
-#### 2.3.4 Install Kubevirt
+#### 1.3.4 Install Kubevirt
 ```sh
 kubectl apply -f kubevirt-operator.yaml
 kubectl apply -f kubevirt-cr.yaml
@@ -157,14 +157,14 @@ kubectl apply -f kubevirt-cr.yaml
     kubevirt.kubevirt.io/kubevirt   19d   Deployed
     ```
 
-### 2.4 Install CDI
+### 1.4 Install CDI
 ```sh
 cd kubevirt-gfx-sriov
 
 ./scripts/setuptools.sh -iv
 ```
 
-### 2.5 Enable Virt-Handler to discover Graphics VFs
+### 1.5 Enable Virt-Handler to discover Graphics VFs
 Update KubeVirt custom resource configuration to enable virt-handler to discover graphics VFs on the host. All discovered VFs will be published as *allocatable* resource
 ```sh
 cd kubevirt-gfx-sriov
@@ -172,7 +172,7 @@ cd kubevirt-gfx-sriov
 kubectl apply -f manifests/kubevirt-cr-gfx-sriov.yaml
 ```
 
-#### 2.5.1 Check for presence of `intel.com/sriov-gpudevices` resource
+#### 1.5.1 Check for presence of `intel.com/sriov-gpudevices` resource
 
 ```sh
 kubectl describe nodes
@@ -192,14 +192,14 @@ Allocated resources:
 > Please wait for all virt-handler pods to complete restarts\
 > The value of **Requests** and **Limits** will increase upon successful resource allocation to running pods/VMs
 
-## 3. Create Windows-10/11 Image
+## 2. Create Windows-10/11 Image
 
 Refer [Installation](../kubevirt-gfx-sriov/docs/deploy-windows-vm.md#installation) and [Deployment](../kubevirt-gfx-sriov/docs/deploy-windows-vm.md#deployment) section
 
 > [!Note]
 Once after steps are complete, search and copy the QCOW2 from `/opt/vm/images/win10`
 
-## 4. Uninstall
+## 3. Uninstall
 
 1. To uninstall all the components you can run the command below or you can specify which component to uninstall.
 
