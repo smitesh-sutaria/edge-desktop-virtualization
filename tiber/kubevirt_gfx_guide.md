@@ -1,6 +1,7 @@
 # Installing Kubernetes and Enabling Graphics SR-IOV for Kubevirt
 
-Intel® Graphics SR-IOV Enablement Toolkit is used to enable Graphics SR-IOV and is cloned to folder [kubevirt-gfx-sriov](https://github.com/intel/kubevirt-gfx-sriov), credits to all contibutors of it. Minor changes has been made to it to work on TiberOS and to support Intel's custom Kubevirt
+[Intel® Graphics SR-IOV Enablement Toolkit](https://github.com/intel/kubevirt-gfx-sriov) is used to enable Graphics SR-IOV and is cloned to folder `kubevirt-gfx-sriov`, credits to all contibutors of it.\
+Minor changes has been made to it to work on TiberOS and to support Intel's custom Kubevirt
 
 **Update Graphics Device ID in `kubevirt-gfx-sriov/manifests/kubevirt-cr-gfx-sriov.yaml` if not found**
   - Read the Device ID of Intel Graphics Card from Host, Ex: for RPL

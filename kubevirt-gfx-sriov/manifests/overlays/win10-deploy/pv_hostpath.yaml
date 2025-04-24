@@ -4,4 +4,4 @@ metadata:
   name: pv-volume
 spec:
   hostPath:
-    path: "/var/vm/images/win10"
+    path: "/opt/vm/images/win10"
