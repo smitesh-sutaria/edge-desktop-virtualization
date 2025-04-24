@@ -1,0 +1,146 @@
+virtualMachines:
+  - name: win11-vm1
+    namespace: default
+    storage: 60Gi
+    hostPath: /var/vm/images/win11-1
+    storageClassName: openebs-lvmpv
+    cpuCores: 4
+    memory: 8192Mi
+    gpuDeviceName: intel.com/sriov-gpudevice
+    secureBoot: false
+    usePVC: false
+    useDataVolume: true
+    dataVolumeName: my-datavolume
+    cdromImage: docker.io/intel2019/win11-iso-cdisk
+    bootDiskImage: docker.io/aisha123aisha/disk-win-11
+    virtioContainerDiskImage: docker.io/kubevirt/virtio-container-disk
+    driverDiskImage: docker.io/intel2019/win-softwaredrv-iso-cdisk
+    rdpPort: 3391
+#    deviceplugin:
+#      resources:
+#        igpu: 1
+#        x11: 1
+#        udma: 1
+#        vfio: 1
+#        usb: 1
+    sidecar: 
+      scriptName: 'metadata-xml.sh'
+      display:
+        connectors: 'HDMI-1'
+      # env:
+      #   display: ':0'
+      usb:
+        hostport: '2'
+#  - name: win11-vm2
+#    namespace: default
+#    storage: 60Gi
+#    hostPath: /var/vm/images/win11-1
+#    storageClassName: openebs-lvmpv
+#    cpuCores: 4
+#    memory: 8192Mi
+#    gpuDeviceName: intel.com/sriov-gpudevice
+#    secureBoot: false
+#    usePVC: false
+#    useDataVolume: false
+#    dataVolumeName: my-datavolume2
+#    cdromImage: docker.io/intel2019/win11-iso-cdisk
+#    bootDiskImage: docker.io/aisha123aisha/disk-win-11
+#    virtioContainerDiskImage: docker.io/kubevirt/virtio-container-disk
+#    driverDiskImage: docker.io/intel2019/win-softwaredrv-iso-cdisk
+#    rdpPort: 3390
+#    deviceplugin:
+#      resources:
+#        igpu: 1
+#        x11: 1
+#        udma: 1
+#        vfio: 1
+#        usb: 1
+#    sidecar: 
+#      scriptName: 'metadata-xml.sh'
+#      display:
+  #       gtkgl: 'on'
+  #       fullScreen: 'on'
+  #       zoomToFit: 'on'
+  #       windowClose: 'off'
+  #       input: 'off'
+#        connectors: 'HDMI-2'
+  #     env:
+  #       display: ':0'
+#      usb:
+  #       host: 'usb-host'
+  #       hostbus: '3'
+#        hostport: '7'
+  # - name: win11-vm3
+  #   namespace: default
+  #   storage: 60Gi
+  #   hostPath: /var/vm/images/win11-1
+  #   storageClassName: openebs-lvmpv
+  #   cpuCores: 4
+  #   memory: 8192Mi
+  #   gpuDeviceName: intel.com/sriov-gpudevice
+  #   secureBoot: false
+  #   usePVC: false
+  #   cdromImage: docker.io/intel2019/win11-iso-cdisk
+  #   bootDiskImage: docker.io/aisha123aisha/disk-win-11
+  #   virtioContainerDiskImage: docker.io/kubevirt/virtio-container-disk
+  #   driverDiskImage: docker.io/intel2019/win-softwaredrv-iso-cdisk
+  #   rdpPort: 3390
+ #    deviceplugin:
+ #      resources:
+ #        igpu: 1
+ #        x11: 1
+ #        udma: 1
+ #        vfio: 1
+ #        usb: 1
+  #   sidecar: 
+  #     scriptName: 'metadata-xml.sh'
+  #     display:
+  #       gtkgl: 'on'
+  #       fullScreen: 'on'
+  #       zoomToFit: 'on'
+  #       windowClose: 'off'
+  #       input: 'off'
+  #       connectors: 'HDMI-3'
+  #     env:
+  #       display: ':0'
+  #     usb:
+  #       host: 'usb-host'
+  #       hostbus: '3'
+  #       hostport: '1'
+  # - name: win11-vm4
+  #   namespace: default
+  #   storage: 60Gi
+  #   hostPath: /var/vm/images/win11-1
+  #   storageClassName: openebs-lvmpv
+  #   cpuCores: 4
+  #   memory: 8192Mi
+  #   gpuDeviceName: intel.com/sriov-gpudevice
+  #   secureBoot: false
+  #   usePVC: false
+  #   cdromImage: docker.io/intel2019/win11-iso-cdisk
+  #   bootDiskImage: docker.io/aisha123aisha/disk-win-11
+  #   virtioContainerDiskImage: docker.io/kubevirt/virtio-container-disk
+  #   driverDiskImage: docker.io/intel2019/win-softwaredrv-iso-cdisk
+  #   rdpPort: 3390
+ #    deviceplugin:
+ #      resources:
+ #        igpu: 1
+ #        x11: 1
+ #        udma: 1
+ #        vfio: 1
+ #        usb: 1
+  #   sidecar: 
+  #     scriptName: 'metadata-xml.sh'
+  #     display:
+  #       gtkgl: 'on'
+  #       fullScreen: 'on'
+  #       zoomToFit: 'on'
+  #       windowClose: 'off'
+  #       input: 'off'
+  #       connectors: 'HDMI-4'
+  #     env:
+  #       display: ':0'
+  #     usb:
+  #       host: 'usb-host'
+  #       hostbus: '3'
+  #       hostport: '4'

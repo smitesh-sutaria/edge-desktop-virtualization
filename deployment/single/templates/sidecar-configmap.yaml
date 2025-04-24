@@ -1,0 +1,15 @@
+{{- range .Values.virtualMachines }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .name }}-sidecar-script
+data:
+  {{ default "metadata-xml.sh" .sidecar.scriptName}}: |
+    #!/bin/sh
+    tempFile=`mktemp`
+    echo $4 > $tempFile
+    sed -i "s|/devices>|/devices> <qemu:commandline> <qemu:arg value='-display'/> <qemu:arg value='gtk,gl={{ default "on" (default dict .sidecar.display).gtkgl }},full-screen={{ default "on" (default dict .sidecar.display).fullScreen }},zoom-to-fit={{ default "on" (default dict .sidecar.display).zoomToFit }},window-close={{ default "off" (default dict .sidecar.display).windowClose }},input={{ default "off" (default dict .sidecar.display).input }},connectors.0={{ default "HDMI-1" (default dict .sidecar.display).connectors }}'/> <qemu:env name='DISPLAY' value='{{ default ":0" (default dict .sidecar.env).display }}'/> <qemu:arg value='-device'/> <qemu:arg value='driver=virtio-vga,max_outputs=1,blob=true,bus=pcie.0,addr=0x3'/> <qemu:arg value='-usb'/> <qemu:arg value='-device'/> <qemu:arg value='{{ default "usb-host" (default dict .sidecar.usb).host }},hostbus={{ default "3" (default dict .sidecar.usb).hostbus }},hostport={{ default "3" (default dict .sidecar.usb).hostport }}'/>  </qemu:commandline>|" $tempFile
+    echo $tempFile > /tmp/t.xml
+    cat $tempFile
+{{- end }}

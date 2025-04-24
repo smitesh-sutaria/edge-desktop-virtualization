@@ -1,0 +1,100 @@
+{{- range .Values.virtualMachines }}
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachineInstance
+metadata:
+  annotations:
+    hooks.kubevirt.io/hookSidecars: '[{"args": ["--version", "v1alpha2"], "configMap": {"name": "{{ .name }}-sidecar-script", "key": "{{ .sidecar.scriptName}}", "hookPath": "/usr/bin/onDefineDomain"}}]'
+  labels:
+    app/name: {{ .name }}
+  name: {{ .name }}-vm
+  namespace: {{ .namespace }}
+spec:
+  domain:
+    cpu:
+      cores: {{ .cpuCores }}
+      model: host-passthrough
+    devices:
+      autoattachGraphicsDevice: false
+      autoattachPodInterface: true
+      gpus:
+        - deviceName: intel.com/sriov-gpudevice
+          name: gpu1
+      disks:
+        - bootOrder: 1
+          disk:
+            bus: virtio
+          name: bootdisk
+      tpm: {}
+      interfaces:
+        - masquerade: {}
+          name: default
+    firmware:
+      bootloader:
+        efi:
+          secureBoot: {{ .secureBoot }}
+    machine:
+      type: q35
+    features:
+      acpi:
+        enabled: true
+      apic:
+        enabled: true
+      smm:
+        enabled: true
+    memory:
+      guest: {{ .memory }}
+      hugepages:
+        pageSize: "2Mi"
+    resources:
+      requests:
+        {{- if .deviceplugin }}
+        intel.com/igpu: {{ default 1 (default dict .deviceplugin.resources).igpu }}
+        intel.com/udma: {{ default 1 (default dict .deviceplugin.resources).udma }}
+        intel.com/x11: {{ default 1 (default dict .deviceplugin.resources).x11 }}
+        intel.com/vfio: {{ default 1 (default dict .deviceplugin.resources).vfio }}
+        intel.com/usb: {{ default 1 (default dict .deviceplugin.resources).usb }}
+        {{- else }}
+        intel.com/igpu: 1
+        intel.com/udma: 1
+        intel.com/x11: 1
+        intel.com/vfio: 1
+        intel.com/usb: 1
+        {{- end }}
+        hugepages-2Mi: {{ .memory }}
+        ephemeral-storage: "1Gi"
+      limits:
+        {{- if .deviceplugin }}
+        intel.com/igpu: {{ default 1 (default dict .deviceplugin.resources).igpu }}
+        intel.com/udma: {{ default 1 (default dict .deviceplugin.resources).udma }}       
+        intel.com/x11: {{ default 1 (default dict .deviceplugin.resources).x11 }}
+        intel.com/vfio: {{ default 1 (default dict .deviceplugin.resources).vfio }}
+        intel.com/usb: {{ default 1 (default dict .deviceplugin.resources).usb }}
+        {{- else }}
+        intel.com/igpu: 1
+        intel.com/udma: 1
+        intel.com/x11: 1
+        intel.com/vfio: 1
+        intel.com/usb: 1
+        {{- end }}
+        hugepages-2Mi: {{ .memory }}
+        ephemeral-storage: "2Gi"
+  networks:
+    - name: default
+      pod: {}
+  terminationGracePeriodSeconds: 0
+  volumes:
+    - name: bootdisk
+      {{- if .usePVC }}
+      persistentVolumeClaim:
+        claimName: {{ .name }}-bootdisk
+      {{- else if .useDataVolume }}
+      dataVolume:
+        name: {{ default "my-datavolume" .dataVolumeName }}
+      {{- else }}
+      containerDisk:
+        image: {{ .bootDiskImage }}
+        imagePullPolicy: IfNotPresent
+      {{- end }}
+{{- end }}
+

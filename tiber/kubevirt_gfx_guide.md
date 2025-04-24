@@ -1,60 +1,23 @@
 # Installing Kubernetes and Enabling Graphics SR-IOV for Kubevirt
 
-Clone kubevirt-gfx-sriov repository
-```sh
-git clone https://github.com/intel/kubevirt-gfx-sriov.git
-```
+Intel® Graphics SR-IOV Enablement Toolkit is used to enable Graphics SR-IOV and is cloned to folder [kubevirt-gfx-sriov](https://github.com/intel/kubevirt-gfx-sriov), credits to all contibutors of it. Minor changes has been made to it to work on TiberOS and to support Intel's custom Kubevirt
 
-## 1. Changes to scripts in kubevirt-gfx-sriov before installation to work on TiberOS and support Intel custom Kubevirt
-
-1.  Update `kubevirt-gfx-sriov/scripts/setuptools.sh` with below versions
+**Update Graphics Device ID in `kubevirt-gfx-sriov/manifests/kubevirt-cr-gfx-sriov.yaml` if not found**
+  - Read the Device ID of Intel Graphics Card from Host, Ex: for RPL
     ```sh
-    KV_VERSION="v1.5.0"
-    CDI_VERSION="v1.60.3"
-    K3S_VERSION="v1.30.6+k3s1"
+    $ cat /sys/devices/pci0000\:00/0000\:00\:02.0/device
+
+    0xa7a0
+    ```
+  - Add the Device ID in `pciHostDevices` section
+    ```yaml
+    - pciVendorSelector: "8086:a7a0"
+      resourceName: "intel.com/sriov-gpudevice"
+      externalResourceProvider: false
     ```
 
-2.  Changes in `kubevirt-gfx-sriov/scripts/setuptools.sh` 
-    - Replace function `install_k3s()` with below changes to avoid K3S installtion failure with *container-selinux* error
-        ```sh
-        install_k3s()
-        {
-            info "Installing K3s"
-            curl -sfL https://get.k3s.io | INSTALL_K3S_SELINUX_WARN=true INSTALL_K3S_VERSION=${K3S_VERSION}  sh -s - --disable=traefik --write-kubeconfig-mode=644
-        }
-        ```
-    - Comment `install_kubevirt` in line 271, since we are installing custom Kubevirt
-
-3.  Changes in `kubevirt-gfx-sriov/systemd/gfx-virtual-func.service`
-    -  Add this line in [Unit] section
-        ```
-        After=multi-user.target
-        ```
-    -  Use `/opt` instead of `/var`, replace lines `/var/vm/scripts/configvfs.sh` with
-        ```
-        /opt/vm/scripts/configvfs.sh
-        ```
-4.  Changes in `kubevirt-gfx-sriov/manifests/kubevirt-cr-gfx-sriov.yaml`
-    - Update Graphics Device ID
-      - Read the Device ID of Intel Graphics Card from Host, Ex: for RPL
-        ```sh
-        $ cat /sys/devices/pci0000\:00/0000\:00\:02.0/device
-
-        0xa7a0
-        ```
-      - Add the Device ID
-        ```yaml
-        - pciVendorSelector: "8086:a7a0"
-        ```
-    - Add support to include Sidecar in ` featureGates:`
-        ```yaml
-        - GPU
-        - HostDevices
-        - Sidecar
-        ```
-
 ## 2. Installation
-Below steps are customized for TiberOS and derived from [Manual Install](https://github.com/intel/kubevirt-gfx-sriov/blob/main/docs/manual-install.md) of kubevirt-gfx-sriov, for more details follow the same link
+Below steps are customized for TiberOS and derived from [Manual Install](../kubevirt-gfx-sriov/docs/manual-install.md) of kubevirt-gfx-sriov, for more details follow the same link
 
 ### 2.1 Install K3s
 
@@ -113,7 +76,7 @@ sudo systemctl status gfx-virtual-func.service
     ```
 
 ### 2.3 Install Intel Built Kubevirt
-Refer [Intel-Innersource-Kubevirt](https://github.com/intel-innersource/applications.virtualization.maverickflats-kubevirt-itep) for setup and build steps
+[Maverick-Flats-Kubevirt](https://github.com/intel-innersource/applications.virtualization.maverickflats-kubevirt-itep) version hosted in Intel-Innersource, clone and [follow](https://github.com/intel-innersource/applications.virtualization.maverickflats-kubevirt-itep/blob/v1.5.0/docs/build-the-builder.md) to build.
 
 Obtain the `kubevirt-operator.yaml` and `kubevirt-cr.yaml` from where the Intel custom Kubevirt is hosted
 
@@ -227,7 +190,7 @@ Allocated resources:
 
 ## 3. Create Windows-10/11 Image
 
-Refer [Installation](https://github.com/intel/kubevirt-gfx-sriov/blob/main/docs/deploy-windows-vm.md#installation) section
+Refer [Installation](../kubevirt-gfx-sriov/docs/deploy-windows-vm.md#installation) section
 
 > [!Note]
 > Change paths which uses `/var` to `/opt` in `kubevirt-gfx-sriov/manifests/overlays/win10-install` and `kubevirt-gfx-sriov/manifests/overlays/win10-deploy` before starting the process
