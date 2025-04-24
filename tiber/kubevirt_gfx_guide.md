@@ -30,6 +30,7 @@ This step is only required if you don't already have a Kubernetes cluster setup 
 
 ```sh
 cd kubevirt-gfx-sriov
+
 ./scripts/setuptools.sh -ik
 ```
 
@@ -158,6 +159,8 @@ kubectl apply -f kubevirt-cr.yaml
 
 ### 2.4 Install CDI
 ```sh
+cd kubevirt-gfx-sriov
+
 ./scripts/setuptools.sh -iv
 ```
 
@@ -191,11 +194,9 @@ Allocated resources:
 
 ## 3. Create Windows-10/11 Image
 
-Refer [Installation](../kubevirt-gfx-sriov/docs/deploy-windows-vm.md#installation) section
+Refer [Installation](../kubevirt-gfx-sriov/docs/deploy-windows-vm.md#installation) and [Deployment](../kubevirt-gfx-sriov/docs/deploy-windows-vm.md#deployment) section
 
 > [!Note]
-> Change paths which uses `/var` to `/opt` in `kubevirt-gfx-sriov/manifests/overlays/win10-install` and `kubevirt-gfx-sriov/manifests/overlays/win10-deploy` before starting the process
-
 Once after steps are complete, search and copy the QCOW2 from `/opt/vm/images/win10`
 
 ## 4. Uninstall
@@ -204,5 +205,7 @@ Once after steps are complete, search and copy the QCOW2 from `/opt/vm/images/wi
 
    *Note: Get help on `setuptools.sh` by running `setupstool.sh -h`*
    ```sh
+   cd kubevirt-gfx-sriov
+
    ./scripts/setuptools.sh -u kvw
    ``` 
