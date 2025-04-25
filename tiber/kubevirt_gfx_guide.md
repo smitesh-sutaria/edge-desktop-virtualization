@@ -77,8 +77,11 @@ sudo systemctl status gfx-virtual-func.service
     Apr 04 16:49:47 EdgeMicrovisorToolkit systemd[1]: Finished gfx-virtual-func.service - Intel Graphics SR-IOV Virtual Function Manager.
     ```
 
-### 1.3 Install Intel Built Kubevirt
+### 1.3 Build and Install customized Kubevirt for Maverick-Flats
 [Maverick-Flats-Kubevirt](https://github.com/intel-innersource/applications.virtualization.maverickflats-kubevirt-itep) version hosted in Intel-Innersource, clone and [follow](https://github.com/intel-innersource/applications.virtualization.maverickflats-kubevirt-itep/blob/v1.5.0/docs/build-the-builder.md) to build.
+
+>[!Note]
+Kubevirt build setup is based on `Ubuntu 22.04 LTS`
 
 Obtain the `kubevirt-operator.yaml` and `kubevirt-cr.yaml` from where the Intel custom Kubevirt is hosted
 
@@ -197,7 +200,7 @@ Allocated resources:
 Refer [Installation](../kubevirt-gfx-sriov/docs/deploy-windows-vm.md#installation) and [Deployment](../kubevirt-gfx-sriov/docs/deploy-windows-vm.md#deployment) section
 
 > [!Note]
-Once after steps are complete, search and copy the QCOW2 from `/opt/vm/images/win10`
+Once after steps are complete, search and copy the `disk.qcow2` from `/opt/vm/images/win10` which can be later used to boot VM from CDI
 
 ## 3. Uninstall
 
