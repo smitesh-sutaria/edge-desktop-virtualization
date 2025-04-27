@@ -94,11 +94,7 @@ func RegisterWithKubelet(socket string, resourceName string) error {
 		Endpoint:     filepath.Base(socket),
 		ResourceName: resourceName,
 	})
-	if err != nil {
-		return err
-	}
-	log.Printf("client registered for %v", resourceName)
-	return nil
+	return err
 }
 
 // CleanupSockets removes existing socket files if it exists
@@ -115,9 +111,13 @@ func CleanupSockets(res []resources.Resource) error {
 }
 
 // StartDevicePlugin starts servers with restart capability
-func StartDevicePlugin(res []resources.Resource) {
+func StartDevicePlugin(
+	res []resources.Resource,
+	serveFunc func([]resources.Resource, func(string, string) error) error,
+	registerFunc func(string, string) error,
+) {
 	for {
-		if err := Serve(res); err != nil {
+		if err := serveFunc(res, registerFunc); err != nil {
 			log.Printf("Device plugin server failed: %v", err)
 		}
 
@@ -128,7 +128,10 @@ func StartDevicePlugin(res []resources.Resource) {
 }
 
 // Serve starts the gRPC server for each of the resources
-func Serve(resources []resources.Resource) error {
+func Serve(
+	resources []resources.Resource,
+	registerFunc func(string, string) error,
+) error {
 	// Cleanup any existing socket file before binding
 	if err := CleanupSockets(resources); err != nil {
 		log.Fatalf("Failed to remove existing socket file: %v", err)
@@ -164,7 +167,7 @@ func Serve(resources []resources.Resource) error {
 
 		// Register resource
 		log.Printf("registering with kubelet for %v\n", resource.GetResourceName())
-		if err = RegisterWithKubelet(resource.GetSocketPath(), resource.GetResourceName()); err != nil {
+		if err = registerFunc(resource.GetSocketPath(), resource.GetResourceName()); err != nil {
 			dpi.server.Stop()
 			return fmt.Errorf("failed to register resource %s with Kubelet: %v", resource.GetResourceName(), err)
 		}
@@ -179,8 +182,6 @@ func Serve(resources []resources.Resource) error {
 	case <-socketWatcher:
 		return fmt.Errorf("socket was deleted, kubelet likely restarted")
 	}
-
-	return nil
 }
 
 // monitorSocket monitors socket file for deletion (indicates kubelet restart)

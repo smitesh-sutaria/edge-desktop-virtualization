@@ -2,13 +2,7 @@ package constants
 
 import pluginapi "k8s.io/kubelet/pkg/apis/deviceplugin/v1beta1"
 
-const (
-	PluginType           = "PLUGIN_TYPE"
-	X11PluginType        = "x11"
-	UdmaPluginType       = "udma"
-	IgpuPluginType       = "igpu"
-	VfioPluginType       = "vfio"
-	UsbPluginType        = "usb"
+var (
 	X11ResourceName      = "intel.com/x11"
 	X11DevicePrefix      = "x11"
 	X11DevicePath        = "/tmp/.X11-unix"
@@ -41,6 +35,4 @@ const (
 	UsbSocketPath        = pluginapi.DevicePluginPath + UsbSocketName
 	UsbDeviceCount       = 1000
 	Permissions          = "rw"
-	DisplayEnvKey        = "DISPLAY"
-	DisplayEnvVal        = ":0"
 )

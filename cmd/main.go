@@ -24,7 +24,9 @@ func fetchResources() []resources.Resource {
 func main() {
 	log.Println("Starting device plugin")
 
-	grpcserver.StartDevicePlugin(fetchResources())
+	grpcserver.StartDevicePlugin(fetchResources(),
+		grpcserver.Serve,
+		grpcserver.RegisterWithKubelet)
 
 	log.Println("Started device plugin")
 
