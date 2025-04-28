@@ -26,9 +26,7 @@ The device plugin handles the following key functions[1]:
 *   **Resource Advertisement:** The plugin advertises the availability of `intel.com/x11`, `intel.com/udma`, `intel.com/vfio`, `intel.com/igpu` and `intel.com/usb` resources to the kubelet.
 *   **Allocation:** When a pod requests one or more of these resources, the kubelet calls the plugin's `Allocate` function.  The plugin then performs any device-specific setup and provides container runtime configurations to enable access to the requested resources. This may include:
     *   Mounting necessary device nodes
-    *   Setting environment variables
-    *   [TODO] Adding annotations
-*   [TODO] **Device Monitoring:** The plugin monitors the health of the resources and reports any state changes to the kubelet. 
+    *   Mounting necessary volumes
 
 ## Deployment
 

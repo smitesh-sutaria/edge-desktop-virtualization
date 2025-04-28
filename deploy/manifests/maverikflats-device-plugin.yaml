@@ -74,11 +74,8 @@ spec:
               mountPath: /dev/bus/usb
       containers:
         - name: mvf-device-plugin
-          image: 'localhost:5000/mvf-device-plugin:v1-test'
+          image: 'amr-registry-pre.caas.intel.com/one-intel-edge-sandbox/maverick-flats/md-device-plugin:v1'
           imagePullPolicy: Always
-          env:
-            - name: PLUGIN_TYPE
-              value: x11
           volumeMounts:
             - name: device-plugin
               mountPath: /var/lib/kubelet/device-plugins
