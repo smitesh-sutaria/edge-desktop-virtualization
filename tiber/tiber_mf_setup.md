@@ -211,3 +211,9 @@ apk add xdotool
     ```sh
     xdotool search --onlyvisible --name "vm1" windowsize 1920 1080
     ```
+
+# 4. Install Helm
+
+```sh
+sudo dnf install helm
+```

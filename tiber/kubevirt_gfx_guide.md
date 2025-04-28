@@ -77,19 +77,48 @@ sudo systemctl status gfx-virtual-func.service
     Apr 04 16:49:47 EdgeMicrovisorToolkit systemd[1]: Finished gfx-virtual-func.service - Intel Graphics SR-IOV Virtual Function Manager.
     ```
 
-### 1.3 Build and Install customized Kubevirt for Maverick-Flats
-[Maverick-Flats-Kubevirt](https://github.com/intel-innersource/applications.virtualization.maverickflats-kubevirt-itep) version hosted in Intel-Innersource, clone and [follow](https://github.com/intel-innersource/applications.virtualization.maverickflats-kubevirt-itep/blob/v1.5.0/docs/build-the-builder.md) to build.
+### 1.3 Install customized Kubevirt for Maverick-Flats
 
+#### 1.3.1 For Quick Install (from one-intel-edge-sandbox repository)
+```sh
+kubectl apply -f tiber/kubevirt/manifests/release/kubevirt-operator.yaml
+kubectl apply -f tiber/kubevirt/manifests/release/kubevirt-cr.yaml
+```
+
+#### 1.3.2 Build and Install customized Kubevirt 
+[Maverick-Flats-Kubevirt](https://github.com/intel-innersource/applications.virtualization.maverickflats-kubevirt-itep) version hosted in Intel-Innersource
+
+Simplified build steps:
 >[!Note]
 Kubevirt build setup is based on `Ubuntu 22.04 LTS`
 
-Obtain the `kubevirt-operator.yaml` and `kubevirt-cr.yaml` from where the Intel custom Kubevirt is hosted
+**Setting up local docker registry**
+```sh
+sudo apt-get -y install podman
 
+podman run -d -p 5000:5000 --name local-registry registry:2
+```
+**Clone the repo, build the Kubevirt and host in the local registry of build machine(Ubuntu)**
+```sh
+git clone https://github.com/intel-innersource/applications.virtualization.maverickflats-kubevirt-itep.git
+
+cd applications.virtualization.maverickflats-kubevirt-itep
+
+export DOCKER_PREFIX=<build_system_ip>:5000
+export DOCKER_TAG=latest
+
+make all
+make bazel-build-images
+make push
+make manifests
+```
+
+Detailed build steps [follow](https://github.com/intel-innersource/applications.virtualization.maverickflats-kubevirt-itep/blob/v1.5.0/docs/build-the-builder.md) to build.
+
+#### 1.3.2.1 Update the Registry for K3S to pull Kubevirt from server
+Copy the `kubevirt-operator.yaml` and `kubevirt-cr.yaml` from `_out/manifests/release` to TiberOS host machine and [follow](#1321-update-the-registry-for-k3s-to-pull-kubevirt-from-server)
 Refer `kubevirt-operator.yaml` for server details, add that in `registries.yaml` and in `NO_PROXY` of `k3s.service.env`
-
 Ex: If Localserver is 10.223.97.134:5000 from `kubevirt-operator.yaml`
-
-#### 1.3.1 Update the Registry for K3S to pull Kubevirt from server
 ```sh
 sudo vi /etc/rancher/k3s/registries.yaml
 ```
@@ -104,7 +133,7 @@ mirrors:
       - "http://10.223.97.134:5000"
 ```
 
-#### 1.3.2 Update Proxy for K3S
+#### 1.3.2.2 Update Proxy for K3S
 ```sh
 sudo vi /etc/systemd/system/k3s.service.env
 ```
@@ -115,12 +144,12 @@ HTTP_PROXY="http://proxy-dmz.intel.com:911"
 NO_PROXY="localhost,::1,127.0.0.1,.intel.com,10.190.167.198,10.223.97.134"
 ```
 
-#### 1.3.3 Restart K3S
+#### 1.3.2.3 Restart K3S
 ```sh
 sudo systemctl restart k3s
 ```
 
-#### 1.3.4 Install Kubevirt
+#### 1.3.2.4 Install Kubevirt
 ```sh
 kubectl apply -f kubevirt-operator.yaml
 kubectl apply -f kubevirt-cr.yaml
@@ -194,6 +223,21 @@ Allocated resources:
 > [!Note] 
 > Please wait for all virt-handler pods to complete restarts\
 > The value of **Requests** and **Limits** will increase upon successful resource allocation to running pods/VMs
+
+### 1.6 Install Device-Plugin
+
+For Quick Install (from one-intel-edge-sandbox repository)
+```sh
+kubectl apply -f tiber/device-plugin/manifests/maverikflats-device-plugin.yaml
+```
+or
+```sh
+# Helm deployment
+
+cd tiber/device-plugin/helm/
+
+helm install device-plugin .
+```
 
 ## 2. Create Windows-10/11 Image
 

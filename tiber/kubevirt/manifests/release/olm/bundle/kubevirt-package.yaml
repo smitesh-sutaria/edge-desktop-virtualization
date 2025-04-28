@@ -1,0 +1,4 @@
+packageName: kubevirt-dev
+channels:
+  - name: alpha
+    currentCSV: kubevirtoperator.0.1
