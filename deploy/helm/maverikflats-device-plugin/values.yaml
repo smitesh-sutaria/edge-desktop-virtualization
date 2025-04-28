@@ -2,7 +2,7 @@ devicePlugin:
   enabled: true
 image:
   repository: localhost:5000/mvf-device-plugin
-  tag: "v2"
+  tag: "v1"
 mvfPluginEnabled: true
 userId: "107"
 groupId: "107"
