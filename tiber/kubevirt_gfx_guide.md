@@ -238,6 +238,33 @@ cd tiber/device-plugin/helm/
 
 helm install device-plugin .
 ```
+To verify 
+```sh
+kubectl describe nodes
+```
+-   Output
+    ```sh
+    Capacity:
+        intel.com/igpu:                 1k
+        intel.com/udma:                 1k
+        intel.com/usb:                  1k
+        intel.com/vfio:                 1k
+        intel.com/x11:                  1k
+    Allocatable:
+        intel.com/igpu:                 1k
+        intel.com/udma:                 1k
+        intel.com/usb:                  1k
+        intel.com/vfio:                 1k
+        intel.com/x11:                  1k
+    Allocated resources:
+        Resource                       Requests          Limits
+        --------                       --------          ------
+        intel.com/igpu                   0                 0
+        intel.com/udma                   0                 0
+        intel.com/usb                    0                 0
+        intel.com/vfio                   0                 0
+        intel.com/x11                    0                 0
+    ```
 
 ## 2. Create Windows-10/11 Image
 
