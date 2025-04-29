@@ -1,6 +1,6 @@
 BINARY_NAME ?= device-plugin
 PKG_LIST := $(shell go list ./... | grep -v /vendor/)
-DOCKER_REPO ?= amr-registry-pre.caas.intel.com/one-intel-edge-sandbox/maverick-flats
+DOCKER_REPO ?= localhost:5000
 BUILD_NAME ?= mf-$(BINARY_NAME)
 HELM_CHART_NAME ?= mdp
 BUILD_VERSION ?= v1
