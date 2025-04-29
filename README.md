@@ -16,8 +16,8 @@ git submodule update --init --recursive
      - [Flashing SR-IOV Enabled TiberOS and Creating Partitions](tiber/tiber_flash_partition.md)
      - [Userspace setup for Maverick Flats](tiber/tiber_mf_setup.md)
   2. [Installing Kubernetes](tiber/kubevirt_gfx_guide.md)
-  3. [Install Intel custom Kubevirt (includes SR-IOV patched QEMU)](tiber/kubevirt_gfx_guide.md#13-build-and-install-customized-kubevirt-for-maverick-flats)
-  4. [Install Device Plugin](https://github.com/intel-innersource/applications.virtualization.maverickflats-deviceplugin-itep?tab=readme-ov-file#deployment)
+  3. [Install Intel custom Kubevirt (includes SR-IOV patched QEMU)](tiber/kubevirt_gfx_guide.md#13-install-customized-kubevirt-for-maverick-flats)
+  4. [Install Device Plugin](tiber/kubevirt_gfx_guide.md/#16-install-device-plugin)
   5. Deployment Package - includes Sidecar and VM deployment Helm charts.
      - [Discrete VM Helm chart to deployment](deployment/discrete/discrete.md)
      - Single Helm deployment - In Progress

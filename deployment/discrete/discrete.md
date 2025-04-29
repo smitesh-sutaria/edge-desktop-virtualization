@@ -18,6 +18,72 @@ Refer `deployment/discrete/helm-win11_[connector]/values.yaml` to edit
 | vm3     | DP-1     | dp1.yaml   | helm-win11_dp1   | vm3-win11-image | 3392     |
 | vm4     | DP-3     | dp3.yaml   | helm-win11_dp3   | vm4-win11-image | 3393     |
 
+**Verify Kubevirt, Device-plugin and GPU Passthrough before deployig VM**
+```sh
+kubectl describe nodes
+
+.
+.
+.
+Capacity:
+  cpu:                            16
+  devices.kubevirt.io/kvm:        1k
+  devices.kubevirt.io/tun:        1k
+  devices.kubevirt.io/vhost-net:  1k
+  ephemeral-storage:              16348504Ki
+  hugepages-1Gi:                  0
+  hugepages-2Mi:                  48Gi
+  intel.com/igpu:                 1k
+  intel.com/sriov-gpudevice:      7
+  intel.com/udma:                 1k
+  intel.com/usb:                  1k
+  intel.com/vfio:                 1k
+  intel.com/x11:                  1k
+  memory:                         65394012Ki
+  pods:                           110
+Allocatable:
+  cpu:                            16
+  devices.kubevirt.io/kvm:        1k
+  devices.kubevirt.io/tun:        1k
+  devices.kubevirt.io/vhost-net:  1k
+  ephemeral-storage:              15903824679
+  hugepages-1Gi:                  0
+  hugepages-2Mi:                  48Gi
+  intel.com/igpu:                 1k
+  intel.com/sriov-gpudevice:      7
+  intel.com/udma:                 1k
+  intel.com/usb:                  1k
+  intel.com/vfio:                 1k
+  intel.com/x11:                  1k
+  memory:                         15062364Ki
+  pods:                           110
+.
+.
+.
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource                       Requests          Limits
+  --------                       --------          ------
+  cpu                            960m (6%)         15m (0%)
+  memory                         4648734400 (30%)  238257920 (1%)
+  ephemeral-storage              1123741824 (7%)   2197483648 (13%)
+  hugepages-1Gi                  0 (0%)            0 (0%)
+  hugepages-2Mi                  0 (0%)            0 (0%)
+  devices.kubevirt.io/kvm        0                 0
+  devices.kubevirt.io/tun        0                 0
+  devices.kubevirt.io/vhost-net  0                 0
+  intel.com/igpu                 0                 0
+  intel.com/sriov-gpudevice      0                 0
+  intel.com/udma                 0                 0
+  intel.com/usb                  0                 0
+  intel.com/vfio                 0                 0
+  intel.com/x11                  0                 0
+.
+.
+.
+```
+
+
 ## 1. Upload VM bootimage to CDI
 Ex. for `vm1` the image name in CDI is `vm1-win11-image`
 
@@ -30,7 +96,9 @@ Ex. for `vm1` the image name in CDI is `vm1-win11-image`
     ```
 -   Upload image
     ```
-    virtctl image-upload --uploadproxy-url=https://10.43.51.68 --insecure dv vm1-win11-image --size=100Gi --access-mode=ReadWriteOnce --force-bind --image-path=/home/guest/disk.qcow2 --force-bind
+    cd tiber/kubevirt/cmd/virtctl/
+
+    ./virtctl image-upload --uploadproxy-url=https://10.43.51.68 --insecure dv vm1-win11-image --size=100Gi --access-mode=ReadWriteOnce --force-bind --image-path=/home/guest/disk.qcow2 --force-bind
     ```
     To check status
     ```
