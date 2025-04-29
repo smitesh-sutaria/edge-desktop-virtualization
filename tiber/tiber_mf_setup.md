@@ -26,7 +26,7 @@ XSERVER is installed by default, make the below settings before starting X serve
     sudo vi /usr/share/X11/xorg.conf.d/10-extensions.conf
     ```
     Add
-    ```
+    ```conf
     Section "Extensions"
         Option "DPMS" "false"
     EndSection
@@ -37,7 +37,7 @@ XSERVER is installed by default, make the below settings before starting X serve
     sudo vi /usr/share/X11/xorg.conf.d/10-serverflags.conf
     ```
     Add
-    ```
+    ```conf
     Section "ServerFlags"
         Option "StandbyTime" "0"
         Option "SuspendTime" "0"
@@ -154,7 +154,7 @@ sudo mkdir -p /etc/systemd/system/docker.service.d/
 sudo vi /etc/systemd/system/docker.service.d/http-proxy.conf
 ```
 Add
-```
+```conf
 [Service]
 Environment="HTTPS_PROXY=http://proxy-dmz.intel.com:912"
 Environment="HTTP_PROXY=http://proxy-dmz.intel.com:911"
@@ -169,7 +169,7 @@ sudo systemctl daemon-reload
 sudo systemctl start docker.service
 ```
 ### 3.3.3 Create alpine container and install XDOTOOL
-```
+```sh
 sudo docker network create tiber-bridge-network
 
 sudo docker run -it --rm --name tiber-resize-container \

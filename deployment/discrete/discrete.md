@@ -18,10 +18,11 @@ Refer `deployment/discrete/helm-win11_[connector]/values.yaml` to edit
 | vm3     | DP-1     | dp1.yaml   | helm-win11_dp1   | vm3-win11-image | 3392     |
 | vm4     | DP-3     | dp3.yaml   | helm-win11_dp3   | vm4-win11-image | 3393     |
 
-**Verify Kubevirt, Device-plugin and GPU Passthrough before deployig VM**
+**Verify Kubevirt, Device-plugin, SR-IOV GPU Passthrough and Hugepage before deployig VM**
 ```sh
 kubectl describe nodes
-
+```
+```sh
 .
 .
 .
@@ -88,21 +89,21 @@ Allocated resources:
 Ex. for `vm1` the image name in CDI is `vm1-win11-image`
 
 -   Get IP of CDI
-    ```
-    $ kubectl get service -A | grep cdi-uploadproxy
+    ```sh
+    kubectl get service -A | grep cdi-uploadproxy
 
     NAMESPACE     NAME                          TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                  AGE
     cdi           cdi-uploadproxy               ClusterIP      10.43.51.68     <none>          443/TCP                  19d
     ```
 -   Upload image
-    ```
+    ```sh
     cd tiber/kubevirt/cmd/virtctl/
 
     ./virtctl image-upload --uploadproxy-url=https://10.43.51.68 --insecure dv vm1-win11-image --size=100Gi --access-mode=ReadWriteOnce --force-bind --image-path=/home/guest/disk.qcow2 --force-bind
     ```
     To check status
-    ```
-    $ kubectl get datavolumes.cdi.kubevirt.io
+    ```sh
+    kubectl get datavolumes.cdi.kubevirt.io
     
     NAME              PHASE       PROGRESS   RESTARTS   AGE
     vm1-win11-image   Succeeded   N/A                   18d
@@ -119,7 +120,7 @@ Get the list of USB devices connected to Host machine
 lsusb -t
 ```
 Output:
-```
+```sh
 /:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/1p, 480M
 /:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/3p, 20000M/x2
 /:  Bus 003.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/12p, 480M
@@ -168,13 +169,13 @@ Ex. in *deployment/discrete/sidecar/hdmi1.yaml* is mapped with
 kubectl apply -f deployment/discrete/sidecar/hdmi1.yaml
 ```
 Output:
-```
+```sh
 configmap/sidecar-script-hdmi2 configured
 ```
 Accordingly make changes to other sidecar YAML files and deploy.\
 To check status
-```
-$ kubectl get configmaps
+```sh
+kubectl get configmaps
 
 NAME                   DATA   AGE
 kube-root-ca.crt       1      19d
@@ -191,7 +192,7 @@ cd deployment/discrete/helm-win11_hdmi1
 helm install vm1 .
 ```
 Output
-```
+```sh
 NAME: vm1
 LAST DEPLOYED: Wed Apr 16 17:19:33 2025
 NAMESPACE: default
@@ -200,12 +201,42 @@ REVISION: 1
 TEST SUITE: None
 ```
 To check status of VMs running
-```
-$ kubectl get vmi
+```sh
+kubectl get vmi
 
 NAME           AGE    PHASE     IP            NODENAME                READY
 win11-vm1-vm   6d4h   Running   10.42.0.104   edgemicrovisortoolkit   True
 win11-vm2-vm   6d4h   Running   10.42.0.106   edgemicrovisortoolkit   True
 win11-vm3-vm   6d4h   Running   10.42.0.108   edgemicrovisortoolkit   True
 win11-vm4-vm   6d4h   Running   10.42.0.110   edgemicrovisortoolkit   True
+```
+
+To check the status of allocated resources when 4 VMs are running
+```sh
+kubectl describe nodes
+
+.
+.
+.
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource                       Requests          Limits
+  --------                       --------          ------
+  cpu                            1875m (11%)       60m (0%)
+  memory                         9009904384 (58%)  418257920 (2%)
+  ephemeral-storage              4494967296 (28%)  8789934592 (55%)
+  hugepages-1Gi                  0 (0%)            0 (0%)
+  hugepages-2Mi                  48Gi (100%)       48Gi (100%)
+  devices.kubevirt.io/kvm        4                 4
+  devices.kubevirt.io/tun        4                 4
+  devices.kubevirt.io/vhost-net  4                 4
+  intel.com/igpu                 4                 4
+  intel.com/sriov-gpudevice      4                 4
+  intel.com/udma                 4                 4
+  intel.com/usb                  4                 4
+  intel.com/vfio                 4                 4
+  intel.com/x11                  4                 4
+.
+.
+.
 ```

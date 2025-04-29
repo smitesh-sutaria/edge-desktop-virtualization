@@ -56,7 +56,7 @@ Kubevirt build setup is based on `Ubuntu 22.04 LTS`.
 
     cd applications.virtualization.maverickflats-kubevirt-itep
 
-    export DOCKER_PREFIX=<build_system_ip>:5000
+    export DOCKER_PREFIX=<build_system_ip>:5000   #Ex. localhost:5000
     export DOCKER_TAG=latest
 
     make all

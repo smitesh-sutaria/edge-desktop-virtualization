@@ -11,6 +11,9 @@ git submodule update --init --recursive
 2. Intel NUC 12 Pro Kit NUC12WSHi5 Mini PC with 12th Gen Core i5-1240P Processor (12 Cores 16 Threads 4.40GHz 12MB Cache Intel Iris Xe Graphics) with 32GB DDR4 RAM, 1TB M.2 SSD, 2.5GbE LAN, Wi-Fi 6E, Bluetooth 5.3
 3. ASUS ExpertCenter PN64-E1, Ultra-compact mini PC with 13th Gen Intel® Core™ mobile processor with Intel® Iris Xe Graphics, supports quad displays and 4K resolution, 2x PCIe® Gen4 x4 M.2 NVMe® SSD, 2.5 Gb LAN, WiFi 6E
 
+Connected with 4 Monitors (2 HDMI and 2 DP) based on type and no. of available ports on above NUCs
+4 Pair of Keyboard & Mouse connected using USB Hub 3.0
+
 # Steps:
   1. System Bring Up
      - [Flashing SR-IOV Enabled TiberOS and Creating Partitions](tiber/tiber_flash_partition.md)
