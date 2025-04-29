@@ -1,7 +1,7 @@
 devicePlugin:
   enabled: true
 image:
-  repository: amr-registry-pre.caas.intel.com/one-intel-edge-sandbox/maverick-flats/mf-device-plugin
+  repository: localhost:5000
   tag: "v1"
 mvfPluginEnabled: true
 userId: "107"
