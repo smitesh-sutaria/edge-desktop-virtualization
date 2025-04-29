@@ -74,7 +74,7 @@ spec:
               mountPath: /dev/bus/usb
       containers:
         - name: mvf-device-plugin
-          image: 'amr-registry-pre.caas.intel.com/one-intel-edge-sandbox/maverick-flats/mf-device-plugin:v1'
+          image: 'localhost:5000/mf-device-plugin:v1'
           imagePullPolicy: Always
           volumeMounts:
             - name: device-plugin
