@@ -67,7 +67,7 @@ Kubevirt build setup is based on `Ubuntu 22.04 LTS`.
     make manifests
     ```
 ## Install Kubevirt on Tiber Host
-1.  Install Kubevirt
+1.  To install Kubevirt
     Copy the `kubevirt-operator.yaml` and `kubevirt-cr.yaml` from `_out/manifests/release` of build system to TiberOS host machine.
     ```sh
     kubectl apply -f kubevirt-operator.yaml
@@ -128,8 +128,9 @@ Kubevirt build setup is based on `Ubuntu 22.04 LTS`.
     ```
 
 ## Install Device-Plugin on Tiber Host
-   -    Copy `deploy` folder to Tiber system
-   -    Replace `localhost:5000` in `deploy/helm/values.yaml` and `deploy/manifests/maverikflats-device-plugin.yaml` with your Ubuntu build server IP
+
+1.  Copy `deploy` folder from build system to Tiber host
+2.  Replace `localhost:5000` in `deploy/helm/values.yaml` and `deploy/manifests/maverikflats-device-plugin.yaml` with your Ubuntu build server IP
     ```sh
     kubectl apply -f tiber/device-plugin/manifests/maverikflats-device-plugin.yaml
     ```
