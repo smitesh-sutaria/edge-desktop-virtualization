@@ -1,5 +1,10 @@
 # Installing Kubernetes and Enabling Graphics SR-IOV for Kubevirt
 
+Clone the repo to Tiber Host system
+```sh
+git clone https://github.com/intel-innersource/applications.virtualization.maverickflats-tiberos-itep.git
+```
+
 [Intel® Graphics SR-IOV Enablement Toolkit](https://github.com/intel/kubevirt-gfx-sriov) is used to enable Graphics SR-IOV and is cloned to folder `kubevirt-gfx-sriov`, credits to all contibutors of it.\
 Minor changes has been made to it to work on TiberOS and to support Intel's custom Kubevirt
 
@@ -76,6 +81,19 @@ sudo systemctl status gfx-virtual-func.service
     Apr 04 16:49:47 EdgeMicrovisorToolkit bash[1833]: VF enabled: 7
     Apr 04 16:49:47 EdgeMicrovisorToolkit systemd[1]: Finished gfx-virtual-func.service - Intel Graphics SR-IOV Virtual Function Manager.
     ```
+-   Verify VFs enumarated on PCI bus
+    ```sh
+    lspci
+
+    00:02.0 VGA compatible controller: Intel Corporation Raptor Lake-P [Iris Xe Graphics] (rev 04)
+    00:02.1 VGA compatible controller: Intel Corporation Raptor Lake-P [Iris Xe Graphics] (rev 04)
+    00:02.2 VGA compatible controller: Intel Corporation Raptor Lake-P [Iris Xe Graphics] (rev 04)
+    00:02.3 VGA compatible controller: Intel Corporation Raptor Lake-P [Iris Xe Graphics] (rev 04)
+    00:02.4 VGA compatible controller: Intel Corporation Raptor Lake-P [Iris Xe Graphics] (rev 04)
+    00:02.5 VGA compatible controller: Intel Corporation Raptor Lake-P [Iris Xe Graphics] (rev 04)
+    00:02.6 VGA compatible controller: Intel Corporation Raptor Lake-P [Iris Xe Graphics] (rev 04)
+    00:02.7 VGA compatible controller: Intel Corporation Raptor Lake-P [Iris Xe Graphics] (rev 04)
+    ```
 
 ### 1.3 Install customized Kubevirt for Maverick-Flats
 
@@ -84,7 +102,7 @@ sudo systemctl status gfx-virtual-func.service
 kubectl apply -f tiber/kubevirt/manifests/release/kubevirt-operator.yaml
 kubectl apply -f tiber/kubevirt/manifests/release/kubevirt-cr.yaml
 ```
-To build Kubevirt [refer](./kubevirt_dv_build_guide.md/#steps-to-build-intel-cutomized-kubevirt)
+To build ans install Kubevirt [refer](./kubevirt_dv_build_guide.md/#steps-to-build-intel-cutomized-kubevirt)
 
 -   Verify Kubevirt Deployment
     ```sh
@@ -173,7 +191,7 @@ cd tiber/device-plugin/helm/
 
 helm install device-plugin .
 ```
-To build Device-plugin [refer](./kubevirt_dv_build_guide.md/#steps-to-build-device-plugin)
+To build and install Device-plugin [refer](./kubevirt_dv_build_guide.md/#steps-to-build-device-plugin)
 
 To verify 
 ```sh

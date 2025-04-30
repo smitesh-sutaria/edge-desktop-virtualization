@@ -4,45 +4,54 @@ virtualMachines:
     storage: 60Gi
     hostPath: /var/vm/images/win11-1
     storageClassName: openebs-lvmpv
-    cpuCores: 4
-    memory: 8192Mi
+    cpuCores: 3
+    memory: 12288Mi
     gpuDeviceName: intel.com/sriov-gpudevice
     secureBoot: false
     usePVC: false
     useDataVolume: true
-    dataVolumeName: my-datavolume
+    dataVolumeName: vm1-win11-image
     cdromImage: docker.io/intel2019/win11-iso-cdisk
     bootDiskImage: docker.io/aisha123aisha/disk-win-11
     virtioContainerDiskImage: docker.io/kubevirt/virtio-container-disk
     driverDiskImage: docker.io/intel2019/win-softwaredrv-iso-cdisk
-    rdpPort: 3391
-#    deviceplugin:
-#      resources:
-#        igpu: 1
-#        x11: 1
-#        udma: 1
-#        vfio: 1
-#        usb: 1
+    rdpPort: 3390
+    deviceplugin:
+      resources:
+        igpu: 1
+        x11: 1
+        udma: 1
+        vfio: 1
+        usb: 1
     sidecar: 
       scriptName: 'metadata-xml.sh'
       display:
+        gtkgl: 'on'
+        fullScreen: 'on'
+        zoomToFit: 'on'
+        windowClose: 'off'
+        input: 'off'
         connectors: 'HDMI-1'
-      # env:
-      #   display: ':0'
+      env:
+        display: ':0'
       usb:
-        hostport: '2'
+        host: 'usb-host'
+        hostbus_dev1: '3'
+        hostport_dev1: '7'
+        hostbus_dev2: '3'
+        hostport_dev2: '8'
 #  - name: win11-vm2
 #    namespace: default
 #    storage: 60Gi
 #    hostPath: /var/vm/images/win11-1
 #    storageClassName: openebs-lvmpv
-#    cpuCores: 4
-#    memory: 8192Mi
+#    cpuCores: 3
+#    memory: 12288Mi
 #    gpuDeviceName: intel.com/sriov-gpudevice
 #    secureBoot: false
 #    usePVC: false
 #    useDataVolume: false
-#    dataVolumeName: my-datavolume2
+#    dataVolumeName: vm2-win11-image
 #    cdromImage: docker.io/intel2019/win11-iso-cdisk
 #    bootDiskImage: docker.io/aisha123aisha/disk-win-11
 #    virtioContainerDiskImage: docker.io/kubevirt/virtio-container-disk
@@ -75,8 +84,8 @@ virtualMachines:
   #   storage: 60Gi
   #   hostPath: /var/vm/images/win11-1
   #   storageClassName: openebs-lvmpv
-  #   cpuCores: 4
-  #   memory: 8192Mi
+  #   cpuCores: 3
+  #   memory: 12288Mi
   #   gpuDeviceName: intel.com/sriov-gpudevice
   #   secureBoot: false
   #   usePVC: false
@@ -112,8 +121,8 @@ virtualMachines:
   #   storage: 60Gi
   #   hostPath: /var/vm/images/win11-1
   #   storageClassName: openebs-lvmpv
-  #   cpuCores: 4
-  #   memory: 8192Mi
+  #   cpuCores: 3
+  #   memory: 12288Mi
   #   gpuDeviceName: intel.com/sriov-gpudevice
   #   secureBoot: false
   #   usePVC: false

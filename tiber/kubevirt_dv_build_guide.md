@@ -13,7 +13,9 @@ Kubevirt build setup is based on `Ubuntu 22.04 LTS`.
     docker run -d -p 5000:5000 --name registry registry:2.7
     ```
 
-2.  Update the Registry for K3S to pull Kubevirt from build system
+# Settings on Tiber Host to pull Kubevirt or Device-Plugin from build system registry
+
+1.  Update the Registry for K3S to pull from build system
 
     Ex: If Localserver registry IP is 10.223.97.134:5000 `kubevirt-operator.yaml`, update that in `registries.yaml` and in `NO_PROXY` of `k3s.service.env`
     ```sh
@@ -30,18 +32,18 @@ Kubevirt build setup is based on `Ubuntu 22.04 LTS`.
         - "http://10.223.97.134:5000"
     ```
 
-3.  Update Proxy for K3S
+2.  Update Proxy for K3S
     ```sh
     sudo vi /etc/systemd/system/k3s.service.env
     ```
-    Add Kubevirt server IP in `NO_PROXY`
+    Add server IP in `NO_PROXY`
     ```sh
     HTTPS_PROXY="http://proxy-dmz.intel.com:912"
     HTTP_PROXY="http://proxy-dmz.intel.com:911"
     NO_PROXY="localhost,::1,127.0.0.1,.intel.com,10.190.167.198,10.223.97.134"
     ```
 
-4.  Restart K3S
+3.  Restart K3S
     ```sh
     sudo systemctl restart k3s
     ```
@@ -64,15 +66,15 @@ Kubevirt build setup is based on `Ubuntu 22.04 LTS`.
     make push
     make manifests
     ```
-
-5.  Install Kubevirt
-    Copy the `kubevirt-operator.yaml` and `kubevirt-cr.yaml` from `_out/manifests/release` to TiberOS host machine.
+## Install Kubevirt on Tiber Host
+1.  Install Kubevirt
+    Copy the `kubevirt-operator.yaml` and `kubevirt-cr.yaml` from `_out/manifests/release` of build system to TiberOS host machine.
     ```sh
     kubectl apply -f kubevirt-operator.yaml
     kubectl apply -f kubevirt-cr.yaml
     ```
 
-6.  Verify Deployment
+2.  Verify Deployment
     ```sh
     kubectl get all -n kubevirt
 
@@ -125,7 +127,7 @@ Kubevirt build setup is based on `Ubuntu 22.04 LTS`.
     make docker-push
     ```
 
-3. Install device-plugin
+## Install Device-Plugin on Tiber Host
    -    Copy `deploy` folder to Tiber system
    -    Replace `localhost:5000` in `deploy/helm/values.yaml` and `deploy/manifests/maverikflats-device-plugin.yaml` with your Ubuntu build server IP
     ```sh

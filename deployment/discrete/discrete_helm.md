@@ -1,4 +1,4 @@
-# Deployment of Virtual Machines using individual scripts
+# Deployment of Virtual Machines and sidecar using individual helm charts
 
 This directory contains mapped Sidecar and Virtual Machine Deployment charts.
 1. Sidecar scripts, patches Libvirt XML with QEMU Commandline parameters inside Virt-Launcher pod.
@@ -18,7 +18,7 @@ Refer `deployment/discrete/helm-win11_[connector]/values.yaml` to edit
 | vm3     | DP-1     | dp1.yaml   | helm-win11_dp1   | vm3-win11-image | 3392     |
 | vm4     | DP-3     | dp3.yaml   | helm-win11_dp3   | vm4-win11-image | 3393     |
 
-**Verify Kubevirt, Device-plugin, SR-IOV GPU Passthrough and Hugepage before deployig VM**
+**Verify Kubevirt, Device-plugin, SR-IOV GPU Passthrough and Hugepage before deploying VM**
 ```sh
 kubectl describe nodes
 ```
@@ -84,7 +84,6 @@ Allocated resources:
 .
 ```
 
-
 ## 1. Upload VM bootimage to CDI
 Ex. for `vm1` the image name in CDI is `vm1-win11-image`
 
@@ -112,7 +111,6 @@ Ex. for `vm1` the image name in CDI is `vm1-win11-image`
     vm4-win11-image   Succeeded   N/A                   15d
     ```
   
-
 ## 2. Edit Sidecar script to attach USB peripherals to Virtual Machine
 
 Get the list of USB devices connected to Host machine
@@ -183,7 +181,6 @@ sidecar-script-dp1     1      15d
 sidecar-script-dp3     1      15d
 sidecar-script-hdmi1   1      18d
 sidecar-script-hdmi2   1      16d
-
 ```
 
 ## 4. Deploy Virtual Machine
@@ -210,6 +207,7 @@ win11-vm2-vm   6d4h   Running   10.42.0.106   edgemicrovisortoolkit   True
 win11-vm3-vm   6d4h   Running   10.42.0.108   edgemicrovisortoolkit   True
 win11-vm4-vm   6d4h   Running   10.42.0.110   edgemicrovisortoolkit   True
 ```
+Now VM will launched on monitors, [refer](../../tiber/tiber_mf_setup.md/#33-setup-xdotool-in-a-container-to-scale-applications-to-full-screen) to scale VM to full-screen
 
 To check the status of allocated resources when 4 VMs are running
 ```sh

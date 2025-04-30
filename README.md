@@ -22,5 +22,5 @@ Connected with 4 Monitors (2 HDMI and 2 DP) based on type and no. of available p
   3. [Install Intel custom Kubevirt (includes SR-IOV patched QEMU)](tiber/kubevirt_gfx_guide.md#13-install-customized-kubevirt-for-maverick-flats)
   4. [Install Device Plugin](tiber/kubevirt_gfx_guide.md/#16-install-device-plugin)
   5. Deployment Package - includes Sidecar and VM deployment Helm charts.
-     - [Discrete VM Helm chart to deployment](deployment/discrete/discrete.md)
-     - Single Helm deployment - In Progress
+     - [Discrete VM Helm chart to deployment](deployment/discrete/discrete_helm.md)
+     - [Single Helm deployment](deployment/single/single_helm.md)

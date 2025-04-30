@@ -6,6 +6,9 @@ The steps include
 2. Setting up the environment to flash and create partitions. 
 3. Flashing TiberOS onto NVMe/SSD and creating partitions.
 
+    > [!Note]
+    > The TiberOS image used here is **mutable**
+
 ## 1. Boot Ubuntu Live Disk and Setup Flashing Environment
 
 1. Boot from Ubuntu Live Disk:
@@ -68,7 +71,7 @@ The steps include
 
 **TiberOS 3.0 SR-IOV Image is now flashed onto NVME/SSD, reboot the system**
 
-1.  Unmount the Ubuntu Disk, and Reboot:
+10.  Unmount the Ubuntu Disk, and Reboot:
     ```sh
     sudo reboot
     ```
@@ -111,8 +114,6 @@ The steps include
     ```
     - Output
         ```sh
-        guest@TiberOS [ ~ ]$ lsblk
-
         NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
         nvme0n1     259:0    0 931.5G  0 disk
         ├─nvme0n1p1 259:1    0   299M  0 part /boot/efi
