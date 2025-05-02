@@ -18,6 +18,7 @@ The steps include
 
 2. Set HTTPS proxy:
     ```sh
+    export http_proxy=http://proxy-dmz.intel.com:911
     export https_proxy=http://proxy-dmz.intel.com:912
     ```
 
@@ -71,7 +72,7 @@ The steps include
 
 **TiberOS 3.0 SR-IOV Image is now flashed onto NVME/SSD, reboot the system**
 
-10.  Unmount the Ubuntu Disk, and Reboot:
+10. Unmount the Ubuntu Disk, and Reboot:
     ```sh
     sudo reboot
     ```

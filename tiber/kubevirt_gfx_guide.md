@@ -98,49 +98,85 @@ sudo systemctl status gfx-virtual-func.service
 ### 1.3 Install customized Kubevirt for Maverick-Flats
 
 #### Quick Install (from one-intel-edge-sandbox repository)
-```sh
-kubectl apply -f tiber/kubevirt/manifests/release/kubevirt-operator.yaml
-kubectl apply -f tiber/kubevirt/manifests/release/kubevirt-cr.yaml
-```
-To build ans install Kubevirt [refer](./kubevirt_dv_build_guide.md/#steps-to-build-intel-cutomized-kubevirt)
 
--   Verify Kubevirt Deployment
+1.  Update `registry.yaml` to pull from `one-intel-edge-sandbox` registry
     ```sh
-    kubectl get all -n kubevirt
-
-    NAME                                   READY   STATUS    RESTARTS      AGE
-    pod/virt-api-999875d56-4dvsc           1/1     Running   6 (18d ago)   19d
-    pod/virt-controller-546cb985cd-f4zns   1/1     Running   5 (18d ago)   19d
-    pod/virt-controller-546cb985cd-kxmsr   1/1     Running   5 (18d ago)   19d
-    pod/virt-handler-s4m9j                 1/1     Running   7 (15d ago)   19d
-    pod/virt-operator-6459bcf8c6-vxbqx     1/1     Running   6 (18d ago)   19d
-    pod/virt-operator-6459bcf8c6-xhktx     1/1     Running   6 (18d ago)   19d
-
-    NAME                                  TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
-    service/kubevirt-operator-webhook     ClusterIP   10.43.86.170   <none>        443/TCP   19d
-    service/kubevirt-prometheus-metrics   ClusterIP   None           <none>        443/TCP   19d
-    service/virt-api                      ClusterIP   10.43.68.37    <none>        443/TCP   19d
-    service/virt-exportproxy              ClusterIP   10.43.189.94   <none>        443/TCP   19d
-
-    NAME                          DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
-    daemonset.apps/virt-handler   1         1         1       1            1           kubernetes.io/os=linux   19d
-
-    NAME                              READY   UP-TO-DATE   AVAILABLE   AGE
-    deployment.apps/virt-api          1/1     1            1           19d
-    deployment.apps/virt-controller   2/2     2            2           19d
-    deployment.apps/virt-operator     2/2     2            2           19d
-
-    NAME                                         DESIRED   CURRENT   READY   AGE
-    replicaset.apps/virt-api-6676df49cc          0         0         0       19d
-    replicaset.apps/virt-api-999875d56           1         1         1       19d
-    replicaset.apps/virt-controller-546cb985cd   2         2         2       19d
-    replicaset.apps/virt-controller-54c7869f6c   0         0         0       19d
-    replicaset.apps/virt-operator-6459bcf8c6     2         2         2       19d
-
-    NAME                            AGE   PHASE
-    kubevirt.kubevirt.io/kubevirt   19d   Deployed
+    sudo vi /etc/rancher/k3s/registries.yaml
+    ```
+    Add
+    ```sh
+    mirrors:
+    "amr-registry-pre.caas.intel.com":
+        endpoint:
+        - "https://amr-registry-pre.caas.intel.com"
     ```
 
+2.  Update Proxy for K3S
+    ```sh
+    sudo vi /etc/systemd/system/k3s.service.env
+    ```
+    Add `.intel.com` IP in `NO_PROXY`
+    ```sh
+    HTTPS_PROXY="http://proxy-dmz.intel.com:912"
+    HTTP_PROXY="http://proxy-dmz.intel.com:911"
+    NO_PROXY="localhost,::1,127.0.0.1,.intel.com"
+    ```
+
+3.  Copy the Certificate
+    ```sh
+    sudo cp tiber/certificates/harbor.crt /etc/pki/ca-trust/source/anchors/
+
+    sudo update-ca-trust
+    ```
+
+4.  Restart K3S
+    ```sh
+    sudo systemctl restart k3s
+    ```
+
+5.  Install Kubevirt
+    ```sh
+    kubectl apply -f tiber/kubevirt/manifests/release/kubevirt-operator.yaml
+    kubectl apply -f tiber/kubevirt/manifests/release/kubevirt-cr.yaml
+    ```
+    To build and install Kubevirt [refer](./kubevirt_dv_build_guide.md/#steps-to-build-intel-cutomized-kubevirt)
+
+    -   Verify Kubevirt Deployment
+        ```sh
+        kubectl get all -n kubevirt
+
+        NAME                                   READY   STATUS    RESTARTS      AGE
+        pod/virt-api-999875d56-4dvsc           1/1     Running   6 (18d ago)   19d
+        pod/virt-controller-546cb985cd-f4zns   1/1     Running   5 (18d ago)   19d
+        pod/virt-controller-546cb985cd-kxmsr   1/1     Running   5 (18d ago)   19d
+        pod/virt-handler-s4m9j                 1/1     Running   7 (15d ago)   19d
+        pod/virt-operator-6459bcf8c6-vxbqx     1/1     Running   6 (18d ago)   19d
+        pod/virt-operator-6459bcf8c6-xhktx     1/1     Running   6 (18d ago)   19d
+
+        NAME                                  TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+        service/kubevirt-operator-webhook     ClusterIP   10.43.86.170   <none>        443/TCP   19d
+        service/kubevirt-prometheus-metrics   ClusterIP   None           <none>        443/TCP   19d
+        service/virt-api                      ClusterIP   10.43.68.37    <none>        443/TCP   19d
+        service/virt-exportproxy              ClusterIP   10.43.189.94   <none>        443/TCP   19d
+
+        NAME                          DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+        daemonset.apps/virt-handler   1         1         1       1            1           kubernetes.io/os=linux   19d
+
+        NAME                              READY   UP-TO-DATE   AVAILABLE   AGE
+        deployment.apps/virt-api          1/1     1            1           19d
+        deployment.apps/virt-controller   2/2     2            2           19d
+        deployment.apps/virt-operator     2/2     2            2           19d
+
+        NAME                                         DESIRED   CURRENT   READY   AGE
+        replicaset.apps/virt-api-6676df49cc          0         0         0       19d
+        replicaset.apps/virt-api-999875d56           1         1         1       19d
+        replicaset.apps/virt-controller-546cb985cd   2         2         2       19d
+        replicaset.apps/virt-controller-54c7869f6c   0         0         0       19d
+        replicaset.apps/virt-operator-6459bcf8c6     2         2         2       19d
+
+        NAME                            AGE   PHASE
+        kubevirt.kubevirt.io/kubevirt   19d   Deployed
+        ```
 
 ### 1.4 Install CDI
 ```sh
