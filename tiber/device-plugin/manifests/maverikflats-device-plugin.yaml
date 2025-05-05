@@ -14,7 +14,7 @@ spec:
     spec:
       initContainers:
         - name: set-permissions
-          image: busybox:latest
+          image: 'amr-registry-pre.caas.intel.com/one-intel-edge-sandbox/maverick-flats/busybox:latest'
           command:
             - sh
             - -c

@@ -97,7 +97,9 @@ sudo systemctl status gfx-virtual-func.service
 
 ### 1.3 Install customized Kubevirt for Maverick-Flats
 
-#### Quick Install (from one-intel-edge-sandbox repository)
+To build and install Kubevirt [refer](./kubevirt_dv_build_guide.md/#steps-to-build-intel-cutomized-kubevirt)
+
+#### 1.3.1 Setup Quick Install from one-intel-edge-sandbox repository (for Intel Internal use only)
 
 1.  Update `registry.yaml` to pull from `one-intel-edge-sandbox` registry
     ```sh
@@ -134,12 +136,13 @@ sudo systemctl status gfx-virtual-func.service
     sudo systemctl restart k3s
     ```
 
-5.  Install Kubevirt
+#### 1.3.2 Install Kubevirt from one-intel-edge-sandbox (for Intel Internal use only)
+
+1.  Install Kubevirt
     ```sh
     kubectl apply -f tiber/kubevirt/manifests/release/kubevirt-operator.yaml
     kubectl apply -f tiber/kubevirt/manifests/release/kubevirt-cr.yaml
     ```
-    To build and install Kubevirt [refer](./kubevirt_dv_build_guide.md/#steps-to-build-intel-cutomized-kubevirt)
 
     -   Verify Kubevirt Deployment
         ```sh
@@ -215,47 +218,53 @@ Allocated resources:
 
 ### 1.6 Install Device-Plugin
 
-#### For Quick Install (from one-intel-edge-sandbox repository)
-```sh
-kubectl apply -f tiber/device-plugin/manifests/maverikflats-device-plugin.yaml
-```
-or
-```sh
-# Helm deployment
-
-cd tiber/device-plugin/helm/
-
-helm install device-plugin .
-```
 To build and install Device-plugin [refer](./kubevirt_dv_build_guide.md/#steps-to-build-device-plugin)
 
-To verify 
-```sh
-kubectl describe nodes
-```
--   Output
+#### For Quick Install from one-intel-edge-sandbox repository (for Intel Internal use only)
+
+Ensure [these steps](./kubevirt_gfx_guide.md/#131-setup-quick-install-from-one-intel-edge-sandbox-repository) are completed.
+
+1. Install Device-Plugin from one-intel-edge-sandbox repository
+
     ```sh
-    Capacity:
-        intel.com/igpu:                 1k
-        intel.com/udma:                 1k
-        intel.com/usb:                  1k
-        intel.com/vfio:                 1k
-        intel.com/x11:                  1k
-    Allocatable:
-        intel.com/igpu:                 1k
-        intel.com/udma:                 1k
-        intel.com/usb:                  1k
-        intel.com/vfio:                 1k
-        intel.com/x11:                  1k
-    Allocated resources:
-        Resource                       Requests          Limits
-        --------                       --------          ------
-        intel.com/igpu                   0                 0
-        intel.com/udma                   0                 0
-        intel.com/usb                    0                 0
-        intel.com/vfio                   0                 0
-        intel.com/x11                    0                 0
+    kubectl apply -f tiber/device-plugin/manifests/maverikflats-device-plugin.yaml
     ```
+    or
+    ```sh
+    # Helm deployment
+
+    cd tiber/device-plugin/helm/
+
+    helm install device-plugin .
+    ```
+
+    -   To verify 
+    ```sh
+    kubectl describe nodes
+    ```
+    -   Output
+        ```sh
+        Capacity:
+            intel.com/igpu:                 1k
+            intel.com/udma:                 1k
+            intel.com/usb:                  1k
+            intel.com/vfio:                 1k
+            intel.com/x11:                  1k
+        Allocatable:
+            intel.com/igpu:                 1k
+            intel.com/udma:                 1k
+            intel.com/usb:                  1k
+            intel.com/vfio:                 1k
+            intel.com/x11:                  1k
+        Allocated resources:
+            Resource                       Requests          Limits
+            --------                       --------          ------
+            intel.com/igpu                   0                 0
+            intel.com/udma                   0                 0
+            intel.com/usb                    0                 0
+            intel.com/vfio                   0                 0
+            intel.com/x11                    0                 0
+        ```
 
 ## 2. Create Windows-10/11 Image
 
