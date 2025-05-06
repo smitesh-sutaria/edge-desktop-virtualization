@@ -271,7 +271,7 @@ Ensure [these steps](./kubevirt_gfx_guide.md/#131-setup-quick-install-from-one-i
 Refer [Installation](../kubevirt-gfx-sriov/docs/deploy-windows-vm.md#installation) and [Deployment](../kubevirt-gfx-sriov/docs/deploy-windows-vm.md#deployment) section
 
 > [!Note]
-Once after steps are complete, search and copy the `disk.qcow2` from `/opt/vm/images/win10` which can be later used to boot VM from CDI
+Once after steps are complete, search and copy the `disk.qcow2` or `disk.img` from `/opt/vm/images/win10` which can be later used to boot VM from CDI
 
 ## 3. Uninstall
 

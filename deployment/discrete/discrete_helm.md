@@ -94,7 +94,7 @@ Ex. for `vm1` the image name in CDI is `vm1-win11-image`
     NAMESPACE     NAME                          TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                  AGE
     cdi           cdi-uploadproxy               ClusterIP      10.43.51.68     <none>          443/TCP                  19d
     ```
--   Upload image
+-   Upload image, use **.qcow2** or **.img**
     ```sh
     cd tiber/kubevirt/cmd/virtctl/
 

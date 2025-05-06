@@ -1,4 +1,4 @@
-# Build setup
+# Build setup for building Kubevirt and Device-Plugin
 >[!Note]
 Kubevirt build setup is based on `Ubuntu 22.04 LTS`.
 
@@ -13,7 +13,7 @@ Kubevirt build setup is based on `Ubuntu 22.04 LTS`.
     docker run -d -p 5000:5000 --name registry registry:2.7
     ```
 
-# Settings on Tiber Host to pull Kubevirt or Device-Plugin from build system registry
+# Settings on Tiber Host to pull Kubevirt or Device-Plugin from Ubuntu build system registry
 
 1.  Update the Registry for K3S to pull from build system
 
@@ -48,7 +48,7 @@ Kubevirt build setup is based on `Ubuntu 22.04 LTS`.
     sudo systemctl restart k3s
     ```
 
-# Steps to build Intel cutomized Kubevirt
+# Steps to build Intel cutomized Kubevirt on Ubuntu build system
 
 [Maverick-Flats-Kubevirt](https://github.com/intel-innersource/applications.virtualization.maverickflats-kubevirt-itep) version hosted in Intel-Innersource
 
@@ -111,7 +111,7 @@ Kubevirt build setup is based on `Ubuntu 22.04 LTS`.
     kubevirt.kubevirt.io/kubevirt   19d   Deployed
     ```
 
-# Steps to build Device-plugin
+# Steps to build Device-plugin on Ubuntu build system
 
 1.  Clone the repo
     ```sh
