@@ -17,7 +17,7 @@ spec:
           cores: 4
           model: host-passthrough
         memory:
-          guest: "4G"
+          guest: "8G"
         devices:
           autoattachGraphicsDevice: true
           autoattachPodInterface: true

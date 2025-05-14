@@ -10,7 +10,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/vm/images"
+    path: "/opt/vm/images"
 
 ---
 apiVersion: v1

@@ -36,7 +36,7 @@ spec:
           imagePullPolicy: IfNotPresent
       - name: virtiocontainerdisk
         containerDisk:
-          image: docker.io/kubevirt/virtio-container-disk
+          image: gar-registry.caas.intel.com/flexpg-public/kubevirt-nexidv/virtio-container-disk:v0.1
           imagePullPolicy: IfNotPresent
       - name: winsoftwaredrviso
         containerDisk:
