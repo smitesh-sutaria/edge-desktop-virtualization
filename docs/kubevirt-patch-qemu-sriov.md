@@ -2,19 +2,22 @@
 
 This document provides steps, related to 
 - Patching QEMU with Intel GPU SR-IOV patches and replacing the version of QEMU in Kubevirt
-- Enabling Kubevirt to local support with GTK
+- Enabling Kubevirt to support local display by enabling GTK library support
 
 ## Overview
 
 The following will be captured in this document:
 
-- Steps to patch QEMU source code on Ubuntu host using the SR-IOV patches
-- Steps to build QEMU within a Centos 9 image container
-- Steps to patch qemu.conf in Kubevirt source code
-- Steps to patch the Kubevirt 
-- Steps to build the Kubevirt images and manifests using custom QEMU binary
+- Enable Kubevirt with libraries to support GTL local display
+- Patch Qemu with Intel Graphics SR-IOV patches
+  - Patch QEMU source code on Ubuntu host using the SR-IOV patches
+  - Build QEMU within a Centos 9 image container
+- Copy the patched QEMU to GTK enabled Kubevirt
+  - Patch Kubevirt files to include QEMU
+- Build and Deploy Kubevirt 
 
 > [!Note]
+> This has been verified on `Kubevirt Version 1.5.0`
 > OS and QEMU version provided in default Kubevirt virt-launcher image is
 
 ```shell
@@ -37,8 +40,7 @@ QEMU emulator version 9.0.0 (qemu-kvm-9.0.0-10.el9)
     podman run -d -p 5000:5000 --name local-registry registry:2
     ```
 
-
-## 2. Enabling Kubevirt with local GTK display
+## 2. Enabling Kubevirt with GTK display support libararies
 
 1. Clone the repo:
 
@@ -267,7 +269,7 @@ The original idea to build within the Centos container comes from this [link](ht
     13c2760bf012a8011ddbe0c595ec3dca24249debe32bc4d1e338ec8538ad7453 build/qemu-system-x86_64
     ```
 
-## 4. Patch Kubevirt with SR-IOV patched QEMU binary
+## 4. Patch Kubevirt files with SR-IOV patched QEMU binary
 
 1. Create a build directory to store new QEMU binary and directory for shared libraries
 
