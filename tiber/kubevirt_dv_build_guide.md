@@ -52,6 +52,7 @@ Kubevirt build setup is based on `Ubuntu 22.04 LTS`.
 
 To build Kubevirt for external: [follow link](../docs/kubevirt-patch-qemu-sriov.md)
 
+## To build Kubevirt for internal: 
 
 1.  Clone the repo, build the Kubevirt, for detailed build steps [refer](https://github.com/intel-innersource/applications.virtualization.maverickflats-kubevirt-itep/blob/v1.5.0/docs/build-the-builder.md).
     ```sh
@@ -67,9 +68,10 @@ To build Kubevirt for external: [follow link](../docs/kubevirt-patch-qemu-sriov.
     make push
     make manifests
     ```
+
 ## Install Kubevirt on Tiber Host
 1.  To install Kubevirt
-    Copy the `kubevirt-operator.yaml` and `kubevirt-cr.yaml` from `_out/manifests/release` of build system to TiberOS host machine.
+    Copy the `kubevirt-operator.yaml` and `kubevirt-cr.yaml` from `_out/manifests/release` from build system to TiberOS host machine.
     ```sh
     kubectl apply -f kubevirt-operator.yaml
     kubectl apply -f kubevirt-cr.yaml
