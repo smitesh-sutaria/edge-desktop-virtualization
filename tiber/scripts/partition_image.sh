@@ -5,7 +5,9 @@ set -e
 
 usage() {
     cat <<EOF
-Usage: $0 <device name> <os image>
+Usage: $0 [--skip-confirm] <device name> <os image>
+    --skip-confirm
+        Optional. If specified, bypasses the confirmation prompt.
     <device_name>
         Example: /dev/sda, /dev/nvme0n1
         Device to flash the OS image onto
@@ -16,6 +18,13 @@ Usage: $0 <device name> <os image>
 EOF
     exit 1
 }
+
+# Check if the first argument is --skip-confirm
+skip_confirm=false
+if [[ "$1" == "--skip-confirm" ]]; then
+    skip_confirm=true
+    shift # Shift arguments to remove --skip-confirm from the list
+fi
 
 if [[ $# -ne 2 ]]; then
     usage
@@ -50,12 +59,14 @@ fi
 echo "Current partition table of $target:"
 sfdisk -l "$target"
 
-# Ask for confirmation
-echo ""
-read -p "Are you sure you want to proceed? This will overwrite all partitions on $target that are listed above. (y/n): " confirm
-if [[ ! "$confirm" =~ ^(Y|y|yes|YES|Yes)$ ]]; then
-    echo "Operation canceled."
-    exit 1
+# Ask for confirmation unless --skip-confirm is specified
+if [[ "$skip_confirm" == false ]]; then
+    echo ""
+    read -p "Are you sure you want to proceed? This will overwrite all partitions on $target that are listed above. (y/n): " confirm
+    if [[ ! "$confirm" =~ ^(Y|y|yes|YES|Yes)$ ]]; then
+        echo "Operation canceled."
+        exit 1
+    fi
 fi
 
 echo "Loading image '$image' onto '$target'..."
@@ -89,11 +100,12 @@ echo "Performing filesystem check on $data_partition"
 e2fsck -f -y -v "$data_partition"
 
 # List the free/unpartitioned space on the target drive.
-# Get the total number of free sectors, then divide that by 2
+# Get the total number of free sectors, then divide that by 5. Not much space
+# is needed for the root partition, everything else lives on the data partition (/home, /opt, ...)
 # The data partition will be moved by this much, then expanded to fill the 2nd half of the free space
 # The 2nd partition (root) will then be expanded to fill the first half of the free space
 # in case of 1TB NVME (1945138575), shift_sector given is 945138575
-shift_sector=$(( $(sfdisk -F "$target" | tail -n 1 | awk '{print $3}') / 2 ))
+shift_sector=$(( $(sfdisk -F "$target" | tail -n 1 | awk '{print $3}') / 5 ))
 
 if [[ "$shift_sector" -eq 0 ]]; then
     echo "Error: Unable to determine free sectors on $target"

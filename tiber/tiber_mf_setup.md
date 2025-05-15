@@ -1,9 +1,7 @@
 # 1. Setup Hugepages
-To setup Hugepages with pagesize 2048M, for 4 VMs with each VM RAM set to 12GB
+To setup Hugepages with pagesize 2MB, for 4 VMs with each VM RAM set to 12GB. 
 ```sh
-sudo su
-
-echo 24576 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+echo $(( 6 * 1024 * 4 )) | sudo tee /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
 ```
 
 # 2. Set USB permissions
@@ -145,7 +143,7 @@ DISPLAY=:0 xrandr
 
 ### 3.3.1 Install Docker in MF image:
 ```sh
-sudo tdnf install -y moby-engine moby-cli ca-certificates
+sudo dnf install -y moby-engine moby-cli ca-certificates
 ```
 ### 3.3.2 Create a http-proxy.conf file with below contents to let docker work in Intel network with proxy.
 ```sh
