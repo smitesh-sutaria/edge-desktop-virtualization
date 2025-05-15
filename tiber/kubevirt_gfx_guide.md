@@ -8,20 +8,6 @@ git clone https://github.com/intel-innersource/applications.virtualization.maver
 [Intel® Graphics SR-IOV Enablement Toolkit](https://github.com/intel/kubevirt-gfx-sriov) is used to enable Graphics SR-IOV and is cloned to folder `kubevirt-gfx-sriov`, credits to all contibutors of it.\
 Minor changes has been made to it to work on TiberOS and to support Intel's custom Kubevirt
 
-**Update Graphics Device ID in `kubevirt-gfx-sriov/manifests/kubevirt-cr-gfx-sriov.yaml` if not found**
-  - Read the Device ID of Intel Graphics Card from Host, Ex: for RPL
-    ```sh
-    $ cat /sys/devices/pci0000\:00/0000\:00\:02.0/device
-
-    0xa7a0
-    ```
-  - Add the Device ID in `pciHostDevices` section
-    ```yaml
-    - pciVendorSelector: "8086:a7a0"
-      resourceName: "intel.com/sriov-gpudevice"
-      externalResourceProvider: false
-    ```
-
 ## 1. Installation
 Below steps are customized for TiberOS and derived from [Manual Install](../kubevirt-gfx-sriov/docs/manual-install.md) of kubevirt-gfx-sriov, for more details follow the same link
 
@@ -190,6 +176,23 @@ cd kubevirt-gfx-sriov
 
 ### 1.5 Enable Virt-Handler to discover Graphics VFs
 Update KubeVirt custom resource configuration to enable virt-handler to discover graphics VFs on the host. All discovered VFs will be published as *allocatable* resource
+
+**Update Graphics Device ID in `kubevirt-gfx-sriov/manifests/kubevirt-cr-gfx-sriov.yaml` if not found**
+  - Read the Device ID of Intel Graphics Card from Host, Ex: for RPL
+    ```sh
+    $ cat /sys/devices/pci0000\:00/0000\:00\:02.0/device
+
+    0xa7a0
+    ```
+  - Add the Device ID in `pciHostDevices` section
+    ```yaml
+    - pciVendorSelector: "8086:a7a0"
+      resourceName: "intel.com/sriov-gpudevice"
+      externalResourceProvider: false
+    ```
+
+Apply the YAML changes
+
 ```sh
 cd kubevirt-gfx-sriov
 

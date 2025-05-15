@@ -48,9 +48,10 @@ Kubevirt build setup is based on `Ubuntu 22.04 LTS`.
     sudo systemctl restart k3s
     ```
 
-# Steps to build Intel cutomized Kubevirt on Ubuntu build system
+# Steps to build Intel customized Kubevirt on Ubuntu build system
 
-[Maverick-Flats-Kubevirt](https://github.com/intel-innersource/applications.virtualization.maverickflats-kubevirt-itep) version hosted in Intel-Innersource
+To build Kubevirt for external: [follow link](../docs/kubevirt-patch-qemu-sriov.md)
+
 
 1.  Clone the repo, build the Kubevirt, for detailed build steps [refer](https://github.com/intel-innersource/applications.virtualization.maverickflats-kubevirt-itep/blob/v1.5.0/docs/build-the-builder.md).
     ```sh
