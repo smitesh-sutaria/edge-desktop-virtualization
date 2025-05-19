@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /home/guest/idv/vm.conf
+source vm.conf
 
 declare -A VM_LIST
 

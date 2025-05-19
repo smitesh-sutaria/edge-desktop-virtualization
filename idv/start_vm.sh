@@ -5,7 +5,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-source /home/guest/idv/vm.conf
+source vm.conf
 
 set -eE
 
@@ -16,7 +16,7 @@ sudo chmod -t /tmp
 INSTALL_DIR="/opt/qcow2"
 
 kernel_maj_ver=0
-TPM_DIR=$INSTALL_DIR/win.qcow2.d
+TPM_DIR=$INSTALL_DIR/win1.qcow2.d
 SETUP_LOCK=/tmp/sriov.setup.lock
 VF_USED=0
 HUGEPG_ALLOC=0
@@ -27,10 +27,10 @@ MAX_USB_REDIR_CHANNEL=16
 GUEST_NAME="-name ${vm1_name}"
 GUEST_MEM="-m ${vm1_ram}G"
 GUEST_CPU_NUM="-smp cores=${vm1_cores},threads=2,sockets=1"
-GUEST_DISK="-drive file=$INSTALL_DIR/win.qcow2,id=windows_disk,format=qcow2,cache=none"
+GUEST_DISK="-drive file=$INSTALL_DIR/${vm1_qcow2_file},id=windows_disk,format=qcow2,cache=none"
 GUEST_FIRMWARE="\
  -drive file=$INSTALL_DIR/OVMF_CODE.fd,format=raw,if=pflash,unit=0,readonly=on \
- -drive file=$INSTALL_DIR/OVMF_VARS_windows.fd,format=raw,if=pflash,unit=1"
+ -drive file=$INSTALL_DIR/${vm1_firmware_file},format=raw,if=pflash,unit=1"
 GUEST_DISP_TYPE="-display gtk,gl=on"
 GUEST_DISPLAY_MAX=4
 GUEST_DISPLAY_MIN=1
