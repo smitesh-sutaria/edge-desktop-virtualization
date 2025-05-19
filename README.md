@@ -50,7 +50,7 @@ https://github.com/smitesh-sutaria/edge-microvisor-toolkit/blob/3.0/docs/develop
 
 ### Generate Virtual Machine qcow2 with required drivers for SR-IOV
 
->> Follow the qcow2 creation for windows till post install launch from this readme.
+Follow the qcow2 creation for windows till post install launch from this readme.
 
 https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#microsoft-windows-11-vm
 
