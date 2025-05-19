@@ -1,16 +1,58 @@
-# IDV solution with SR-IOV setup
-
-> These contents may have been developed with support from one or more Intel-operated generative artificial intelligence solutions.
+# Desktop Virtualization solution with graphics SR-IOV
 
 ## Table of Contents
-- [Pre-requisites](#pre-requisites)
-  - [Create a directory to save qcow2 image and firmware files](#create-a-directory-to-save-qcow2-image-and-firmware-files)
-  - [SR-IOV virtual functions enumeration](#sr-iov-virtual-functions-enumeration)
-  - [Run X server](#run-x-server)
-- [Launch one Windows11 virtual machine](#launch-one-windows11-virtual-machine)
-- [Launch Windows11 virtual machines](#launch-windows11-virtual-machines)
+- [Desktop Virtualization solution with graphics SR-IOV](#desktop-virtualization-solution-with-graphics-sr-iov)
+  - [Table of Contents](#table-of-contents)
+  - [Pre-requisites](#pre-requisites)
+    - [System Requirements](#system-requirements)
+      - [Recommended Hardware Configuration](#recommended-hardware-configuration)
+    - [Build EMT](#build-emt)
+    - [Install EMT](#install-emt)
+    - [Generate Virtual Machine qcow2 with required drivers for SR-IOV](#generate-virtual-machine-qcow2-with-required-drivers-for-sr-iov)
+    - [Create a directory to save qcow2 image and firmware files](#create-a-directory-to-save-qcow2-image-and-firmware-files)
+    - [Run X server](#run-x-server)
+  - [Launch one Windows11 virtual machine](#launch-one-windows11-virtual-machine)
+  - [Launch multiple Windows11 virtual machines](#launch-multiple-windows11-virtual-machines)
+  - [Troubleshooting](#troubleshooting)
 
 ## Pre-requisites
+
+### System Requirements
+
+Edge Microvisor Toolkit + Graphics SR-IOV is designed to support all Intel® Core platforms from 12th gen onwards.
+
+This software is validated on below:
+
+|         Core™         |
+| ----------------------|
+| 12th Gen Intel® Core™ |
+| 13th Gen Intel® Core™ |
+
+#### Recommended Hardware Configuration
+
+| Component    | Edge Microvisor Toolkit + graphics SR-IOV|
+|--------------|-----------------------------------|
+| CPU          | Intel® Core (12th gen and higher) |
+| RAM          | 64GB recommended                  |
+| Storage      | 500 GB SSD or NVMe minimum        |
+| Networking   | 1GbE Ethernet                     |
+
+
+### Build EMT
+
+Build EMT image for graphics SR-IOV using the spec https://github.com/open-edge-platform/edge-microvisor-toolkit/blob/3.0-dev/toolkit/imageconfigs/edge-image-mf-dev.json
+
+Follow the build steps as mentioned here : https://github.com/smitesh-sutaria/edge-microvisor-toolkit/blob/3.0/docs/developer-guide/get-started/building-howto.md 
+
+### Install EMT
+
+https://github.com/smitesh-sutaria/edge-microvisor-toolkit/blob/3.0/docs/developer-guide/get-started/installation-howto.md
+
+### Generate Virtual Machine qcow2 with required drivers for SR-IOV
+
+>> Follow the qcow2 creation for windows till post install launch from this readme.
+
+https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#microsoft-windows-11-vm
 
 ### Create a directory to save qcow2 image and firmware files
 
