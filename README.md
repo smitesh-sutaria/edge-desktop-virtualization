@@ -7,6 +7,7 @@
   - [Create a directory to save qcow2 image and firmware files](#create-a-directory-to-save-qcow2-image-and-firmware-files)
   - [SR-IOV virtual functions enumeration](#sr-iov-virtual-functions-enumeration)
   - [Run X server](#run-x-server)
+- [Launch one Windows11 virtual machine](#launch-one-windows11-virtual-machine)
 - [Launch Windows11 virtual machines](#launch-windows11-virtual-machines)
 
 ## Pre-requisites
@@ -71,7 +72,52 @@
   xhost +
   ```
 
-## Launch Windows11 virtual machines
+## Launch one Windows11 virtual machine
+
+- Once you have completed all the above steps, move to the working directory. Run the following command
+
+  ```bash
+  cd idv
+  ```
+
+- The `vm.conf` file contains configuration parameters for the virtual machines. Modify the variables starting with `vm1_*` to set the configuration parameters.
+
+  Example:
+
+  ```ini
+  # Memory in GB
+  vm1_ram=3
+  # Name of the VM
+  vm1_name=windows_vm1
+  # Number of CPU cores
+  vm1_cores=3
+  # Name of the firmware file present in `/opt/qcow2` directory
+  vm1_firmware_file=OVMF_VARS_windows1.fd
+  # Name of the qcow2 file present in `/opt/qcow2` directory
+  vm1_qcow2_file=win1.qcow2
+  # Name of the display connector (monitor)
+  vm1_connector0=HDMI-1
+  # SSH port for the VM
+  vm1_ssh=4444
+  # WinRDP port for the VM
+  vm1_winrdp=3389
+  # WinRM port for the VM
+  vm1_winrm=5986
+  ```
+
+- Run the `start_vm` script with superuser privileges to launch the VM
+  
+  ```bash
+  sudo ./start_vm.sh
+  ```
+
+  Verify that the VM is running by checking the process list
+  
+  ```bash
+  ps aux | grep qemu
+  ```
+
+## Launch multiple Windows11 virtual machines
 
 - Once you have completed all the above steps, move to the working directory. Run the following command
 
