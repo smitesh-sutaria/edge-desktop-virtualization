@@ -16,7 +16,7 @@ sudo chmod -t /tmp
 INSTALL_DIR="/opt/qcow2"
 
 kernel_maj_ver=0
-TPM_DIR=$INSTALL_DIR/win1.qcow2.d
+TPM_DIR=$INSTALL_DIR/${vm1_qcow2_file}.d
 SETUP_LOCK=/tmp/sriov.setup.lock
 VF_USED=0
 HUGEPG_ALLOC=0
