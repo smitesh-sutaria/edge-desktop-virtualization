@@ -206,9 +206,10 @@ DISPLAY=:0 xrandr
     DP-4 disconnected (normal left inverted right x axis y axis)
     ```
 
-## 3.3 Setup XDOTOOL in a container to scale applications to full-screen
+## 3.3 Setup Openbox Window Manager in a container to scale applications to full-screen
 > [!Note]
 > This is needed if VM doesn't scale to full-screen after launching
+> Perform this step before starting VM
 
 ### 3.3.1 Install Docker in MF image:
 ```sh
@@ -235,7 +236,7 @@ sudo systemctl daemon-reload
 
 sudo systemctl start docker.service
 ```
-### 3.3.3 Create alpine container and install XDOTOOL
+### 3.3.3 Create alpine container and install Openbox
 ```sh
 sudo docker network create tiber-bridge-network
 
@@ -247,37 +248,74 @@ sudo docker run -it --rm --name tiber-resize-container \
     --network tiber-bridge-network \
     alpine:latest
 ```
-#### 3.3.3.1 From container set proxy, install xdotool and rescale VM:
+#### 3.3.3.1 From container set proxy, install Openbox window manager:
 ```sh
 export https_proxy=http://proxy-dmz.intel.com:912
 
-apk add xdotool
+apk add openbox
 ```
 -   Output
     ```sh
     fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/main/x86_64/APKINDEX.tar.gz
     fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/community/x86_64/APKINDEX.tar.gz
-    (1/14) Installing libxau (1.0.11-r4)
-    (2/14) Installing libmd (1.1.0-r0)
-    (3/14) Installing libbsd (0.12.2-r0)
-    (4/14) Installing libxdmcp (1.1.5-r1)
-    (5/14) Installing libxcb (1.16.1-r0)
-    (6/14) Installing libx11 (1.8.10-r0)
-    (7/14) Installing libxext (1.3.6-r2)
-    (8/14) Installing libxinerama (1.1.5-r4)
-    (9/14) Installing libxtst (1.2.5-r0)
-    (10/14) Installing xkeyboard-config (2.43-r0)
-    (11/14) Installing xz-libs (5.6.3-r0)
-    (12/14) Installing libxml2 (2.13.4-r5)
-    (13/14) Installing libxkbcommon (1.7.0-r1)
-    (14/14) Installing xdotool (3.20211022.1-r1)
+    (1/47) Installing libice (1.1.1-r6)
+    (2/47) Installing libuuid (2.40.4-r1)
+    (3/47) Installing libsm (1.2.4-r4)
+    (4/47) Installing libxfixes (6.0.1-r4)
+    (5/47) Installing libxrender (0.9.11-r5)
+    (6/47) Installing libxcursor (1.2.3-r0)
+    (7/47) Installing libxrandr (1.5.4-r1)
+    (8/47) Installing libffi (3.4.7-r0)
+    (9/47) Installing libintl (0.22.5-r0)
+    (10/47) Installing libeconf (0.6.3-r0)
+    (11/47) Installing libblkid (2.40.4-r1)
+    (12/47) Installing libmount (2.40.4-r1)
+    (13/47) Installing pcre2 (10.43-r0)
+    (14/47) Installing glib (2.82.5-r0)
+    (15/47) Installing libbz2 (1.0.8-r6)
+    (16/47) Installing brotli-libs (1.1.0-r2)
+    (17/47) Installing libpng (1.6.47-r0)
+    (18/47) Installing freetype (2.13.3-r0)
+    (19/47) Installing giflib (5.2.2-r1)
+    (20/47) Installing libid3tag (0.16.3-r0)
+    (21/47) Installing libjpeg-turbo (3.0.4-r0)
+    (22/47) Installing libsharpyuv (1.4.0-r0)
+    (23/47) Installing libwebp (1.4.0-r0)
+    (24/47) Installing zstd-libs (1.5.6-r2)
+    (25/47) Installing tiff (4.7.0-r0)
+    (26/47) Installing libwebpdemux (1.4.0-r0)
+    (27/47) Installing imlib2 (1.12.3-r1)
+    (28/47) Installing libexpat (2.7.0-r0)
+    (29/47) Installing fontconfig (2.15.0-r1)
+    (30/47) Installing libxft (2.3.8-r3)
+    (31/47) Installing pixman (0.43.4-r1)
+    (32/47) Installing cairo (1.18.2-r1)
+    (33/47) Installing fribidi (1.0.16-r0)
+    (34/47) Installing graphite2 (1.3.14-r6)
+    (35/47) Installing harfbuzz (9.0.0-r1)
+    (36/47) Installing pango (1.54.0-r1)
+    (37/47) Installing libdav1d (1.5.0-r0)
+    (38/47) Installing libgcc (14.2.0-r4)
+    (39/47) Installing pkgconf (2.3.0-r0)
+    (40/47) Installing libstdc++ (14.2.0-r4)
+    (41/47) Installing shared-mime-info (2.4-r2)
+    (42/47) Installing gdk-pixbuf (2.42.12-r1)
+    (43/47) Installing librsvg (2.59.2-r0)
+    (44/47) Installing openbox-libs (3.6.1-r8)
+    (45/47) Installing xcb-util (0.4.1-r3)
+    (46/47) Installing startup-notification (0.12-r8)
+    (47/47) Installing openbox (3.6.1-r8)
     Executing busybox-1.37.0-r12.trigger
-    OK: 15 MiB in 29 packages
+    Executing glib-2.82.5-r0.trigger
+    Executing shared-mime-info-2.4-r2.trigger
+    Executing gdk-pixbuf-2.42.12-r1.trigger
+    OK: 44 MiB in 76 packages
     ```
--   To resize Virtual Machine Window
+-   To start Openbox Window Manager
     ```sh
-    xdotool search --onlyvisible --name "vm1" windowsize 1920 1080
+    DISPLAY=:0 openbox &
     ```
+    **Now you can see a cursor (usually on Primary Display: HDMI-1)**
 
 # 4. Install packages
 
