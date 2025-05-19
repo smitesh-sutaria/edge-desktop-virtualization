@@ -1,16 +1,65 @@
 # 1. Setup Hugepages
-To setup Hugepages with pagesize 2MB, for 4 VMs with each VM RAM set to 12GB. 
+Set up Hugepages with pagesize 2MB, for 4 VMs with each VM RAM set to 12GB (48 GB total)
+
+Create a service to set up these hugepages at boot time
 ```sh
-echo $(( 6 * 1024 * 4 )) | sudo tee /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+sudo vi /etc/systemd/system/hugepages.service
+```
+Add
+```
+[Unit]
+Description=Configure Hugepages
+Before=k3s.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'echo $(( 6 * 1024 * 4 )) | sudo tee /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages'
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Enable and start the service, which will configure the hugepages and exit.
+```
+sudo systemctl daemon-reload
+sudo systemctl enable hugepages.service
+sudo systemctl start hugepages.service
+```
+
+Check that hugepages were configured
+```
+sudo cat /proc/meminfo | grep -i hugepages
+```
+```
+HugePages_Total:   24576
+HugePages_Free:    24576
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
 ```
 
 # 2. Set USB permissions
-To use USB peripherals connected to Host machine with Virtual machines, set the USB devices permission to user `qemu`
-```sh
-sudo chown -R qemu:root /dev/bus/usb/
+To use USB peripherals connected to Host machine with Virtual machines, create a udev rule that will automatically give the user qemu access to them
 ```
-> [!Note]
-> This has to be done everytime USB device is hot-plugged
+sudo vi /etc/udev/rules.d/99-usb-qemu.rules
+```
+Add
+```
+SUBSYSTEM=="usb", MODE="0664", GROUP="qemu"
+```
+Apply changes
+```
+sudo udevadm control --reload-rules
+```
+Unplug and re-plug the USB devices you plan to attach to VMs, then check the permissions are set correctly:
+```
+ls -alR /dev/bus/usb/
+```
+```
+...
+crw-rw-r--. 1 root qemu 189, 8 May 15 22:14 009
+...
+```
 
 # 3. Display setup for TiberOS
 
@@ -45,13 +94,33 @@ XSERVER is installed by default, make the below settings before starting X serve
     ```
 
 
-## 3.2 Start X Server
+## 3.2 Create a service to autostart the X server
 ```sh
-sudo X
+sudo vi /etc/systemd/system/x.service
 ```
-- You can now see Black screen on monitors
+Add
+```
+[Unit]
+Description=Launch X server at startup
+After=network.target
 
-### 3.2.1 Check Monitor's resolution
+[Service]
+Type=simple
+ExecStart=/usr/bin/X
+
+[Install]
+WantedBy=graphical.target
+```
+
+Enable and start the service. You should now see a black screen on the monitors.
+**NOTE: When you reboot the machine, you will end up with a black screen, because X is running. To access the console, try `control+alt+f3`.** To return to X, switch back with `control-alt-f2`. If X is not currently the active display, the VMs will not boot, and will error with "SyncVMI failed".
+```
+sudo systemctl daemon-reload
+sudo systemctl enable x.service
+sudo systemctl start x.service
+```
+
+### 3.2.1 Check Monitor's resolution and names of connected displays
 Open SSH session to the Host system
 ```sh
 DISPLAY=:0 xrandr
