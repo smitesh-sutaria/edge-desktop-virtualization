@@ -10,7 +10,7 @@
     - [Install EMT](#install-emt)
     - [Generate Virtual Machine qcow2 with required drivers for SR-IOV](#generate-virtual-machine-qcow2-with-required-drivers-for-sr-iov)
     - [Create a directory to save qcow2 image and firmware files](#create-a-directory-to-save-qcow2-image-and-firmware-files)
-    - [Run X server](#run-x-server)
+    - [Display Setup](#display-setup)
   - [Launch one Windows11 virtual machine](#launch-one-windows11-virtual-machine)
   - [Launch multiple Windows11 virtual machines](#launch-multiple-windows11-virtual-machines)
   - [Troubleshooting](#troubleshooting)
@@ -101,7 +101,34 @@ https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#m
   00:02.7 VGA compatible controller: Intel Corporation Raptor Lake-P [Iris Xe Graphics] (rev 04)
   ```
 
-### Run X server
+### Display setup
+
+## Disable DPMS and screen blanking on the X Window System
+
+-   DPMS Disable
+    ```sh
+    sudo vi /usr/share/X11/xorg.conf.d/10-extensions.conf
+    ```
+    Add
+    ```conf
+    Section "Extensions"
+        Option "DPMS" "false"
+    EndSection
+    ```
+
+-   Disable Screen Blanking and Timeouts
+    ```sh
+    sudo vi /usr/share/X11/xorg.conf.d/10-serverflags.conf
+    ```
+    Add
+    ```conf
+    Section "ServerFlags"
+        Option "StandbyTime" "0"
+        Option "SuspendTime" "0"
+        Option "OffTime"     "0"
+        Option "BlankTime"   "0"
+    EndSection
+    ```
 
 - Run the following command to start X server
   
