@@ -63,6 +63,11 @@ https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#m
   sudo chmod -R 755 /opt/qcow2/
   sudo chown -R <your_username>:<your_username> /opt/qcow2/
 
+- Make sure you have the following files in the `/opt/qcow2` directory:
+  - `OVMF_CODE.fd`
+  - `qcow2` file for each VM
+  - Firmware file (`.fd` file) for each VM
+
 ### SR-IOV virtual functions enumeration
 
 - Move to the 'idv' directory using the following command
