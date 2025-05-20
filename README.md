@@ -171,8 +171,8 @@ https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#m
   vm1_qcow2_file=win1.qcow2
   # Name of the display connector (monitor)
   vm1_connector0=HDMI-1
-  # Comma separated list of USB devices to attach to the VM in the format: <hostbus>-<device-id>
-  vm1_usb=3-1,3-2
+  # Comma separated list of USB devices to attach to the VM in the format: <hostbus>-<hostport>, where hostport is the end port to which the device is attached
+  vm1_usb=3-1.1,3-1.2,3-1.3,3-1.4
   # SSH port for the VM
   vm1_ssh=4444
   # WinRDP port for the VM
@@ -221,8 +221,8 @@ https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#m
   vm1_qcow2_file=win1.qcow2
   # Name of the display connector (monitor)
   vm1_connector0=HDMI-1
-  # Comma separated list of USB devices to attach to the VM in the format: <hostbus>-<device-id>
-  vm1_usb=3-1,3-2
+  # Comma separated list of USB devices to attach to the VM in the format: <hostbus>-<hostport>, where hostport is the end port to which the device is attached
+  vm1_usb=3-1.1,3-1.3,3-1.3,3-1.4
   # SSH port for the VM
   vm1_ssh=4444
   # WinRDP port for the VM

@@ -757,8 +757,8 @@ function set_usb_passthrough() {
     IFS=',' read -r -a usb_pairs <<< "$GUEST_USB_DEVICES"
 
     for pair in "${usb_pairs[@]}"; do
-        IFS='-' read -r bus device <<< "$pair"
-        USB_OPTIONS+=" -device usb-host,hostbus=$bus,hostaddr=$device"
+        IFS='-' read -r bus port <<< "$pair"
+        USB_OPTIONS+=" -device usb-host,hostbus=$bus,hostport=$port"
     done
 }
 
