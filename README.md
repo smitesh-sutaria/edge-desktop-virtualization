@@ -109,7 +109,7 @@ https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#m
   sudo X
   ```
 
-  **Note**: After running the above command, you will see a blank screen. Ensure you have SSH access to the machine for the next steps.
+  **Note**: After running the above command, you will see a blank screen because X is running. To access the console, try control+alt+f3. To return to X, switch back with control-alt-f2. If X is not currently the active display, the VMs will not boot. Ensure you have SSH access to the machine for the next steps.
 
 - Grant X11 server access to local users
 
