@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# These contents may have been developed with support from one or more
+# Intel-operated generative artificial intelligence solutions.
+
 source vm.conf
 
 declare -A VM_LIST
@@ -21,8 +24,9 @@ for vm in "${VM_LIST[@]}"; do
     ssh="${vm}_ssh"
     winrdp="${vm}_winrdp"
     winrm="${vm}_winrm"
+    usb="${vm}_usb"
 
-    sudo ./start_vm.sh -m ${!ram}G -c ${!cpu} -n ${!name} -f ${!firmware_file} -d ${!qcow2_file} --display connectors.0=${!connector} -p ssh=${!ssh},winrdp=${!winrdp},winrm=${!winrm} &
+    sudo ./start_vm.sh -m ${!ram}G -c ${!cpu} -n ${!name} -f ${!firmware_file} -d ${!qcow2_file} --display connectors.0=${!connector} -p ssh=${!ssh},winrdp=${!winrdp},winrm=${!winrm} -u ${!usb} &
 
 done
 

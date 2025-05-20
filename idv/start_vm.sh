@@ -1,9 +1,7 @@
 #!/bin/bash
 
-# Copyright (c) 2024 ThunderSoft Corporation.
-# All rights reserved.
-#
-# SPDX-License-Identifier: Apache-2.0
+# These contents may have been developed with support from one or more
+# Intel-operated generative artificial intelligence solutions.
 
 source vm.conf
 
@@ -28,6 +26,7 @@ GUEST_NAME="-name ${vm1_name}"
 GUEST_MEM="-m ${vm1_ram}G"
 GUEST_CPU_NUM="-smp cores=${vm1_cores},threads=2,sockets=1"
 GUEST_DISK="-drive file=$INSTALL_DIR/${vm1_qcow2_file},id=windows_disk,format=qcow2,cache=none"
+GUEST_USB_DEVICES=$vm1_usb
 GUEST_FIRMWARE="\
  -drive file=$INSTALL_DIR/OVMF_CODE.fd,format=raw,if=pflash,unit=0,readonly=on \
  -drive file=$INSTALL_DIR/${vm1_firmware_file},format=raw,if=pflash,unit=1"
@@ -71,6 +70,7 @@ GUEST_STATIC_OPTION="\
  -k en-us \
  -cpu host \
  -rtc base=localtime -usb -device usb-tablet"
+ USB_OPTIONS=''
 
 #------------------------------------------------------         Functions       ----------------------------------------------------------
 function check_kernel_version() {
@@ -753,6 +753,15 @@ function setup_swtpm() {
     swtpm socket --tpmstate dir=$TPM_DIR/vtpm0 --tpm2 --ctrl type=unixio,path=$TPM_DIR/vtpm0/swtpm-sock --daemon
 }
 
+function set_usb_passthrough() {
+    IFS=',' read -r -a usb_pairs <<< "$GUEST_USB_DEVICES"
+
+    for pair in "${usb_pairs[@]}"; do
+        IFS='-' read -r bus device <<< "$pair"
+        USB_OPTIONS+=" -device usb-host,hostbus=$bus,hostaddr=$device"
+    done
+}
+
 function cleanup() {
     setup_lock_acquire
     cleanup_pt_pci
@@ -799,6 +808,7 @@ function launch_guest() {
               $GUEST_SWTPM \
               $GUEST_STATIC_OPTION \
               $GUEST_EXTRA_QCMD\
+	      $USB_OPTIONS\
     "
 
     echo $EXE_CMD
@@ -816,6 +826,7 @@ function show_help() {
     printf "\t-f  specify guest firmware OVMF variable image, eg. \"-d /path/to/<ovmf_vars.fd>\"\n"
     printf "\t-p  specify host forward ports, current support ssh,winrdp,winrm, eg. \"-p ssh=4444,winrdp=5555,winrm=6666\"\n"
     printf "\t-e  specify extra qemu cmd, eg. \"-e \"-monitor stdio\"\"\n"
+    printf "\t-u  comma-separated list of USB devices to attach to the VM in the format: <hostbus>-<device-id>\"\"\n"
     printf "\t--passthrough-pci-usb passthrough USB PCI bus to guest.\n"
     printf "\t--passthrough-pci-udc passthrough USB Device Controller ie. UDC PCI bus to guest.\n"
     printf "\t--passthrough-pci-audio passthrough Audio PCI bus to guest.\n"
@@ -887,6 +898,11 @@ function parse_arg() {
 
             -e)
                 set_extra_qcmd "$2"
+                shift
+                ;;
+
+            -u)
+                GUEST_USB_DEVICES=$2
                 shift
                 ;;
 
@@ -962,6 +978,7 @@ setup_lock_acquire
 setup_sriov
 set_pwr_ctrl
 setup_swtpm
+set_usb_passthrough
 setup_lock_release
 
 # launch
