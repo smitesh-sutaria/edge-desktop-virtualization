@@ -1,0 +1,33 @@
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+Starting Windows Guest windows_vm3 ...
+Setting hugepages 1024
+Total VFs 7
+Using VF 1
+Using qmp-pwr-socket-0 for power control qmp socket
+/bin/qemu-system-x86_64 -m 2048M -smp cores=2,threads=2,sockets=1 -name windows_vm3 -display gtk,gl=on,connectors.0=DP-1 -device virtio-vga,max_outputs=4,blob=true, -device vfio-pci,host=0000:00:02.1, -object memory-backend-memfd,hugetlb=on,id=mem,size=2048M -machine memory-backend=mem -drive file=/opt/qcow2/win3.qcow2,id=windows_disk1,format=qcow2,cache=none -drive file=/opt/qcow2/OVMF_CODE.fd,format=raw,if=pflash,unit=0,readonly=on -drive file=/opt/qcow2/OVMF_VARS_windows3.fd,format=raw,if=pflash,unit=1 -device e1000,netdev=net0,mac=DE:AD:BE:EF:B1:14 -netdev user,id=net0,hostfwd=tcp::4446-:22,hostfwd=tcp::5988-:5986,hostfwd=tcp::3391-:3389 -machine kernel_irqchip=on -device qemu-xhci,id=xhci -qmp unix:/tmp/qmp-pwr-socket-0,server,nowait -chardev socket,id=chrtpm,path=/opt/qcow2/win3.qcow2.d/vtpm0/swtpm-sock -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0 -machine q35 -enable-kvm -k en-us -cpu host -rtc base=localtime -usb -device usb-tablet -device usb-host,hostbus=3,hostport=7.1 -device usb-host,hostbus=3,hostport=7.2 -device usb-host,hostbus=3,hostport=7.3 -device usb-host,hostbus=3,hostport=7.4
+Starting Windows Guest windows_vm2 ...
+Setting hugepages 2048
+qemu-system-x86_64: -device vfio-pci,host=0000:00:02.1,: IGD device 0000:00:02.1 cannot support legacy mode due to existing devices at address 1f.0
+Total VFs 7
+Using VF 2
+Using qmp-pwr-socket-1 for power control qmp socket
+/bin/qemu-system-x86_64 -m 2048M -smp cores=2,threads=2,sockets=1 -name windows_vm2 -display gtk,gl=on,connectors.0=DP-3 -device virtio-vga,max_outputs=4,blob=true, -device vfio-pci,host=0000:00:02.2, -object memory-backend-memfd,hugetlb=on,id=mem,size=2048M -machine memory-backend=mem -drive file=/opt/qcow2/win2.qcow2,id=windows_disk1,format=qcow2,cache=none -drive file=/opt/qcow2/OVMF_CODE.fd,format=raw,if=pflash,unit=0,readonly=on -drive file=/opt/qcow2/OVMF_VARS_windows2.fd,format=raw,if=pflash,unit=1 -device e1000,netdev=net0,mac=DE:AD:BE:EF:B1:14 -netdev user,id=net0,hostfwd=tcp::4445-:22,hostfwd=tcp::5987-:5986,hostfwd=tcp::3390-:3389 -machine kernel_irqchip=on -device qemu-xhci,id=xhci -qmp unix:/tmp/qmp-pwr-socket-1,server,nowait -chardev socket,id=chrtpm,path=/opt/qcow2/win2.qcow2.d/vtpm0/swtpm-sock -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0 -machine q35 -enable-kvm -k en-us -cpu host -rtc base=localtime -usb -device usb-tablet -device usb-host,hostbus=3,hostport=1.1 -device usb-host,hostbus=3,hostport=1.2 -device usb-host,hostbus=3,hostport=1.3 -device usb-host,hostbus=3,hostport=1.4
+qemu-system-x86_64: -device vfio-pci,host=0000:00:02.2,: IGD device 0000:00:02.2 cannot support legacy mode due to existing devices at address 1f.0
+Starting Windows Guest windows_vm1 ...
+Setting hugepages 3072
+Total VFs 7
+Using VF 3
+Using qmp-pwr-socket-2 for power control qmp socket
+/bin/qemu-system-x86_64 -m 2048M -smp cores=2,threads=2,sockets=1 -name windows_vm1 -display gtk,gl=on,connectors.0=HDMI-1 -device virtio-vga,max_outputs=4,blob=true, -device vfio-pci,host=0000:00:02.3, -object memory-backend-memfd,hugetlb=on,id=mem,size=2048M -machine memory-backend=mem -drive file=/opt/qcow2/win1.qcow2,id=windows_disk1,format=qcow2,cache=none -drive file=/opt/qcow2/OVMF_CODE.fd,format=raw,if=pflash,unit=0,readonly=on -drive file=/opt/qcow2/OVMF_VARS_windows1.fd,format=raw,if=pflash,unit=1 -device e1000,netdev=net0,mac=DE:AD:BE:EF:B1:14 -netdev user,id=net0,hostfwd=tcp::4444-:22,hostfwd=tcp::5986-:5986,hostfwd=tcp::3389-:3389 -machine kernel_irqchip=on -device qemu-xhci,id=xhci -qmp unix:/tmp/qmp-pwr-socket-2,server,nowait -chardev socket,id=chrtpm,path=/opt/qcow2/win1.qcow2.d/vtpm0/swtpm-sock -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0 -machine q35 -enable-kvm -k en-us -cpu host -rtc base=localtime -usb -device usb-tablet -device usb-host,hostbus=3,hostport=3.1 -device usb-host,hostbus=3,hostport=3.2 -device usb-host,hostbus=3,hostport=3.3 -device usb-host,hostbus=3,hostport=3.4
+qemu-system-x86_64: -device vfio-pci,host=0000:00:02.3,: IGD device 0000:00:02.3 cannot support legacy mode due to existing devices at address 1f.0
