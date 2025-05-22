@@ -71,7 +71,7 @@ This file contains steps to launch virtual machines using a system service.
     ```bash
     sudo systemctl status idv-init.service
     ```
-   **Note:**After starting the idv-init service, the screen will go blank because X is running. Ensure you have SSH access to the machine for the next steps.
+   **Note**:After starting the idv-init service, the screen will go blank because X is running. Ensure you have SSH access to the machine for the next steps.
 
 ## Enable and start `idv-launcher` service
 
@@ -94,7 +94,7 @@ This file contains steps to launch virtual machines using a system service.
   ```bash
   systemctl --user status idv-launcher.service
   ```
-   **Note:**Once the idv-launcher service starts, all the VMs should be launched in respective monitors.
+   **Note**:Once the idv-launcher service starts, all the VMs should be launched in respective monitors.
 
 ## Troubleshooting
 
