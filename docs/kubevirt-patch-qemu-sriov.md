@@ -1,6 +1,6 @@
 # Building Kubevirt and patching QEMU
 
-This document provides steps, related to 
+This document provides steps, related to
 - Patching QEMU with Intel GPU SR-IOV patches and replacing the version of QEMU in Kubevirt
 - Enabling Kubevirt to support local display by enabling GTK library support
 
@@ -8,16 +8,16 @@ This document provides steps, related to
 
 The following will be captured in this document:
 
-- Enable Kubevirt with libraries to support GTL local display
 - Patch Qemu with Intel Graphics SR-IOV patches
   - Patch QEMU source code on Ubuntu host using the SR-IOV patches
   - Build QEMU within a Centos 9 image container
-- Copy the patched QEMU to GTK enabled Kubevirt
+- Enable Kubevirt with libraries to support GTK local display
+  - Copy the patched QEMU to GTK enabled Kubevirt
   - Patch Kubevirt files to include QEMU
-- Build and Deploy Kubevirt 
+  - Build and Deploy Kubevirt
 
 > [!Note]
-> This has been verified on `Kubevirt Version 1.5.0`
+> This has been verified on `Kubevirt Version v1.5.0`
 > OS and QEMU version provided in default Kubevirt virt-launcher image is
 
 ```shell
@@ -33,115 +33,17 @@ QEMU emulator version 9.0.0 (qemu-kvm-9.0.0-10.el9)
 > [!Note]
 > Build system where the Kubevirt and QEMU build performed is Ubuntu 22.04 LTS
 
-1. Install podman and setup registry
+1. Install a container frontend and setup the registry.
+    Both `podman` and `docker` will work. `podman` is recommended and used in this guide.
     ```sh
     sudo apt -y install podman
 
     podman run -d -p 5000:5000 --name local-registry registry:2
     ```
 
-## 2. Enabling Kubevirt with GTK display support libararies
+## 2. Building and patching QEMU
 
-1. Clone the repo:
-
-    ```sh
-    mkdir ~/workspace
-
-    cd ~/workspace
-
-    git clone https://github.com/kubevirt/kubevirt.git
-
-    cd kubevirt
-    ```
-
-2. Add the following packages to `centos_main` section of `hack/rpm_deps.sh`
-   
-    ```diff
-    @ -42,6 +42,63 @@ centos_main="
-    acl
-    curl-minimal
-    vim-minimal
-    + gtk3-devel
-    + libjpeg-turbo
-    + openjpeg2
-    + libjpeg-turbo-devel
-    + libproxy
-    + libproxy-webkitgtk4
-    + xdg-dbus-proxy
-    + SDL2
-    + SDL2-devel
-    + libxdp-devel
-    + mesa-libgbm
-    + mesa-libgbm-devel
-    + gdk-pixbuf2
-    + gdk-pixbuf2-modules
-    + gdk-pixbuf2-devel
-    + cairo
-    + vulkan-tools
-    + vulkan-loader
-    + cairo-gobject
-    + cairo-devel
-    + cairo-gobject-devel
-    + gdk-pixbuf2
-    + gdk-pixbuf2-modules
-    + gdk-pixbuf2-devel
-    + vte-profile
-    + vte291
-    + vte291-devel
-    + libX11-xcb
-    + xorg-x11-fonts-ISO8859-1-100dpi
-    + libX11-common
-    + libX11
-    + xorg-x11-proto-devel
-    + libX11-devel
-    + sound-theme-freedesktop
-    + alsa-lib
-    + pulseaudio-libs
-    + pulseaudio-libs-glib2
-    + pipewire-pulseaudio
-    + pulseaudio-libs-devel
-    + pipewire-libs
-    + pipewire
-    + pipewire-jack-audio-connection-kit-libs
-    + pipewire-jack-audio-connection-kit
-    + pipewire-alsa
-    + pipewire-pulseaudio
-    + brlapi
-    + brlapi-devel
-    + fuse3-libs
-    + fuse3-devel
-    + libiscsi
-    + libblkio
-    + libblkio-devel
-    + librbd1
-    + librbd-devel
-    + librados2
-    + librados-devel
-    + libradospp-devel
-    "
-    centos_extra="
-    coreutils-single
-    ```
-
-3. Export the location of the docker registry and build tag (local docker registry in this case)
-
-    ```sh
-    export DOCKER_PREFIX=localhost:5000
-    export DOCKER_TAG=mybuild
-    ```
-
-4. Build Kubevirt
-   
-   ```sh
-   make rpm-deps
-   ```
-
-**Once the build completes successfully, Kubevirt is has been enabled with GTK dependent libraries**
-
-
-## 3. Patching QEMU
-
-The SRIOV patches to QEMU are based on QEMU 8
+The SRIOV patches to QEMU are based on QEMU 8.2.1
 
 1. Download the the SR-IOV patches for QEMU
 
@@ -153,23 +55,23 @@ The SRIOV patches to QEMU are based on QEMU 8
     tar -xvf qemu_8.2.1+ppa1-noble9.debian.tar.xz
     ```
 
-2. Download QEMU 8:
+1. Download the same version of QEMU that matches the downloaded patches:
 
     ```sh
-    wget -N --no-check-certificate https://download.qemu.org/qemu-8.0.0.tar.xz
+    wget -N --no-check-certificate https://download.qemu.org/qemu-8.2.1.tar.xz
 
-    tar -xvf qemu-8.0.0.tar.xz
+    tar -xvf qemu-8.2.1.tar.xz
 
-    cd qemu-8.0.0
+    cd qemu-8.2.1
     ```
 
-3. Copy the patches from `qemu_8.2.1+ppa1-noble9.debian` to qemu-8.0.0 directory:
+1. Copy the patches from `qemu_8.2.1+ppa1-noble9.debian` to qemu-8.2.1 directory:
 
     ```sh
     cp  -r ../qemu_8.2.1+ppa1-noble9.debian/debian/patches/sriov/ .
     ```
 
-4. Apply patches:
+1. Apply patches:
 
     ```sh
     git apply ./sriov/*.patch
@@ -177,7 +79,7 @@ The SRIOV patches to QEMU are based on QEMU 8
     cd ~/workspace
     ```
 
-### 3.1 Creating CentOS 9 containerized environment
+### 2.1 Creating CentOS 9 containerized environment
 
 QEMU is built in Centos 9 container environment to ensure compatible with the Centos 9 based container image for virt-launcher.
 
@@ -186,12 +88,12 @@ The original idea to build within the Centos container comes from this [link](ht
 1. Generate the Centos 9 image to be used for QEMU build environment
 
     ```sh
-    cd qemu-8.0.0
+    cd qemu-8.2.1
 
     ./tests/lcitool/libvirt-ci/bin/lcitool --data-dir ./tests/lcitool dockerfile centos-stream-9 qemu > Dockerfile.centos-stream9
     ```
 
-2. Patch `Dockerfile.centos-stream9` to include missing dependencies
+1. Patch `Dockerfile.centos-stream9` to include missing dependencies
 
     ```sh
     vim Dockerfile.centos-stream9
@@ -210,21 +112,27 @@ The original idea to build within the Centos container comes from this [link](ht
         dnf clean all -y && \
         rpm -qa | sort > /packages.txt && \
     ```
-    > [!Note] 
+    > [!Note]
     > All expected dependencies for QEMU build in this example are there after the patch - if QEMU will be built with other flags it is possible that some dependencies may be missing and will need to be added to this Dockerfile.
 
-3. Build the Centos 9 image
+    If needed, add proxy environment variables to the top of this Dockerfile.centos-stream9 (use an appropriate proxy, such as proxy-dmz or proxy-iind).
+    ```
+    ENV HTTPS_PROXY "http://proxy-dmz.intel.com:912"
+    ENV HTTP_PROXY "http://proxy-dmz.intel.com:912"
+    ```
+
+1. Build the Centos 9 image
 
     ```sh
     podman build -t qemu_build:centos-stream9 -f Dockerfile.centos-stream9 .
     ```
 
-4. Starting Centos 9 build environment
+1. Starting Centos 9 build environment
 
-    Start the Centos 9 environment container from `qemu-8.0.0` directory. This allows the whole content of the QEMU source to be inside the environment.
+    Start the Centos 9 environment container from `qemu-8.2.1` directory. This allows the whole content of the QEMU source to be inside the environment.
 
     ```sh
-    cd qemu-8.0.0
+    cd qemu-8.2.1
 
     podman run -ti \
         -v $(pwd):/src:Z \
@@ -233,7 +141,7 @@ The original idea to build within the Centos container comes from this [link](ht
         qemu_build:centos-stream9
     ```
 
-### 3.2 Building QEMU inside the Centos 9 container
+### 2.2 Building QEMU inside the Centos 9 container
 
 1. Configure QEMU build
 
@@ -241,13 +149,13 @@ The original idea to build within the Centos container comes from this [link](ht
     [root@<container> src]# ./configure --prefix=/usr --enable-kvm --disable-xen --enable-libusb --enable-debug-info --enable-debug  --enable-sdl --enable-vhost-net --enable-spice --disable-debug-tcg  --enable-opengl  --enable-gtk  --enable-virtfs --target-list=x86_64-softmmu --audio-drv-list=pa --firmwarepath=/usr/share/qemu-firmware:/usr/share/ipxe/qemu:/usr/share/seavgabios:/usr/share/seabios:/usr/share/qemu-kvm/ --disable-spice
     ```
 
-    > [!Note] 
+    > [!Note]
     > Certain flags were added to the default configure command to enable **GTK on local display**:
     > * spice is disabled with --disable-spice (spice is not natively supported in RHEL9 image)
     > * Firmware paths necessary for the operation of VM within the virt-launcher pods are added `--firmwarepath=/usr/share/qemu-firmware:/usr/share/ipxe/qemu:/usr/share/seavgabios:/usr/share/seabios:/usr/share/qemu-kvm/`
 
 
-2. Build QEMU
+1. Build QEMU
 
     ```sh
     [root@<container> src]# cd build
@@ -255,7 +163,7 @@ The original idea to build within the Centos container comes from this [link](ht
     [root@<container> src]# ninja install
     ```
 
-3. Exit the CentOS build container environment - the built artifacts will be present in the `qemu-8.0.0` directory on host.
+1. Exit the CentOS build container environment - the built artifacts will be present in the `qemu-8.2.1` directory on host.
 
     ```sh
     [root@<container> src]# exit
@@ -269,30 +177,129 @@ The original idea to build within the Centos container comes from this [link](ht
     13c2760bf012a8011ddbe0c595ec3dca24249debe32bc4d1e338ec8538ad7453 build/qemu-system-x86_64
     ```
 
-## 4. Patch Kubevirt files with SR-IOV patched QEMU binary
+## 3. Enabling Kubevirt with GTK display support libararies
 
-1. Create a build directory to store new QEMU binary and directory for shared libraries
+1. Clone the kubevirt repo:
 
     ```sh
-    cd ~/workspace/kubevirt
+    mkdir ~/workspace
 
+    cd ~/workspace
+
+    git clone https://github.com/kubevirt/kubevirt.git
+
+    cd kubevirt
+    ```
+
+1. Check out the specific kubevirt version you want to build with.
+    ```
+    git checkout v1.5.0
+    ```
+
+1. Add the following packages to `launcherbase_main` section of `hack/rpm_deps.sh`
+
+    ```diff
+    @@ -89,14 +89,71 @@ sandboxroot_main="
+     launcherbase_main="
+       libvirt-client-${LIBVIRT_VERSION}
+       libvirt-daemon-driver-qemu-${LIBVIRT_VERSION}
+       passt-${PASST_VERSION}
+       qemu-kvm-core-${QEMU_VERSION}
+       qemu-kvm-device-usb-host-${QEMU_VERSION}
+       swtpm-tools-${SWTPM_VERSION}
+    +  gtk3-devel
+    +  libjpeg-turbo
+    +  openjpeg2
+    +  libjpeg-turbo-devel
+    +  libproxy
+    +  libproxy-webkitgtk4
+    +  xdg-dbus-proxy
+    +  SDL2
+    +  SDL2-devel
+    +  libxdp-devel
+    +  mesa-libgbm
+    +  mesa-libgbm-devel
+    +  gdk-pixbuf2
+    +  gdk-pixbuf2-modules
+    +  gdk-pixbuf2-devel
+    +  cairo
+    +  vulkan-tools
+    +  vulkan-loader
+    +  cairo-gobject
+    +  cairo-devel
+    +  cairo-gobject-devel
+    +  gdk-pixbuf2
+    +  gdk-pixbuf2-modules
+    +  gdk-pixbuf2-devel
+    +  vte-profile
+    +  vte291
+    +  vte291-devel
+    +  libX11-xcb
+    +  xorg-x11-fonts-ISO8859-1-100dpi
+    +  libX11-common
+    +  libX11
+    +  xorg-x11-proto-devel
+    +  libX11-devel
+    +  sound-theme-freedesktop
+    +  alsa-lib
+    +  pulseaudio-libs
+    +  pulseaudio-libs-glib2
+    +  pipewire-pulseaudio
+    +  pulseaudio-libs-devel
+    +  pipewire-libs
+    +  pipewire
+    +  pipewire-jack-audio-connection-kit-libs
+    +  pipewire-jack-audio-connection-kit
+    +  pipewire-alsa
+    +  pipewire-pulseaudio
+    +  brlapi
+    +  brlapi-devel
+    +  fuse3-libs
+    +  fuse3-devel
+    +  libiscsi
+    +  libblkio
+    +  libblkio-devel
+    +  librbd1
+    +  librbd-devel
+    +  librados2
+    +  librados-devel
+    +  libradospp-devel
+     "
+    ```
+
+1. Export the location of the docker registry and build tag (local docker registry in this case)
+
+    ```sh
+    export DOCKER_PREFIX=localhost:5000
+    export DOCKER_TAG=mybuild
+    ```
+
+    If you are building on a corporate network, ensure HTTP_PROXY and HTTPS_PROXY are set correctly. They must be the uppercase variants, the lowercase versions are not used by the kubevirt build scripts.
+    ```sh
+    export HTTPS_PROXY="http://proxy-dmz.intel.com:912"
+    export HTTP_PROXY="http://proxy-dmz.intel.com:912"
+    ```
+
+1. Build Kubevirt dependencies.
+    ```sh
+    make rpm-deps
+    ```
+
+1. Create a directory to place the custom QEMU binary and copy it from the QEMU build
+
+    ```sh
     mkdir build
+    cp ../qemu-8.2.1/build/qemu-system-x86_64 build/qemu-system-x86_64
     ```
 
-2. Copy the QEMU binary built from the `qemu-8.0.0` directory into `kubevirt`'s directory `build`.
-
-    ```sh
-    cp ../qemu-8.0.0/build/qemu-system-x86_64 build/qemu-system-x86_64
-    ```
-
-3. Obtain the `SHA` hash number of the QEMU binary
+1. Obtain the `SHA` hash number of the QEMU binary
 
     ```sh
     sha256sum ./build/qemu-system-x86_64
     13c2760bf012a8011ddbe0c595ec3dca24249debe32bc4d1e338ec8538ad7453 ./build/qemu-system-x86_64
     ```
 
-5. Patch the top level `WORKSPACE` file in top level `kubevirt` directory.
+1. Patch the top level `WORKSPACE` file in top level `kubevirt` directory.
    Replace the `sha256` with the one of the new QEMU binary.
    This will point the build to where the local binary is.
 
@@ -319,7 +326,7 @@ The original idea to build within the Centos container comes from this [link](ht
         sha256 = "fb24d80ad9edad0f7bd3000e8cffcfbba89cc07e495c47a7d3b1f803bd527a40",
     ```
 
-5. Patch the `cmd/virt-launcher/BUILD.bazel` file.
+1. Patch the `cmd/virt-launcher/BUILD.bazel` file.
    This will point to where the new QEMU binary in virt-launcher container image build
 
     ```sh
@@ -355,7 +362,7 @@ The original idea to build within the Centos container comes from this [link](ht
         }),
     ```
 
-6. Patch the `qemu.conf` file
+1. Patch the `qemu.conf` file
 
     To patch the custom qemu.conf edit the local configuration at `cmd/virt-launcher/qemu.conf`
     Any additional qemu configurations should be added to this file.
@@ -377,23 +384,14 @@ The original idea to build within the Centos container comes from this [link](ht
     +security_driver = []
     ```
 
-## Build Kubevirt images and manifests
-
-1. Export the location of the docker registry and build tag (local docker registry in this case)
-
-    ```sh
-    export DOCKER_PREFIX=localhost:5000
-    export DOCKER_TAG=mybuild
-    ```
-
-2. Build the Kubevirt images from `kubevirt` top level directory
+1. Build the Kubevirt images from `kubevirt` top level directory
 
     ```sh
     make all
     make bazel-build-images
     ```
 
-3. Push the images to the local Docker registry
+1. Push the images to the local Docker registry
 
     ```sh
     make push
@@ -402,19 +400,19 @@ The original idea to build within the Centos container comes from this [link](ht
     BUILD_ARCH= DOCKER_PREFIX=localhost:5000 DOCKER_TAG=mybuild hack/push-container-manifest.sh
     ```
 
-4. Build manifests referencing the image locations
+1. Build manifests referencing the image locations
 
     ```sh
     make manifests
     ```
 
-5. To install Kubevirt
+1. To install Kubevirt
     ```sh
     kubectl apply -f _out/manifests/release/kubevirt-operator.yaml
     kubectl apply -f _out/manifests/release/kubevirt-cr.yaml
     ```
 
-6.  Verify Deployment
+1.  Verify Deployment
     ```sh
     kubectl get all -n kubevirt
 
