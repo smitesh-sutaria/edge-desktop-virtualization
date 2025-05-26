@@ -40,6 +40,8 @@ This file contains steps to launch virtual machines using a system service.
   # WinRM port for the VM
   vm1_winrm=5986
 
+  - Set the `OVMF_CODE_FILE` variable to the path of OVMF_CODE.fd file.
+
 ## Run script to copy necessary files to `/opt` directory
 
 - Move to the `idv` directory and run the `copy_files.sh` file with superuser privileges using the following command
