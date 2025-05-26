@@ -25,9 +25,9 @@ This file contains steps to launch virtual machines using a system service.
   vm1_name=windows_vm1
   # Number of CPU cores
   vm1_cores=3
-  # Name of the firmware file present in `/opt/qcow2` directory
+  # Path of firmware file
   vm1_firmware_file=OVMF_VARS_windows1.fd
-  # Name of the qcow2 file present in `/opt/qcow2` directory
+  # Path of qcow2 file
   vm1_qcow2_file=win1.qcow2
   # Name of the display connector (monitor)
   vm1_connector0=HDMI-1
@@ -117,4 +117,4 @@ This file contains steps to launch virtual machines using a system service.
   ```bash
   sudo cat /opt/idv/launcher/start_all_vms.log
   ```  
-  Ensure that the `vm.conf` file is correctly configured and all required files (e.g., firmware and qcow2 files) are present in `/opt/qcow2`.
+  Ensure that the `vm.conf` file is correctly configured and all required files (e.g., firmware and qcow2 files) are present and the file paths are valid.

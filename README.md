@@ -9,7 +9,6 @@
     - [Build EMT](#build-emt)
     - [Install EMT](#install-emt)
     - [Generate Virtual Machine qcow2 with required drivers for SR-IOV](#generate-virtual-machine-qcow2-with-required-drivers-for-sr-iov)
-    - [Create a directory to save qcow2 image and firmware files](#create-a-directory-to-save-qcow2-image-and-firmware-files)
     - [Display Setup](#display-setup)
   - [Launch one Windows11 virtual machine](#launch-one-windows11-virtual-machine)
   - [Launch multiple Windows11 virtual machines](#launch-multiple-windows11-virtual-machines)
@@ -87,20 +86,6 @@ To verify checkout [Other methods](https://github.com/smitesh-sutaria/edge-micro
 Follow the qcow2 creation for windows till post install launch from this readme.
 
 https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#microsoft-windows-11-vm
-
-### Create a directory to save qcow2 image and firmware files
-
-- Create a '/opt/qcow2' directory and local user should have write access to it.
-
-  ```bash
-  sudo mkdir /opt/qcow2
-  sudo chmod -R 755 /opt/qcow2/
-  sudo chown -R <your_username>:<your_username> /opt/qcow2/
-
-- Make sure you have the following files in the `/opt/qcow2` directory:
-  - `OVMF_CODE.fd`
-  - `qcow2` file for each VM
-  - Firmware file (`.fd` file) for each VM
 
 ### SR-IOV virtual functions enumeration
 
@@ -199,10 +184,10 @@ https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#m
   vm1_name=windows_vm1
   # Number of CPU cores
   vm1_cores=3
-  # Name of the firmware file present in `/opt/qcow2` directory
-  vm1_firmware_file=OVMF_VARS_windows1.fd
-  # Name of the qcow2 file present in `/opt/qcow2` directory
-  vm1_qcow2_file=win1.qcow2
+  # Path of firmware file
+  vm1_firmware_file=/opt/qcow2/OVMF_VARS_windows1.fd
+  # Path of qcow2 file
+  vm1_qcow2_file=/opt/qcow2/win1.qcow2
   # Name of the display connector (monitor)
   vm1_connector0=HDMI-1
   # Comma separated list of USB devices to attach to the VM in the format: <hostbus>-<hostport>, where hostport is the end port to which the device is attached
@@ -214,6 +199,8 @@ https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#m
   # WinRM port for the VM
   vm1_winrm=5986
   ```
+
+  - Set the `OVMF_CODE_FILE` variable to the path of OVMF_CODE.fd file.
 
 - Run the `start_vm` script with superuser privileges to launch the VM
   
@@ -249,10 +236,10 @@ https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#m
   vm1_name=windows_vm1
   # Number of CPU cores
   vm1_cores=3
-  # Name of the firmware file present in `/opt/qcow2` directory
-  vm1_firmware_file=OVMF_VARS_windows1.fd
-  # Name of the qcow2 file present in `/opt/qcow2` directory
-  vm1_qcow2_file=win1.qcow2
+  # Path of firmware file
+  vm1_firmware_file=/opt/qcow2/OVMF_VARS_windows1.fd
+  # Path of qcow2 file
+  vm1_qcow2_file=/opt/qcow2/win1.qcow2
   # Name of the display connector (monitor)
   vm1_connector0=HDMI-1
   # Comma separated list of USB devices to attach to the VM in the format: <hostbus>-<hostport>, where hostport is the end port to which the device is attached
@@ -281,5 +268,4 @@ https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#m
 
 ## Troubleshooting
   - **Issue:** VMs fail to launch with `start_all_vms.sh`.
-  - **Solution:** Check the `vm.conf` file for errors or missing parameters. Ensure all required files (e.g., firmware and qcow2 files) are present in `/opt/qcow2`.
-
+  - **Solution:** Check the `vm.conf` file for errors or missing parameters. Ensure all required files (e.g., firmware and qcow2 file) are present and file paths are valid.
