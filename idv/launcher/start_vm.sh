@@ -70,7 +70,7 @@ GUEST_STATIC_OPTION="\
  -k en-us \
  -cpu host \
  -rtc base=localtime -usb -device usb-tablet"
- USB_OPTIONS=''
+USB_OPTIONS=''
 
 #------------------------------------------------------         Functions       ----------------------------------------------------------
 function check_kernel_version() {

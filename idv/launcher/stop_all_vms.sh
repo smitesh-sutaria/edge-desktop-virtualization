@@ -15,5 +15,6 @@ done
 
 for vm in "${VM_LIST[@]}"; do
     name="${vm}_name"
-    sudo ./stop_vm.sh ${!name}
+    qcow2_file_path="${vm}_qcow2_file"
+    sudo ./stop_vm.sh ${!name} "${!qcow2_file_path}.d"
 done
