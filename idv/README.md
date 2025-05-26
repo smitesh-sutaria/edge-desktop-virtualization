@@ -39,6 +39,7 @@ This file contains steps to launch virtual machines using a system service.
   vm1_winrdp=3389
   # WinRM port for the VM
   vm1_winrm=5986
+  ```
 
   - Set the `OVMF_CODE_FILE` variable to the path of OVMF_CODE.fd file.
 
