@@ -14,7 +14,7 @@ sudo chmod -t /tmp
 INSTALL_DIR="/opt/qcow2"
 
 kernel_maj_ver=0
-TPM_DIR=$INSTALL_DIR/${vm1_qcow2_file}.d
+TPM_DIR=${vm1_qcow2_file}.d
 SETUP_LOCK=/tmp/sriov.setup.lock
 VF_USED=0
 HUGEPG_ALLOC=0
@@ -25,11 +25,11 @@ MAX_USB_REDIR_CHANNEL=16
 GUEST_NAME="-name ${vm1_name}"
 GUEST_MEM="-m ${vm1_ram}G"
 GUEST_CPU_NUM="-smp cores=${vm1_cores},threads=2,sockets=1"
-GUEST_DISK="-drive file=$INSTALL_DIR/${vm1_qcow2_file},id=windows_disk,format=qcow2,cache=none"
+GUEST_DISK="-drive file=${vm1_qcow2_file},id=windows_disk,format=qcow2,cache=none"
 GUEST_USB_DEVICES=$vm1_usb
 GUEST_FIRMWARE="\
- -drive file=$INSTALL_DIR/OVMF_CODE.fd,format=raw,if=pflash,unit=0,readonly=on \
- -drive file=$INSTALL_DIR/${vm1_firmware_file},format=raw,if=pflash,unit=1"
+ -drive file=$OVMF_CODE_FILE,format=raw,if=pflash,unit=0,readonly=on \
+ -drive file=${vm1_firmware_file},format=raw,if=pflash,unit=1"
 GUEST_DISP_TYPE="-display gtk,gl=on"
 GUEST_DISPLAY_MAX=4
 GUEST_DISPLAY_MIN=1
@@ -114,19 +114,19 @@ function set_name() {
 }
 
 function set_disk() {
-    GUEST_DISK="-drive file=$INSTALL_DIR/$1,id=windows_disk1,format=qcow2,cache=none"
+    GUEST_DISK="-drive file=$1,id=windows_disk1,format=qcow2,cache=none"
     set_swtpm $1
 }
 
 function set_swtpm() {
-    TPM_DIR=$INSTALL_DIR/$1.d
+    TPM_DIR=$1.d
     GUEST_SWTPM="-chardev socket,id=chrtpm,path=$TPM_DIR/vtpm0/swtpm-sock -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0"
 }
 
 function set_firmware_path() {
     GUEST_FIRMWARE="\
-        -drive file=$INSTALL_DIR/OVMF_CODE.fd,format=raw,if=pflash,unit=0,readonly=on \
-        -drive file=$INSTALL_DIR/$1,format=raw,if=pflash,unit=1"
+        -drive file=$OVMF_CODE_FILE,format=raw,if=pflash,unit=0,readonly=on \
+        -drive file=$1,format=raw,if=pflash,unit=1"
 }
 
 function disable_kernel_irq_chip() {

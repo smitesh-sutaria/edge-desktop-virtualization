@@ -5,8 +5,8 @@ After=network.target
 [Service]
 Type=simple
 Environment=DISPLAY=:0
+ExecStartPre=/bin/bash -c 'cd /opt/idv/init && ./setup_display.sh'
 ExecStart=/usr/bin/X
-ExecStartPost=/bin/bash -c 'cd /opt/idv/init && ./setup_display.sh'
 ExecStartPost=/bin/bash -c 'cd /opt/idv/init && ./setup_sudo_permissions.sh'
 ExecStartPost=/bin/bash -c 'cd /opt/idv/init && ./setup_sriov_vfs.sh'
 User=root

@@ -13,6 +13,8 @@ for ((counter = 1; counter <= ${guest}; counter++)); do
   VM_LIST[${#VM_LIST[@]}]=${vm}
 done
 
+trap 'trap " " SIGTERM; kill 0; wait' SIGINT SIGTERM
+
 for vm in "${VM_LIST[@]}"; do
     name="${vm}_name"
     echo "Starting Windows Guest ${!name} ..."
@@ -28,6 +30,7 @@ for vm in "${VM_LIST[@]}"; do
 
     sudo ./start_vm.sh -m ${!ram}G -c ${!cpu} -n ${!name} -f ${!firmware_file} -d ${!qcow2_file} --display connectors.0=${!connector} -p ssh=${!ssh},winrdp=${!winrdp},winrm=${!winrm} -u ${!usb} &
     
+    # Added sleep time of 3 seconds to make sure there is no issue related to swtpm socket
     sleep 3
 done
 
