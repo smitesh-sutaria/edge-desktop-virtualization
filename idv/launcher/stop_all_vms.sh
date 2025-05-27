@@ -18,3 +18,6 @@ for vm in "${VM_LIST[@]}"; do
     qcow2_file_path="${vm}_qcow2_file"
     sudo ./stop_vm.sh ${!name} "${!qcow2_file_path}.d"
 done
+
+# wait until the start_vm script completes cleanup
+sleep 2

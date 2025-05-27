@@ -22,14 +22,16 @@ HUGEPG_ALLOC=0
 EMULATOR_PATH=$(which qemu-system-x86_64)
 MAX_NUM_GUEST=7
 MAX_USB_REDIR_CHANNEL=16
+OS_VALUE=''
 GUEST_NAME="-name ${vm1_name}"
 GUEST_MEM="-m ${vm1_ram}G"
 GUEST_CPU_NUM="-smp cores=${vm1_cores},threads=2,sockets=1"
-GUEST_DISK="-drive file=${vm1_qcow2_file},id=windows_disk,format=qcow2,cache=none"
 GUEST_USB_DEVICES=$vm1_usb
 GUEST_FIRMWARE="\
  -drive file=$OVMF_CODE_FILE,format=raw,if=pflash,unit=0,readonly=on \
  -drive file=${vm1_firmware_file},format=raw,if=pflash,unit=1"
+GUEST_DISK=
+GUEST_NET=
 GUEST_DISP_TYPE="-display gtk,gl=on"
 GUEST_DISPLAY_MAX=4
 GUEST_DISPLAY_MIN=1
@@ -37,10 +39,7 @@ GUEST_MAX_OUTPUTS=4
 GUEST_FULL_SCREEN=0
 GUEST_KIRQ_CHIP="-machine kernel_irqchip=on"
 GUEST_VGA_DEV="-device virtio-gpu-pci"
-GUEST_MAC_ADDR="DE:AD:BE:EF:B1:14"
-GUEST_NET="\
- -device e1000,netdev=net0,mac=$GUEST_MAC_ADDR \
- -netdev user,id=net0,hostfwd=tcp::4444-:22,hostfwd=tcp::5986-:5986,hostfwd=tcp::3389-:3389"
+GUEST_MAC_ADDR=
 GUEST_EXTRA_QCMD=
 GUEST_USB_PT_DEV=
 GUEST_UDC_PT_DEV=
@@ -63,7 +62,6 @@ GUEST_AUDIO_NAME="hda-audio"
 GUEST_AUDIO_SERVER="unix:/run/user/1000/pulse/native"
 GUEST_AUDIO_SINK="alsa_output.pci-0000_00_1f.3.analog-stereo"
 GUEST_AUDIO_TIMER="5000"
-GUEST_SWTPM="-chardev socket,id=chrtpm,path=$TPM_DIR/vtpm0/swtpm-sock -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0"
 GUEST_STATIC_OPTION="\
  -machine q35 \
  -enable-kvm \
@@ -114,8 +112,12 @@ function set_name() {
 }
 
 function set_disk() {
-    GUEST_DISK="-drive file=$1,id=windows_disk1,format=qcow2,cache=none"
-    set_swtpm $1
+    if [[ $OS_VALUE == "windows" ]]; then
+        GUEST_DISK="-drive file=$1,id=windows_disk1,format=qcow2,cache=none"
+        set_swtpm $1
+    elif [[ $OS_VALUE == "ubuntu"  ]]
+        GUEST_DISK="-drive file=$1,if=virtio,id=ubuntu_disk1,format=qcow2,cache=none"
+    fi
 }
 
 function set_swtpm() {
@@ -354,19 +356,31 @@ function cleanup_sriov() {
 }
 
 function set_fwd_port() {
-    OIFS=$IFS IFS=',' port_arr=($1) IFS=$OIFS
-    for e in "${port_arr[@]}"; do
-        if [[ $e =~ ^ssh= ]]; then
-            GUEST_NET="${GUEST_NET/4444-:22/${e#*=}-:22}"
-        elif [[ $e =~ ^winrdp= ]]; then
-            GUEST_NET="${GUEST_NET/3389-:3389/${e#*=}-:3389}"
-        elif [[ $e =~ ^winrm= ]]; then
-            GUEST_NET="${GUEST_NET/5986-:5986/${e#*=}-:5986}"
-        else
-            echo "E: Forward port, Invalid parameter"
-            return -1;
-        fi
-    done
+    if [[ $OS_VALUE == "windows" ]]; then
+        OIFS=$IFS IFS=',' port_arr=($1) IFS=$OIFS
+        for e in "${port_arr[@]}"; do
+            if [[ $e =~ ^ssh= ]]; then
+                GUEST_NET="${GUEST_NET/4444-:22/${e#*=}-:22}"
+            elif [[ $e =~ ^winrdp= ]]; then
+                GUEST_NET="${GUEST_NET/3389-:3389/${e#*=}-:3389}"
+            elif [[ $e =~ ^winrm= ]]; then
+                GUEST_NET="${GUEST_NET/5986-:5986/${e#*=}-:5986}"
+            else
+                echo "E: Forward port, Invalid parameter"
+                return -1;
+            fi
+        done
+    elif [[  $OS_VALUE == "ubuntu" ]]; then
+	OIFS=$IFS IFS=',' port_arr=($1) IFS=$OIFS
+        for e in "${port_arr[@]}"; do
+            if [[ $e =~ ^ssh= ]]; then
+                GUEST_NET="${GUEST_NET/2222-:22/${e#*=}-:22}"
+            else
+                echo "E: Forward port, Invalid parameter"
+                return -1;
+            fi
+        done
+    fi
 }
 
 function enable_pwr_ctrl() {
@@ -754,12 +768,34 @@ function setup_swtpm() {
 }
 
 function set_usb_passthrough() {
+    GUEST_USB_DEVICES=$1
     IFS=',' read -r -a usb_pairs <<< "$GUEST_USB_DEVICES"
 
     for pair in "${usb_pairs[@]}"; do
-        IFS='-' read -r bus port <<< "$pair"
-        USB_OPTIONS+=" -device usb-host,hostbus=$bus,hostport=$port"
+        IFS='-' read -r bus device <<< "$pair"
+        USB_OPTIONS+=" -device usb-host,hostbus=$bus,hostport=$device"
     done
+}
+
+function set_params() {
+    OS_VALUE=$1
+    if [[ $OS_VALUE == "windows" ]]; then
+        GUEST_MAC_ADDR="DE:AD:BE:EF:B1:14"
+        GUEST_DISK="-drive file=${vm1_qcow2_file},id=windows_disk,format=qcow2,cache=none"
+        GUEST_NET="\
+        -device e1000,netdev=net0,mac=$GUEST_MAC_ADDR \
+        -netdev user,id=net0,hostfwd=tcp::4444-:22,hostfwd=tcp::5986-:5986,hostfwd=tcp::3389-:3389"
+        GUEST_SWTPM="-chardev socket,id=chrtpm,path=$TPM_DIR/vtpm0/swtpm-sock -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0"
+    elif [[ $OS_VALUE == "ubuntu"  ]]; then
+        GUEST_MAC_ADDR="DE:AD:BE:EF:B1:12"
+        GUEST_DISK="-drive file=${vm1_qcow2_file},if=virtio,id=ubuntu_disk,format=qcow2,cache=none"
+        GUEST_NET="\
+        -device e1000,netdev=net0,mac=$GUEST_MAC_ADDR \
+        -netdev user,id=net0,hostfwd=tcp::2222-:22"
+    else
+        echo "Invalid OS value"
+	exit
+    fi
 }
 
 function cleanup() {
@@ -808,7 +844,7 @@ function launch_guest() {
               $GUEST_SWTPM \
               $GUEST_STATIC_OPTION \
               $GUEST_EXTRA_QCMD\
-	      $USB_OPTIONS\
+              $USB_OPTIONS\
     "
 
     echo $EXE_CMD
@@ -827,6 +863,7 @@ function show_help() {
     printf "\t-p  specify host forward ports, current support ssh,winrdp,winrm, eg. \"-p ssh=4444,winrdp=5555,winrm=6666\"\n"
     printf "\t-e  specify extra qemu cmd, eg. \"-e \"-monitor stdio\"\"\n"
     printf "\t-u  comma-separated list of USB devices to attach to the VM in the format: <hostbus>-<device-id>\"\"\n"
+    printf "\t-o  specify the OS to configure. Supported OSes are "ubuntu" and "windows"\"\"\n"
     printf "\t--passthrough-pci-usb passthrough USB PCI bus to guest.\n"
     printf "\t--passthrough-pci-udc passthrough USB Device Controller ie. UDC PCI bus to guest.\n"
     printf "\t--passthrough-pci-audio passthrough Audio PCI bus to guest.\n"
@@ -902,7 +939,12 @@ function parse_arg() {
                 ;;
 
             -u)
-                GUEST_USB_DEVICES=$2
+                set_usb_passthrough $2
+                shift
+                ;;
+            
+            -o)
+                set_params $2
                 shift
                 ;;
 
@@ -977,8 +1019,9 @@ check_kernel_version || exit -1
 setup_lock_acquire
 setup_sriov
 set_pwr_ctrl
-setup_swtpm
-set_usb_passthrough
+if [[ $OS_VALUE == "windows" ]]; then
+    setup_swtpm
+fi
 setup_lock_release
 
 # launch

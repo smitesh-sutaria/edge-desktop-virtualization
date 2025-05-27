@@ -16,20 +16,44 @@ done
 trap 'trap " " SIGTERM; kill 0; wait' SIGINT SIGTERM
 
 for vm in "${VM_LIST[@]}"; do
+    QEMU_OPTIONS=''
     name="${vm}_name"
-    echo "Starting Windows Guest ${!name} ..."
-    ram="${vm}_ram"
-    cpu="${vm}_cores"
-    firmware_file="${vm}_firmware_file"
-    qcow2_file="${vm}_qcow2_file"
-    connector="${vm}_connector0"
-    ssh="${vm}_ssh"
-    winrdp="${vm}_winrdp"
-    winrm="${vm}_winrm"
-    usb="${vm}_usb"
+    echo "Starting Guest ${!name} ..."
+    QEMU_OPTIONS+="-n ${!name}"
 
-    sudo ./start_vm.sh -m ${!ram}G -c ${!cpu} -n ${!name} -f ${!firmware_file} -d ${!qcow2_file} --display connectors.0=${!connector} -p ssh=${!ssh},winrdp=${!winrdp},winrm=${!winrm} -u ${!usb} &
+    os="${vm}_os"
+    QEMU_OPTIONS+=" -o ${!os}"
+
+    ram="${vm}_ram"
+    QEMU_OPTIONS+=" -m ${!ram}G"
+
+    cpu="${vm}_cores"
+    QEMU_OPTIONS+=" -c ${!cpu}"
+
+    firmware_file="${vm}_firmware_file"
+    QEMU_OPTIONS+=" -f ${!firmware_file}"
+
+    qcow2_file="${vm}_qcow2_file"
+    QEMU_OPTIONS+=" -d ${!qcow2_file}"
+
+    connector="${vm}_connector0"
+    QEMU_OPTIONS+=" --display connectors.0=${!connector}"
+
+    ssh="${vm}_ssh"
     
+    if [[ ${!os} == "windows" ]]; then
+        winrdp="${vm}_winrdp"
+        winrm="${vm}_winrm"
+        QEMU_OPTIONS+=" -p ssh=${!ssh},winrdp=${!winrdp},winrm=${!winrm}"
+    elif [[ ${!os} == "ubuntu" ]]; then
+        QEMU_OPTIONS+=" -p ssh=${!ssh}"
+    fi
+
+    usb="${vm}_usb"
+    QEMU_OPTIONS+=" -u ${!usb}"
+
+    sudo ./start_vm.sh $QEMU_OPTIONS &
+
     # Added sleep time of 3 seconds to make sure there is no issue related to swtpm socket
     sleep 3
 done
