@@ -21,6 +21,8 @@ This file contains steps to launch virtual machines using a system service.
   ```ini
   # Memory in GB
   vm1_ram=3
+  # OS to be configured
+  vm1_os=windows
   # Name of the VM
   vm1_name=windows_vm1
   # Number of CPU cores
@@ -35,9 +37,9 @@ This file contains steps to launch virtual machines using a system service.
   vm1_usb=3-1.1,3-1.2,3-1.3,3-1.4
   # SSH port for the VM
   vm1_ssh=4444
-  # WinRDP port for the VM
+  # WinRDP port for the VM - Set this only for Windows VM.
   vm1_winrdp=3389
-  # WinRM port for the VM
+  # WinRM port for the VM - Set this only for Windows VM
   vm1_winrm=5986
   ```
 

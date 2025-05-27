@@ -68,7 +68,7 @@ GUEST_STATIC_OPTION="\
  -k en-us \
  -cpu host \
  -rtc base=localtime -usb -device usb-tablet"
-USB_OPTIONS=''
+USB_OPTIONS=
 
 #------------------------------------------------------         Functions       ----------------------------------------------------------
 function check_kernel_version() {
@@ -772,8 +772,8 @@ function set_usb_passthrough() {
     IFS=',' read -r -a usb_pairs <<< "$GUEST_USB_DEVICES"
 
     for pair in "${usb_pairs[@]}"; do
-        IFS='-' read -r bus device <<< "$pair"
-        USB_OPTIONS+=" -device usb-host,hostbus=$bus,hostport=$device"
+        IFS='-' read -r bus port <<< "$pair"
+        USB_OPTIONS+=" -device usb-host,hostbus=$bus,hostport=$port"
     done
 }
 
