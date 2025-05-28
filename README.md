@@ -9,9 +9,15 @@
     - [Build EMT](#build-emt)
     - [Install EMT](#install-emt)
     - [Generate Virtual Machine qcow2 with required drivers for SR-IOV](#generate-virtual-machine-qcow2-with-required-drivers-for-sr-iov)
+    - [SR-IOV virtual functions enumeration](#sr-iov-virtual-functions-enumeration)
     - [Display Setup](#display-setup)
+      - [Disable DPMS and screen blanking on the X Window System](#disable-dpms-and-screen-blanking-on-the-x-window-system)
+      - [Start X server](#start-x-server)
+  - [VM configuration file](#virtual-machine-configuration-file)
   - [Launch one Windows11 virtual machine](#launch-one-windows11-virtual-machine)
-  - [Launch multiple Windows11 virtual machines](#launch-multiple-windows11-virtual-machines)
+  - [Launch one Ubuntu virtual machine](#launch-one-ubuntu-virtual-machine)
+  - [Launch multiple virtual machines](#launch-multiple-virtual-machines)
+  - [Stop virtual machines](#stop-virtual-machines)
   - [Troubleshooting](#troubleshooting)
 
 ## Pre-requisites
@@ -92,7 +98,7 @@ https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#m
 - Move to the 'idv' directory using the following command
   
   ```bash
-  cd idv
+  cd idv/init
   ```
 
 - Run the `setup_sriov_vfs.sh` script with superuser privileges to enable virtual functions
@@ -124,30 +130,18 @@ https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#m
 
 ## Disable DPMS and screen blanking on the X Window System
 
--   DPMS Disable
-    ```sh
-    sudo vi /usr/share/X11/xorg.conf.d/10-extensions.conf
-    ```
-    Add
-    ```conf
-    Section "Extensions"
-        Option "DPMS" "false"
-    EndSection
-    ```
+- Move to the 'idv' directory using the following command
+  
+  ```bash
+  cd idv/init
+  ```
 
--   Disable Screen Blanking and Timeouts
-    ```sh
-    sudo vi /usr/share/X11/xorg.conf.d/10-serverflags.conf
-    ```
-    Add
-    ```conf
-    Section "ServerFlags"
-        Option "StandbyTime" "0"
-        Option "SuspendTime" "0"
-        Option "OffTime"     "0"
-        Option "BlankTime"   "0"
-    EndSection
-    ```
+- Run the `setup_display.sh` script with superuser privileges to disable DPMS and screen blanking on the X Window System
+  
+  ```bash
+  sudo ./setup_display.sh
+
+## Start X server
 
 - Run the following command to start X server
   
@@ -165,12 +159,32 @@ https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#m
   xhost +
   ```
 
+## Virtual machine configuration file
+
+- The `vm.conf` file in `idv/launcher` directory consists of the following parameters - 
+
+| Parameter           | Description                                      | Example Value                             |
+|---------------------|--------------------------------------------------|-------------------------------------------|
+| `vm1_ram`           | Memory allocated to the VM (in GB).              | `3`                                       |
+| `vm1_os`            | Operating system of the VM.                      | `windows` or `ubuntu`                     |
+| `vm1_name`          | Name of the VM.                                  | `vm1`                                     |
+| `vm1_cores`         | Number of CPU cores allocated to the VM.         | `3`                                       |
+| `vm1_firmware_file` | Path of firmware (.fd) file.                     | `/opt/qcow2/win1.fd`                      |
+| `vm1_qcow2_file`    | Path of qcow2 file.                              | `/opt/qcow2/win1/qcow2`                   |
+| `vm1_connector0`    | Display connector for the VM.                    | `HDMI-1`                                  |
+| `vm1_usb`           | USB devices to attach (comma-separated)          | `3-1.1,3-1.2`                             |
+| `vm1_ssh`           | SSH port for the VM.                             | `4444` (for windows), `2222` (for Ubuntu) |
+| `vm1_winrdp`        | WinRDP port (Set this only for Windows VM)       | `3389`                                    |
+| `vm1_winrm`         | WinRM port (Set this only for Windows VM)        | `5986`                                    |
+
+- `vm1_usb` should be a comma separated list of USB devices to attach to the VM in the format: <hostbus>-<hostport>, where hostbus is the bus number and hostport is the end port to which the device is attached.
+
 ## Launch one Windows11 virtual machine
 
-- Once you have completed all the above steps, move to the working directory. Run the following command
+- Once you have completed all the above steps, move to the working directory using the following command
 
   ```bash
-  cd idv
+  cd idv/launcher
   ```
 
 - The `vm.conf` file contains configuration parameters for the virtual machines. Modify the variables starting with `vm1_*` to set the configuration parameters.
@@ -178,25 +192,16 @@ https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#m
   Example:
 
   ```ini
-  # Memory in GB
   vm1_ram=3
-  # Name of the VM
+  vm1_os=windows
   vm1_name=windows_vm1
-  # Number of CPU cores
   vm1_cores=3
-  # Path of firmware file
   vm1_firmware_file=/opt/qcow2/OVMF_VARS_windows1.fd
-  # Path of qcow2 file
   vm1_qcow2_file=/opt/qcow2/win1.qcow2
-  # Name of the display connector (monitor)
   vm1_connector0=HDMI-1
-  # Comma separated list of USB devices to attach to the VM in the format: <hostbus>-<hostport>, where hostport is the end port to which the device is attached
   vm1_usb=3-1.1,3-1.2,3-1.3,3-1.4
-  # SSH port for the VM
   vm1_ssh=4444
-  # WinRDP port for the VM
   vm1_winrdp=3389
-  # WinRM port for the VM
   vm1_winrm=5986
   ```
 
@@ -214,15 +219,53 @@ https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#m
   ps aux | grep qemu
   ```
 
-## Launch multiple Windows11 virtual machines
+## Launch one Ubuntu virtual machine
 
-- Once you have completed all the above steps, move to the working directory. Run the following command
+- Move to the working directory using the following command
 
   ```bash
-  cd idv
+  cd idv/launcher
   ```
 
-- The `vm.conf` file contains configuration parameters for the virtual machines. Modify this file to specify the number of VMs to launch and their respective settings. 
+- Modify the variables in `vm.conf` file starting with `vm1_*` to set the configuration parameters.
+
+  Example:
+
+  ```ini
+  vm1_ram=3
+  vm1_os=ubuntu
+  vm1_name=ubuntu_vm1
+  vm1_cores=3
+  vm1_firmware_file=/opt/qcow2/ubuntu.fd
+  vm1_qcow2_file=/opt/qcow2/ubuntu.qcow2
+  vm1_connector0=HDMI-1
+  vm1_usb=3-3.1,3-3.2,3-3.3,3-3.4
+  vm1_ssh=2222
+  ```
+
+  - Set the `OVMF_CODE_FILE` variable to the path of OVMF_CODE.fd file.
+
+- Run the `start_vm` script with superuser privileges to launch the VM
+  
+  ```bash
+  sudo ./start_vm.sh
+  ```
+
+  Verify that the VM is running by checking the process list
+  
+  ```bash
+  ps aux | grep qemu
+  ```
+
+## Launch multiple virtual machines
+
+- Move to the working directory using the following command
+
+  ```bash
+  cd idv/launcher
+  ```
+
+- Modify the `vm.conf` file to specify the number of VMs to launch and their respective settings. 
 
   - Set the `guest` variable to the number of VMs to launch
   - Fill in the required configuration parameters for each VM in the right order. If `guest` is set to `2`, modify/set the variables starting with `vm1_*` and `vm2_*`
@@ -230,26 +273,29 @@ https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#m
   Example:
 
   ```ini
-  # Memory in GB
+  # Windows VM
   vm1_ram=3
-  # Name of the VM
+  vm1_os=windows
   vm1_name=windows_vm1
-  # Number of CPU cores
   vm1_cores=3
-  # Path of firmware file
   vm1_firmware_file=/opt/qcow2/OVMF_VARS_windows1.fd
-  # Path of qcow2 file
   vm1_qcow2_file=/opt/qcow2/win1.qcow2
-  # Name of the display connector (monitor)
   vm1_connector0=HDMI-1
-  # Comma separated list of USB devices to attach to the VM in the format: <hostbus>-<hostport>, where hostport is the end port to which the device is attached
   vm1_usb=3-1.1,3-1.3,3-1.3,3-1.4
-  # SSH port for the VM
   vm1_ssh=4444
-  # WinRDP port for the VM
   vm1_winrdp=3389
-  # WinRM port for the VM
   vm1_winrm=5986
+
+  # Ubuntu VM
+  vm2_ram=3
+  vm2_os=ubuntu
+  vm2_name=ubuntu_vm1
+  vm2_cores=3
+  vm2_firmware_file=/opt/qcow2/ubuntu.fd
+  vm2_qcow2_file=/opt/qcow2/ubuntu.qcow2
+  vm2_connector0=HDMI-1
+  vm2_usb=3-3.1,3-3.2,3-3.3,3-3.4
+  vm2_ssh=2222
   ```
 
   **Note:** Set unique values for ssh, winrdp and winrm ports to avoid conflicts when launching multiple VMs.
@@ -260,10 +306,21 @@ https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#m
   sudo ./start_all_vms.sh
   ```
 
+  **Note:** Using the above configuration, a combination of Ubuntu and Windows VMs can be launched.
+
   Verify that the VMs are running by checking the process list
   
   ```bash
   ps aux | grep qemu
+  ```
+
+## Stop virtual machines
+
+- To stop all VMs, open a new terminal and run the following commands
+  
+  ```bash
+  cd idv/launcher
+  sudo ./stop_all_vms.sh
   ```
 
 ## Troubleshooting

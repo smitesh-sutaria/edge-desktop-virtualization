@@ -22,7 +22,7 @@ HUGEPG_ALLOC=0
 EMULATOR_PATH=$(which qemu-system-x86_64)
 MAX_NUM_GUEST=7
 MAX_USB_REDIR_CHANNEL=16
-OS_VALUE=''
+OS_VALUE=${vm1_os}
 GUEST_NAME="-name ${vm1_name}"
 GUEST_MEM="-m ${vm1_ram}G"
 GUEST_CPU_NUM="-smp cores=${vm1_cores},threads=2,sockets=1"
@@ -115,7 +115,7 @@ function set_disk() {
     if [[ $OS_VALUE == "windows" ]]; then
         GUEST_DISK="-drive file=$1,id=windows_disk1,format=qcow2,cache=none"
         set_swtpm $1
-    elif [[ $OS_VALUE == "ubuntu"  ]]
+    elif [[ $OS_VALUE == "ubuntu"  ]]; then
         GUEST_DISK="-drive file=$1,if=virtio,id=ubuntu_disk1,format=qcow2,cache=none"
     fi
 }
