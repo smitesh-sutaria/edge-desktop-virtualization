@@ -103,6 +103,7 @@ Add
 [Unit]
 Description=Launch X server at startup
 After=network.target
+Before=k3s.service
 
 [Service]
 Type=simple
