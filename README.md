@@ -170,9 +170,9 @@ https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#m
 | `vm1_name`          | Name of the VM.                                  | `vm1`                                     |
 | `vm1_cores`         | Number of CPU cores allocated to the VM.         | `3`                                       |
 | `vm1_firmware_file` | Path of firmware (.fd) file.                     | `/opt/qcow2/win1.fd`                      |
-| `vm1_qcow2_file`    | Path of qcow2 file.                              | `/opt/qcow2/win1/qcow2`                   |
+| `vm1_qcow2_file`    | Path of qcow2 file.                              | `/opt/qcow2/win1.qcow2`                   |
 | `vm1_connector0`    | Display connector for the VM.                    | `HDMI-1`                                  |
-| `vm1_usb`           | USB devices to attach (comma-separated)          | `3-1.1,3-1.2`                             |
+| `vm1_usb`           | USB devices to attach (comma-separated)          | `3-1.1,3-1.2,3-1.3,3-1.4`                 |
 | `vm1_ssh`           | SSH port for the VM.                             | `4444` (for windows), `2222` (for Ubuntu) |
 | `vm1_winrdp`        | WinRDP port (Set this only for Windows VM)       | `3389`                                    |
 | `vm1_winrm`         | WinRM port (Set this only for Windows VM)        | `5986`                                    |
