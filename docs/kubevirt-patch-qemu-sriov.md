@@ -207,63 +207,59 @@ The original idea to build within the Centos container comes from this [link](ht
        qemu-kvm-core-${QEMU_VERSION}
        qemu-kvm-device-usb-host-${QEMU_VERSION}
        swtpm-tools-${SWTPM_VERSION}
+    +  alsa-lib
+    +  brlapi
+    +  brlapi-devel
+    +  cairo
+    +  cairo-devel
+    +  cairo-gobject
+    +  cairo-gobject-devel
+    +  fuse3-devel
+    +  fuse3-libs
+    +  gdk-pixbuf2
+    +  gdk-pixbuf2-devel
+    +  gdk-pixbuf2-modules
     +  gtk3-devel
+    +  libX11
+    +  libX11-common
+    +  libX11-devel
+    +  libX11-xcb
+    +  libblkio
+    +  libblkio-devel
+    +  libiscsi
     +  libjpeg-turbo
-    +  openjpeg2
     +  libjpeg-turbo-devel
     +  libproxy
     +  libproxy-webkitgtk4
-    +  xdg-dbus-proxy
-    +  SDL2
-    +  SDL2-devel
+    +  librados-devel
+    +  librados2
+    +  libradospp-devel
+    +  librbd-devel
+    +  librbd1
     +  libxdp-devel
     +  mesa-libgbm
     +  mesa-libgbm-devel
-    +  gdk-pixbuf2
-    +  gdk-pixbuf2-modules
-    +  gdk-pixbuf2-devel
-    +  cairo
-    +  vulkan-tools
-    +  vulkan-loader
-    +  cairo-gobject
-    +  cairo-devel
-    +  cairo-gobject-devel
-    +  gdk-pixbuf2
-    +  gdk-pixbuf2-modules
-    +  gdk-pixbuf2-devel
+    +  openjpeg2
+    +  pipewire
+    +  pipewire-alsa
+    +  pipewire-jack-audio-connection-kit
+    +  pipewire-jack-audio-connection-kit-libs
+    +  pipewire-libs
+    +  pipewire-pulseaudio
+    +  pulseaudio-libs
+    +  pulseaudio-libs-devel
+    +  pulseaudio-libs-glib2
+    +  SDL2
+    +  SDL2-devel
+    +  sound-theme-freedesktop
     +  vte-profile
     +  vte291
     +  vte291-devel
-    +  libX11-xcb
+    +  vulkan-loader
+    +  vulkan-tools
+    +  xdg-dbus-proxy
     +  xorg-x11-fonts-ISO8859-1-100dpi
-    +  libX11-common
-    +  libX11
     +  xorg-x11-proto-devel
-    +  libX11-devel
-    +  sound-theme-freedesktop
-    +  alsa-lib
-    +  pulseaudio-libs
-    +  pulseaudio-libs-glib2
-    +  pipewire-pulseaudio
-    +  pulseaudio-libs-devel
-    +  pipewire-libs
-    +  pipewire
-    +  pipewire-jack-audio-connection-kit-libs
-    +  pipewire-jack-audio-connection-kit
-    +  pipewire-alsa
-    +  pipewire-pulseaudio
-    +  brlapi
-    +  brlapi-devel
-    +  fuse3-libs
-    +  fuse3-devel
-    +  libiscsi
-    +  libblkio
-    +  libblkio-devel
-    +  librbd1
-    +  librbd-devel
-    +  librados2
-    +  librados-devel
-    +  libradospp-devel
      "
     ```
 
