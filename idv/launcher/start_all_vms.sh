@@ -37,7 +37,7 @@ for vm in "${VM_LIST[@]}"; do
     QEMU_OPTIONS+=" -d ${!qcow2_file}"
 
     connector="${vm}_connector0"
-    QEMU_OPTIONS+=" --display connectors.0=${!connector}"
+    QEMU_OPTIONS+=" --display full-screen,connectors.0=${!connector}"
 
     ssh="${vm}_ssh"
     

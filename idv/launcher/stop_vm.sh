@@ -18,8 +18,6 @@ if [ -n "$swtpm_grep_output" ]; then
     pid=$(echo "$swtpm_grep_output" | awk '{print $2}')
     echo "Stopping swtpm process for $1"
     sudo kill -9 $pid
-else
-    echo "Could not find swtpm process for $1"
 fi
 
 echo "*******************************************************"
