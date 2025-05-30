@@ -209,32 +209,21 @@ The original idea to build within the Centos container comes from this [link](ht
        swtpm-tools-${SWTPM_VERSION}
     +  alsa-lib
     +  brlapi
-    +  brlapi-devel
     +  cairo
-    +  cairo-devel
     +  cairo-gobject
-    +  cairo-gobject-devel
-    +  fuse3-devel
     +  fuse3-libs
     +  gdk-pixbuf2
-    +  gdk-pixbuf2-devel
     +  gdk-pixbuf2-modules
     +  gtk3-devel
     +  libX11
     +  libX11-common
-    +  libX11-devel
     +  libX11-xcb
     +  libblkio
-    +  libblkio-devel
     +  libiscsi
     +  libjpeg-turbo
-    +  libjpeg-turbo-devel
     +  libproxy
     +  libproxy-webkitgtk4
-    +  librados-devel
     +  librados2
-    +  libradospp-devel
-    +  librbd-devel
     +  librbd1
     +  libxdp-devel
     +  mesa-libgbm
@@ -247,14 +236,11 @@ The original idea to build within the Centos container comes from this [link](ht
     +  pipewire-libs
     +  pipewire-pulseaudio
     +  pulseaudio-libs
-    +  pulseaudio-libs-devel
     +  pulseaudio-libs-glib2
     +  SDL2
-    +  SDL2-devel
     +  sound-theme-freedesktop
     +  vte-profile
     +  vte291
-    +  vte291-devel
     +  vulkan-loader
     +  vulkan-tools
     +  xdg-dbus-proxy
