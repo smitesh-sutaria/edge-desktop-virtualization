@@ -196,75 +196,9 @@ The original idea to build within the Centos container comes from this [link](ht
     git checkout v1.5.0
     ```
 
-1. Add the following packages to `launcherbase_main` section of `hack/rpm_deps.sh`
-
-    ```diff
-    @@ -89,14 +89,71 @@ sandboxroot_main="
-     launcherbase_main="
-       libvirt-client-${LIBVIRT_VERSION}
-       libvirt-daemon-driver-qemu-${LIBVIRT_VERSION}
-       passt-${PASST_VERSION}
-       qemu-kvm-core-${QEMU_VERSION}
-       qemu-kvm-device-usb-host-${QEMU_VERSION}
-       swtpm-tools-${SWTPM_VERSION}
-    +  alsa-lib
-    +  brlapi
-    +  cairo
-    +  cairo-gobject
-    +  fuse3-libs
-    +  gdk-pixbuf2
-    +  gdk-pixbuf2-modules
-    +  gtk3-devel
-    +  libX11
-    +  libX11-common
-    +  libX11-xcb
-    +  libblkio
-    +  libiscsi
-    +  libjpeg-turbo
-    +  libproxy
-    +  libproxy-webkitgtk4
-    +  librados2
-    +  librbd1
-    +  libxdp-devel
-    +  mesa-libgbm
-    +  mesa-libgbm-devel
-    +  openjpeg2
-    +  pipewire
-    +  pipewire-alsa
-    +  pipewire-jack-audio-connection-kit
-    +  pipewire-jack-audio-connection-kit-libs
-    +  pipewire-libs
-    +  pipewire-pulseaudio
-    +  pulseaudio-libs
-    +  pulseaudio-libs-glib2
-    +  SDL2
-    +  sound-theme-freedesktop
-    +  vte-profile
-    +  vte291
-    +  vulkan-loader
-    +  vulkan-tools
-    +  xdg-dbus-proxy
-    +  xorg-x11-fonts-ISO8859-1-100dpi
-    +  xorg-x11-proto-devel
-     "
-    ```
-
-1. Export the location of the docker registry and build tag (local docker registry in this case)
-
+1. Apply the kubevirt patch from this repo to expand kubevirt virt-launcher image with additional dependencies to support GTK
     ```sh
-    export DOCKER_PREFIX=localhost:5000
-    export DOCKER_TAG=mybuild
-    ```
-
-    If you are building on a corporate network, ensure HTTP_PROXY and HTTPS_PROXY are set correctly. They must be the uppercase variants, the lowercase versions are not used by the kubevirt build scripts.
-    ```sh
-    export HTTPS_PROXY="http://proxy-dmz.intel.com:912"
-    export HTTP_PROXY="http://proxy-dmz.intel.com:912"
-    ```
-
-1. Build Kubevirt dependencies.
-    ```sh
-    make rpm-deps
+    git apply your/path/to/applications.virtualization.maverickflats-tiberos-itep/docs/0001-Patching-Kubevirt-with-GTK-libraries_v1.patch
     ```
 
 1. Create a directory to place the custom QEMU binary and copy it from the QEMU build
@@ -281,94 +215,27 @@ The original idea to build within the Centos container comes from this [link](ht
     13c2760bf012a8011ddbe0c595ec3dca24249debe32bc4d1e338ec8538ad7453 ./build/qemu-system-x86_64
     ```
 
-1. Patch the top level `WORKSPACE` file in top level `kubevirt` directory.
-   Replace the `sha256` with the one of the new QEMU binary.
-   This will point the build to where the local binary is.
-
+1. Patch the top level `WORKSPACE` file in top level `kubevirt` directory. Replace `<SHA256SUM_OF_PATCHED_QEMU>` with your sha256sum from the previous step
     ```sh
     vim WORKSPACE
     ```
 
-    ```diff
-    @@ -152,6 +152,15 @@ http_file(
-        ],
-    )
-
-    +http_file(
-    +    name = "custom-qemu",
-    +    downloaded_file_path = "qemu-kvm",
-    +    sha256 = "13c2760bf012a8011ddbe0c595ec3dca24249debe32bc4d1e338ec8538ad7453",
-    +    urls = [
-    +        "file:///root/go/src/kubevirt.io/kubevirt/build/qemu-system-x86_64",
-    +    ],
-    +)
-    +
-    http_archive(
-        name = "bazeldnf",
-        sha256 = "fb24d80ad9edad0f7bd3000e8cffcfbba89cc07e495c47a7d3b1f803bd527a40",
-    ```
-
-1. Patch the `cmd/virt-launcher/BUILD.bazel` file.
-   This will point to where the new QEMU binary in virt-launcher container image build
+1. Export the location of the docker registry and build tag (local docker registry in this case)
 
     ```sh
-    vim cmd/virt-launcher/BUILD.bazel
+    export DOCKER_PREFIX=localhost:5000
+    export DOCKER_TAG=mybuild
     ```
 
-    ```diff
-    --- a/cmd/virt-launcher/BUILD.bazel
-    +++ b/cmd/virt-launcher/BUILD.bazel
-    @@ -165,6 +178,15 @@ pkg_tar(
-        owner = "0.0",
-    )
-
-    +pkg_tar(
-    +    name = "custom-qemu-build",
-    +    srcs = ["@custom-qemu//file"],
-    +    mode = "0755",
-    +    owner = "0.0",
-    +    package_dir = "/usr/libexec",
-    +    visibility = ["//visibility:public"],
-    +)
-    +
-    container_image(
-        name = "version-container",
-        directory = "/",
-    @@ -189,6 +211,8 @@ container_image(
-                ":passwd-tar",
-                ":nsswitch-tar",
-                ":qemu-kvm-modules-dir-tar",
-    +            ":custom-qemu-build",
-                "//rpm:launcherbase_x86_64",
-            ],
-        }),
-    ```
-
-1. Patch the `qemu.conf` file
-
-    To patch the custom qemu.conf edit the local configuration at `cmd/virt-launcher/qemu.conf`
-    Any additional qemu configurations should be added to this file.
-
+    If you are building on a corporate network, ensure HTTP_PROXY and HTTPS_PROXY are set correctly. They must be the uppercase variants, the lowercase versions are not used by the kubevirt build scripts.
     ```sh
-    vim cmd/virt-launcher/qemu.conf
+    export HTTPS_PROXY="http://proxy-dmz.intel.com:912"
+    export HTTP_PROXY="http://proxy-dmz.intel.com:912"
     ```
 
-    ```diff
-    --- a/cmd/virt-launcher/qemu.conf
-    +++ b/cmd/virt-launcher/qemu.conf
-    @@ -8,3 +8,7 @@ dynamic_ownership = 1
-    remember_owner = 0
-    namespaces = [ ]
-    cgroup_controllers = [ ]
-    +security_default_confined = 0
-    +seccomp_sandbox = 0
-    +cgroup_device_acl = ["/dev/null", "/dev/full", "/dev/zero","/dev/random", "/dev/urandom", "/dev/ptmx", "/dev/kvm", "/dev/dri/card0"]
-    +security_driver = []
-    ```
-
-1. Build the Kubevirt images from `kubevirt` top level directory
-
+1. Build Kubevirt & dependencies.
     ```sh
+    make rpm-deps
     make all
     make bazel-build-images
     ```
