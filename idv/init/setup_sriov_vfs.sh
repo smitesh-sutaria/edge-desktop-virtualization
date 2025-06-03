@@ -1,16 +1,8 @@
 #!/bin/bash
 #
-# Copyright (C) 2024, 2025 Intel Corporation
-#
-# SPDX-License-Identifier: MIT
-#
 # These contents may have been developed with support from one or more
 # Intel-operated generative artificial intelligence solutions.
-#####################################################################
-#
-# This script sets up SR-IOV VF for Intel Connected Education Kits
-#
-#####################################################################
+
 
 # amount of spare GTT (Graphics Translation Table) memory to be allocated for the xe driver
 GTT_SPARE_PF=$((500 * 1024 * 1024)) # MB
