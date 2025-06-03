@@ -18,6 +18,7 @@
   - [Launch one Ubuntu virtual machine](#launch-one-ubuntu-virtual-machine)
   - [Launch multiple virtual machines](#launch-multiple-virtual-machines)
   - [Stop virtual machines](#stop-virtual-machines)
+  - [Custom package creation BKMs](./docs/custom-packages-bkms.md)
   - [Troubleshooting](#troubleshooting)
 
 ## Pre-requisites
