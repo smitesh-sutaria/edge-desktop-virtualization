@@ -13,6 +13,7 @@
     - [Display Setup](#display-setup)
   - [Launch one Windows11 virtual machine](#launch-one-windows11-virtual-machine)
   - [Launch multiple Windows11 virtual machines](#launch-multiple-windows11-virtual-machines)
+  - [Custom package creation BKMs](./docs/custom-packages-bkms.md)
   - [Troubleshooting](#troubleshooting)
 
 ## Pre-requisites
