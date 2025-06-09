@@ -62,19 +62,19 @@ This file contains steps to launch virtual machines using a system service.
 - Run the following command to enable `idv-init` service
   
   ```bash
-  sudo systemctl enable idv-init.service
+  systemctl --user enable idv-init.service
   ```
 
 - Run the following command to start `idv-init` service
   
   ```bash
-  sudo systemctl start idv-init.service
+  systemctl --user start idv-init.service
   ```
 
 - Verify that the service is running:
 
     ```bash
-    sudo systemctl status idv-init.service
+    systemctl --user status idv-init.service
     ```
    **Note**: After starting the idv-init service, the screen will go blank because X is running. Ensure you have SSH access to the machine for the next steps.
 
@@ -106,7 +106,7 @@ This file contains steps to launch virtual machines using a system service.
 - If the `idv-init` service fails to start, check the service logs using the following command:
   
   ```bash
-  sudo journalctl -u idv-init.service
+  journalctl --user -xeu idv-init.service
   ```
   Ensure that all required files are present in `/opt/idv`.
 
