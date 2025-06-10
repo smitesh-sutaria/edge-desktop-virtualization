@@ -7930,32 +7930,14 @@ spec:
         - virt-operator
         env:
         - name: VIRT_OPERATOR_IMAGE
-          value: amr-registry-pre.caas.intel.com/one-intel-edge-sandbox/maverick-flats/mf-kubevirt/virt-operator@sha256:8ff7a3f65fb7028f9f98aa861f48856893a2991a5f5a92dc66e4f65c268ea153
+          value: amr-registry-pre.caas.intel.com/one-intel-edge-sandbox/maverick-flats/mf-kubevirt/virt-operator:v1.5.0_DV
         - name: WATCH_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.annotations['olm.targetNamespaces']
-        - name: VIRT_API_SHASUM
-          value: sha256:4adab116bbbc432c5b68826d18ae06ecdb78281e01056309cafcb2b1fa868578
-        - name: VIRT_CONTROLLER_SHASUM
-          value: sha256:f153040e60742286e0509154b13d88fd0269c67ddc8de2f7fc702d563e1c4602
-        - name: VIRT_HANDLER_SHASUM
-          value: sha256:30544deac41203707bc7da94a87294a1a7e6cc20a1f34963d041939185085bc7
-        - name: VIRT_LAUNCHER_SHASUM
-          value: sha256:2c9c1fed8c1eff31b3d5310d4cb4e1424ce6b8d14ae96d09e14f310565352575
-        - name: VIRT_EXPORTPROXY_SHASUM
-          value: sha256:44c60e7a261f12f14a1b861d3b936ef197b95fd408a1bf025a4a5c6e4ea2265f
-        - name: VIRT_EXPORTSERVER_SHASUM
-          value: sha256:4f3a61bc95eb066fd4c78c4cc964d3a91387c6f514a2809d5ae91313edceac46
-        - name: GS_SHASUM
-          value: sha256:b516c9143d0a4a6554655acc3b951c92274e3a12e72c225d5c9d222e1faa3448
-        - name: PR_HELPER_SHASUM
-          value: sha256:f8229898c0b6378e0577a13821ee2e4abeeed80a09a1dba3a53a50e79e07919e
-        - name: SIDECAR_SHIM_SHASUM
-          value: sha256:6674d5b74db2c68df705880138c7b4998c34edb8929cf1bfed8c2c510d19b6e8
         - name: KUBEVIRT_VERSION
-          value: "0.1"
-        image: amr-registry-pre.caas.intel.com/one-intel-edge-sandbox/maverick-flats/mf-kubevirt/virt-operator@sha256:8ff7a3f65fb7028f9f98aa861f48856893a2991a5f5a92dc66e4f65c268ea153
+          value: v1.5.0_DV
+        image: amr-registry-pre.caas.intel.com/one-intel-edge-sandbox/maverick-flats/mf-kubevirt/virt-operator:v1.5.0_DV
         imagePullPolicy: IfNotPresent
         name: virt-operator
         ports:
