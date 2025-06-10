@@ -1,4 +1,4 @@
-# Device Plugin for MaverikFlats
+# Device Plugins for Kubernetes to realize desktop virtualization
 
 ## Table of Contents
 - [Overview](#overview)
