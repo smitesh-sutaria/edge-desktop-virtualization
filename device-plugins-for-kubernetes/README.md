@@ -1,17 +1,16 @@
 # Device Plugins for Kubernetes to realize desktop virtualization
 
-## Table of Contents
-- [Overview](#overview)
-- [Functionality](#functionality)
-- [Deployment](#deployment)
-  - [Prerequisites](#prerequisites)
-  - [Steps for Helm Chart installation](#steps-for-helm-chart-installation)
-  - [Steps for manual installation](#steps-for-manual-installation)
-  - [Building and Deploying](#building-and-deploying)
+- [Device Plugins for Kubernetes to realize desktop virtualization](#device-plugins-for-kubernetes-to-realize-desktop-virtualization)
+  - [Overview](#overview)
+  - [Functionality](#functionality)
+  - [Build](#build)
     - [Local Setup](#local-setup)
+  - [Deploy](#deploy)
+    - [Prerequisites](#prerequisites)
+    - [Steps for Helm Chart installation](#steps-for-helm-chart-installation)
+  - [Build and Deploy via designated registry](#build-and-deploy-via-designated-registry)
   - [Verify setup](#verify-setup)
-- [Usage](#usage)
-- [Contributing](#contributing)
+  - [Usage](#usage)
 
 This repository contains a device plugin for MaverikFlats that exposes five custom resources: `intel.com/x11`, `intel.com/udma`, `intel.com/vfio`, `intel.com/igpu` and `intel.com/usb`. This plugin allows you to request these resources in your pod specifications, enabling the mounting of necessary drivers/devices.
 
@@ -28,7 +27,19 @@ The device plugin handles the following key functions[1]:
     *   Mounting necessary device nodes
     *   Mounting necessary volumes
 
-## Deployment
+## Build 
+### Local Setup
+
+To test it in local system, have a docker registry running in your system.
+```shell
+docker run -d -p 5000:5000 --name registry registry:2.7
+```
+This registry is accessible through port `5000`. To have the device-plugin up and running in your kubernetes system, you can run the `build.sh` file. This script will delete the existing device-plugin, if any, build, push to registry and create the deployment. You can adjust the resulting docker image tag & repository by changing the optional arguments `version` (default "v1") and `repo` (default "127.0.0.1:5000"). 
+```shell
+./build.sh [version] [repo]
+```
+
+## Deploy
 
 You can deploy the device plugin as a DaemonSet to ensure that it runs on every node in your cluster. You can deploy it as a helm package.
 
@@ -57,25 +68,13 @@ kube-system   device-plugin-maverikflats-device-plugin-zxkqm          1/1     Ru
 .
 ```
 
-### Steps for manual installation
+## Build and Deploy via designated registry
 
 1.  **Build the Device Plugin:** Build the device plugin binary using Go.
 2.  **Push to registry:** Build and Push the image to your designated registry
 3.  **Apply the DaemonSet:** Update `deploy/manifests/maverikflats-device-plugin.yaml` with the pushed image and deploy to your Kubernetes cluster using `kubectl apply -f deploy/manifests/maverikflats-device-plugin.yaml`.
 
-### Building and Deploying
-#### Local Setup
-
-To test it in local system, have a docker registry running in your system.
-```shell
-docker run -d -p 5000:5000 --name registry registry:2.7
-```
-This registry is accessible through port `5000`. To have the device-plugin up and running in your kubernetes system, you can run the `build.sh` file. This script will delete the existing device-plugin, if any, build, push to registry and create the deployment. You can adjust the resulting docker image tag & repository by changing the optional arguments `version` (default "v1") and `repo` (default "127.0.0.1:5000"). 
-```shell
-./build.sh [version] [repo]
-```
-
-### Verify setup
+## Verify setup
 
 Upon having the device-plugin up and running, you should see the resources and resource count show up in your node(s). 
 ```shell
@@ -147,7 +146,3 @@ spec:
           intel.com/vfio: 1
           intel.com/usb: 1
 ```
-
-## Contributing
-
-Contributions are welcome! Please submit pull requests with detailed explanations of the changes.
