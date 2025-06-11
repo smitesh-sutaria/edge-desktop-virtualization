@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
 VER="${1:-v1}"
 DOCKER_REPO="${2:-127.0.0.1:5000}"
 

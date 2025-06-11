@@ -1,11 +1,16 @@
+/*
+ *  Copyright (C) 2025 Intel Corporation
+ *  SPDX-License-Identifier: Apache-2.0
+ */
 package resources
 
 import (
 	"device-plugin/pkg/constants"
 	"fmt"
-	pluginapi "k8s.io/kubelet/pkg/apis/deviceplugin/v1beta1"
 	"log"
 	"os"
+
+	pluginapi "k8s.io/kubelet/pkg/apis/deviceplugin/v1beta1"
 )
 
 type ResourceIGPU struct{}

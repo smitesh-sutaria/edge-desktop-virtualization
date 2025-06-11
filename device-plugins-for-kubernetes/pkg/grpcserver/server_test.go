@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2025 Intel Corporation
+ *  SPDX-License-Identifier: Apache-2.0
+ */
 package grpcserver
 
 import (
@@ -12,6 +16,7 @@ import (
 	"time"
 
 	"device-plugin/pkg/resources"
+
 	pluginapi "k8s.io/kubelet/pkg/apis/deviceplugin/v1beta1"
 
 	"google.golang.org/grpc"

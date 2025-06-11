@@ -1,3 +1,7 @@
+/*
+ *  Copyright (C) 2025 Intel Corporation
+ *  SPDX-License-Identifier: Apache-2.0
+ */
 package resources
 
 import (
@@ -7,6 +11,7 @@ import (
 	"testing"
 
 	"device-plugin/pkg/constants"
+
 	pluginapi "k8s.io/kubelet/pkg/apis/deviceplugin/v1beta1"
 )
 

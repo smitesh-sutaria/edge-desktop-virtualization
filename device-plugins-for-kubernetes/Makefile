@@ -1,3 +1,6 @@
+# Copyright (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
 BINARY_NAME ?= device-plugin
 PKG_LIST := $(shell go list ./... | grep -v /vendor/)
 DOCKER_REPO ?= localhost:5000

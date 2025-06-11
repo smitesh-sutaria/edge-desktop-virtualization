@@ -1,16 +1,21 @@
+/*
+ *  Copyright (C) 2025 Intel Corporation
+ *  SPDX-License-Identifier: Apache-2.0
+ */
 package grpcserver
 
 import (
 	"context"
 	"device-plugin/pkg/resources"
 	"fmt"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"net"
 	"os"
 	"path/filepath"
 	"time"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 
 	pluginapi "k8s.io/kubelet/pkg/apis/deviceplugin/v1beta1"
 )
