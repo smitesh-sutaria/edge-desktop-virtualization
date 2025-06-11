@@ -342,6 +342,7 @@ The original idea to build within the Centos container comes from this [link](ht
 4.  Copy the above `.tar` files, `kubevirt-operator.yaml` and `kubevirt-cr.yaml` to deployment system.
 
 **On Deployment system**
+
 5.  Ensure Kubernetes is installed and local cluster is running.
 6.  Import the images into the container runtime
     ```sh
