@@ -297,3 +297,74 @@ The original idea to build within the Centos container comes from this [link](ht
     NAME                            AGE   PHASE
     kubevirt.kubevirt.io/kubevirt   19d   Deployed
     ```
+
+## 4. Kubevirt installation using local tar files (ideal for deployment on Host system not connected to network)
+
+**On Development System**
+
+1.  Pull Docker Images from registry
+    ```sh
+    docker pull localhost:5000/sidecar-shim:mybuild
+    docker pull localhost:5000/virt-handler:mybuild
+    docker pull localhost:5000/virt-controller:mybuild
+    docker pull localhost:5000/virt-launcher:mybuild
+    docker pull localhost:5000/virt-api:mybuild
+    docker pull localhost:5000/virt-operator:mybuild
+    ```
+    Optional to tag the images
+    ```sh
+    docker tag localhost:5000/sidecar-shim:mybuild myregistry:5000/sidecar-shim:v1
+    ```
+
+2.  Save the images to tar files for transfer
+    ```sh
+    docker save -o sidecar-shim.tar localhost:5000/sidecar-shim:mybuild
+    docker save -o virt-api.tar localhost:5000/virt-api:mybuild
+    docker save -o virt-controller.tar localhost:5000/virt-controller:mybuild
+    docker save -o virt-handler.tar localhost:5000/virt-handler:mybuild
+    docker save -o virt-launcher.tar localhost:5000/virt-launcher:mybuild
+    docker save -o virt-operator.tar localhost:5000/virt-operator:mybuild
+    ```
+3.  Modify the `kubevirt-operator.yaml` file with the following changes
+    ```yaml
+    env:
+    - name: VIRT_OPERATOR_IMAGE
+      value: localhost:5000/virt-operator:mybuild
+    - name: WATCH_NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.annotations['olm.targetNamespaces']
+    - name: KUBEVIRT_VERSION
+      value: mybuild
+    image: localhost:5000/virt-operator:mybuild
+    imagePullPolicy: IfNotPresent
+    ```
+4.  Copy the above `.tar` files, `kubevirt-operator.yaml` and `kubevirt-cr.yaml` to deployment system.
+
+**On Deployment system**
+
+5.  Import the images into the container runtime
+    ```sh
+    sudo ctr -n k8s.io images import sidecar-shim.tar 
+    sudo ctr -n k8s.io images import virt-api.tar
+    sudo ctr -n k8s.io images import virt-controller.tar
+    sudo ctr -n k8s.io images import virt-handler.tar
+    sudo ctr -n k8s.io images import virt-launcher.tar
+    sudo ctr -n k8s.io images import virt-operator.tar
+    ```
+6.  Verify the images are imported correctly
+    ```sh
+    sudo crictl images | grep localhost
+
+    localhost:5000/sidecar-shim                             mybuild           c48d79a700926       51.5MB
+    localhost:5000/virt-api                                 mybuild           025a39d7f7504       28.6MB
+    localhost:5000/virt-controller                          mybuild           d1cb23d032aa0       27.9MB
+    localhost:5000/virt-handler                             mybuild           a9bd1a37e2e0c       90.7MB
+    localhost:5000/virt-launcher                            mybuild           c69ddc6b90387       403MB
+    localhost:5000/virt-operator                            mybuild           99462ddb3a866       39.8MB
+    ```
+7.  Deploy Kubevirt by applying Kubevirt operator and custom resource YAML
+    ```sh
+    kubectl apply -f kubevirt-operator.yaml
+    kubectl apply -f kubevirt-cr.yaml
+    ```
