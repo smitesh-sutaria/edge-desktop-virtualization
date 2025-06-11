@@ -4,8 +4,9 @@ This version of Kubevirt is built on release tag v1.5.0 along with GTK library s
 Also the Device-Plugin has been shared as a [Device-Plugin TAR](link_to_dp_tar) to support enabling Display Virtualization on local display of edge node
 
 ## Steps
-1.  Download [Kubevirt TAR](link_to_kubevier_tar) and [Device-Plugin TAR](link_to_dp_tar) to the host system
-2.  Extract TAR files
+1.  Ensure Kubernetes is installed and local cluster is running.
+2.  Download [Kubevirt TAR](link_to_kubevier_tar) and [Device-Plugin TAR](link_to_dp_tar) to the host system
+3.  Extract TAR files
     ```sh
     mkdir -p ~/display-virtualization
 
@@ -14,7 +15,7 @@ Also the Device-Plugin has been shared as a [Device-Plugin TAR](link_to_dp_tar) 
 
     cd ~/display-virtualization
     ```
-3.  Import the images into the container runtime
+4.  Import the images into the container runtime
     ```sh
     sudo ctr -n k8s.io images import sidecar-shim.tar 
     sudo ctr -n k8s.io images import virt-api.tar
@@ -26,7 +27,7 @@ Also the Device-Plugin has been shared as a [Device-Plugin TAR](link_to_dp_tar) 
     sudo ctr -n k8s.io images import device-plugin.tar
     sudo ctr -n k8s.io images import busybox.tar
     ```
-4.  Verify the images are imported correctly
+5.  Verify the images are imported correctly
     ```sh
     sudo crictl images | grep localhost
 
@@ -39,7 +40,7 @@ Also the Device-Plugin has been shared as a [Device-Plugin TAR](link_to_dp_tar) 
     localhost:5000/mf-device-plugin                       v1                  156ba1fcaf549       21.3MB
     localhost:5000/busybox                                latest              ff7a7936e9306       2.21MB
     ```
-5.  Deploy Kubevirt and Device Plugin
+6.  Deploy Kubevirt and Device Plugin
     ```sh
     kubectl apply -f kubevirt-operator.yaml
     kubectl apply -f kubevirt-cr.yaml

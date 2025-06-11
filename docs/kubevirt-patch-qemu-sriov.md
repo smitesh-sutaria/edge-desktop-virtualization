@@ -342,8 +342,8 @@ The original idea to build within the Centos container comes from this [link](ht
 4.  Copy the above `.tar` files, `kubevirt-operator.yaml` and `kubevirt-cr.yaml` to deployment system.
 
 **On Deployment system**
-
-5.  Import the images into the container runtime
+5.  Ensure Kubernetes is installed and local cluster is running.
+6.  Import the images into the container runtime
     ```sh
     sudo ctr -n k8s.io images import sidecar-shim.tar 
     sudo ctr -n k8s.io images import virt-api.tar
@@ -352,7 +352,7 @@ The original idea to build within the Centos container comes from this [link](ht
     sudo ctr -n k8s.io images import virt-launcher.tar
     sudo ctr -n k8s.io images import virt-operator.tar
     ```
-6.  Verify the images are imported correctly
+7.  Verify the images are imported correctly
     ```sh
     sudo crictl images | grep localhost
 
@@ -363,7 +363,7 @@ The original idea to build within the Centos container comes from this [link](ht
     localhost:5000/virt-launcher                            mybuild           c69ddc6b90387       403MB
     localhost:5000/virt-operator                            mybuild           99462ddb3a866       39.8MB
     ```
-7.  Deploy Kubevirt by applying Kubevirt operator and custom resource YAML
+8.  Deploy Kubevirt by applying Kubevirt operator and custom resource YAML
     ```sh
     kubectl apply -f kubevirt-operator.yaml
     kubectl apply -f kubevirt-cr.yaml
