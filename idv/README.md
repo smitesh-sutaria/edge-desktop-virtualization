@@ -13,7 +13,8 @@ This file contains steps to launch virtual machines using a system service.
 
 - The `vm.conf` file in `idv/launcher` directory contains configuration parameters for the virtual machines. Modify this file to specify the number of VMs to launch and their respective settings. 
 
-  - Set the `guest` variable to the number of VMs to launch
+  - Set the `guest` variable to the number of VMs to launch.
+  - Set the OVMF_CODE_FILE variable to the path of OVMF_CODE.fd file.
   - Fill in the required configuration parameters for each VM in the right order. If `guest` is set to `2`, modify/set the variables starting with `vm1_*` and `vm2_*`
 
   Example:
@@ -43,9 +44,7 @@ This file contains steps to launch virtual machines using a system service.
   vm1_winrm=5986
   ```
 
-  - Set the `OVMF_CODE_FILE` variable to the path of OVMF_CODE.fd file.
-
-    **Note:** Set unique values for ssh, winrdp and winrm ports to avoid conflicts when launching multiple VMs.
+    **Note:** Set unique values for ssh, winrdp and winrm ports to avoid conflicts when launching multiple Windows VMs.
 
 ## Run script to copy necessary files to `/opt` directory
 
