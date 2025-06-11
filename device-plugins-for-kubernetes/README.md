@@ -70,9 +70,9 @@ To test it in local system, have a docker registry running in your system.
 ```shell
 docker run -d -p 5000:5000 --name registry registry:2.7
 ```
-This registry is accessible through port `5000`. To have the device-plugin up and running in your kubernetes system, you can run the `run.sh` file. This script will delete the existing device-plugin, if any, build, push to registry and create the deployment. 
+This registry is accessible through port `5000`. To have the device-plugin up and running in your kubernetes system, you can run the `build.sh` file. This script will delete the existing device-plugin, if any, build, push to registry and create the deployment. You can adjust the resulting docker image tag & repository by changing the optional arguments `version` (default "v1") and `repo` (default "127.0.0.1:5000"). 
 ```shell
-./run.sh
+./build.sh [version] [repo]
 ```
 
 ### Verify setup
