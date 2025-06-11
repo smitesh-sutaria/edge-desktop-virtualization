@@ -1,0 +1,49 @@
+/*
+ *  Copyright (C) 2025 Intel Corporation
+ *  SPDX-License-Identifier: Apache-2.0
+ */
+syntax = "proto3";
+
+package deviceplugin;
+
+service DevicePlugin {
+  rpc ListAndWatch(Empty) returns (stream ListAndWatchResponse);
+  rpc Allocate(AllocateRequest) returns (stream AllocateResponse);
+}
+
+message Empty {}
+
+message Device {
+  string id = 1;
+  string health = 2 ;
+}
+
+message ListAndWatchResponse {
+  repeated Device devices = 1;
+}
+
+message AllocateRequest {
+  repeated string device_ids = 1;
+}
+
+message AllocateResponse {
+  repeated ContainerAllocateResponse container_responses = 1;
+}
+
+message ContainerAllocateResponse {
+  repeated string envs =1;
+  repeated Mount mounts = 2;
+  repeated DeviceSpec devices = 3;
+}
+
+message Mount {
+  string container_path=1;
+  string host_path=2;
+  string permissions =3;
+}
+
+message DeviceSpec {
+  string container_path = 1;
+  string host_path = 2;
+  string permissions = 3;
+}
