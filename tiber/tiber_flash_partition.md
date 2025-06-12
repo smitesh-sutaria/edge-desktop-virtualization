@@ -60,14 +60,14 @@ The steps include
     - No changes need to be made with this tool beyond validating the correct drive (for example, /dev/nvme0n1 or /dev/sda)
 
 9. Flash TiberOS RAW image to NVME/SSD:
-    - TiberOS SR-IOV images are hosted in [link](https://af01p-png.devtools.intel.com/artifactory/tiberos-png-local/mf/3.0/) 
-    - Download any latest image by navigating to folders *Ex.: 20250321.0803/edge-readonly-mf-dev-3.0.20250321.0803.raw.gz*.
+    - TiberOS SR-IOV images are hosted in [link](https://af01p-png.devtools.intel.com/artifactory/tiberos-png-local/dv/3.0/) 
+    - Download any latest image by navigating to folders *Ex.: 20250605.1308/edge-readonly-dv-dev-3.0.20250605.1308.raw.gz*.
     - Use the script to load that onto the desired drive.
       - /dev/nvme0n1 for NVME
       - /dev/sda for SSD
     - *Ex. for NVME*
       ```sh
-      sudo ./tiber/scripts/partition_image.sh /dev/nvme0n1 ~/Downloads/edge-readonly-mf-dev-3.0.20250321.0803.raw.gz
+      sudo ./tiber/scripts/partition_image.sh /dev/nvme0n1 ~/Downloads/edge-readonly-dv-dev-3.0.20250605.1308.raw.gz
       ```
 
 **TiberOS 3.0 SR-IOV Image is now flashed onto NVME/SSD, reboot the system**

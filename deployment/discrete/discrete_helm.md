@@ -207,7 +207,7 @@ win11-vm2-vm   6d4h   Running   10.42.0.106   edgemicrovisortoolkit   True
 win11-vm3-vm   6d4h   Running   10.42.0.108   edgemicrovisortoolkit   True
 win11-vm4-vm   6d4h   Running   10.42.0.110   edgemicrovisortoolkit   True
 ```
-Now VM will launched on monitors, [refer](../../tiber/tiber_mf_setup.md/#33-setup-xdotool-in-a-container-to-scale-applications-to-full-screen) to scale VM to full-screen
+Now VM will be launched on monitors
 
 To check the status of allocated resources when 4 VMs are running
 ```sh
