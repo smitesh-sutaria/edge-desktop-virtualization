@@ -50,7 +50,7 @@ This file contains steps to launch virtual machines using a system service.
 ## Run IDV services via an RPM package
 - For detailed instructions on running IDV services using an RPM package, follow the instructions in [RPM Packaging Guide](rpm-packaging-guide.md).
 
-### Manual steps to run IDV service
+## Manual steps to run IDV service
 
 ## Run script to copy necessary files to `/opt` directory
 
