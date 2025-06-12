@@ -84,7 +84,7 @@ sudo ./setup_permissions.sh
   sudo rpm -ivh ~/rpmbuild/RPMS/noarch/idv-solution-1.0-1.emt3.noarch.rpm
   ```
   
-  > **Note**: If the output of above command may contain a message something similar to -
+  **Note**: If the output of above command may contain a message something similar to -
 
     ```ini
     Reload daemon failed: Transport endpoint is not connected
