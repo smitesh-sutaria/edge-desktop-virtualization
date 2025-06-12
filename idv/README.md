@@ -52,6 +52,7 @@ This file contains steps to launch virtual machines using a system service.
 
   ```bash
   cd idv
+  sudo chmod +x copy_files.sh
   sudo ./copy_files.sh
   ```
   This copies all the scripts and services to appropriate directories.
