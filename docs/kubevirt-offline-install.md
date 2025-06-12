@@ -46,3 +46,25 @@ Also the Device-Plugin has been shared as a [Device-Plugin TAR](link_to_dp_tar) 
     kubectl apply -f kubevirt-cr.yaml
     kubectl apply -f device-plugin.yaml
     ```
+7.  Verify Deployment
+    ```sh
+    kubectl get all -A
+
+    NAMESPACE     NAME                                          READY   STATUS    RESTARTS      AGE
+    .
+    .
+    kube-system   pod/device-plugin-q2c2n                       1/1     Running   0             10d
+    kubevirt      pod/virt-api-6c66767447-tvqwz                 1/1     Running   0             8d
+    kubevirt      pod/virt-controller-599f9b4d86-ffv2b          1/1     Running   0             8d
+    kubevirt      pod/virt-controller-599f9b4d86-pt5rn          1/1     Running   0             8d
+    kubevirt      pod/virt-handler-hbtsj                        1/1     Running   0             8d
+    kubevirt      pod/virt-operator-69cb894b4c-djrzh            1/1     Running   0             8d
+    kubevirt      pod/virt-operator-69cb894b4c-jc8sk            1/1     Running   0             8d
+    .
+    .
+    .
+    NAMESPACE   NAME                            AGE   PHASE
+    kubevirt    kubevirt.kubevirt.io/kubevirt   9d    Deployed
+    .
+    .
+    ```
