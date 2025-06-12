@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Copyright (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
 ROOT_PATH="/sys/bus/pci/devices"
 
 enable_vfs()

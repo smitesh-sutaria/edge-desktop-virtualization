@@ -10,4 +10,4 @@ virtualMachines:
     secureBoot: false
     usePVC: false
     rdpPort: 3393
-    cdiDv:  vm4-win11-image
+    cdiDv: vm4-win11-image
