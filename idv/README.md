@@ -11,9 +11,10 @@ This file contains steps to launch virtual machines using a system service.
 
 ## Modify the VM configuration
 
-- The `vm.conf` file in `idv` directory contains configuration parameters for the virtual machines. Modify this file to specify the number of VMs to launch and their respective settings. 
+- The `vm.conf` file in `idv/launcher` directory contains configuration parameters for the virtual machines. Modify this file to specify the number of VMs to launch and their respective settings. 
 
-  - Set the `guest` variable to the number of VMs to launch
+  - Set the `guest` variable to the number of VMs to launch.
+  - Set the `OVMF_CODE_FILE` variable to the path of OVMF_CODE.fd file.
   - Fill in the required configuration parameters for each VM in the right order. If `guest` is set to `2`, modify/set the variables starting with `vm1_*` and `vm2_*`
 
   Example:
@@ -43,7 +44,7 @@ This file contains steps to launch virtual machines using a system service.
   vm1_winrm=5986
   ```
 
-  - Set the `OVMF_CODE_FILE` variable to the path of OVMF_CODE.fd file.
+    **Note:** Set unique values for ssh, winrdp and winrm ports to avoid conflicts when launching multiple Windows VMs.
 
 ## Run script to copy necessary files to `/opt` directory
 
@@ -51,6 +52,7 @@ This file contains steps to launch virtual machines using a system service.
 
   ```bash
   cd idv
+  sudo chmod +x copy_files.sh
   sudo ./copy_files.sh
   ```
   This copies all the scripts and services to appropriate directories.
@@ -62,19 +64,19 @@ This file contains steps to launch virtual machines using a system service.
 - Run the following command to enable `idv-init` service
   
   ```bash
-  sudo systemctl enable idv-init.service
+  systemctl --user enable idv-init.service
   ```
 
 - Run the following command to start `idv-init` service
   
   ```bash
-  sudo systemctl start idv-init.service
+  systemctl --user start idv-init.service
   ```
 
 - Verify that the service is running:
 
     ```bash
-    sudo systemctl status idv-init.service
+    systemctl --user status idv-init.service
     ```
    **Note**: After starting the idv-init service, the screen will go blank because X is running. Ensure you have SSH access to the machine for the next steps.
 
@@ -106,7 +108,7 @@ This file contains steps to launch virtual machines using a system service.
 - If the `idv-init` service fails to start, check the service logs using the following command:
   
   ```bash
-  sudo journalctl -u idv-init.service
+  journalctl --user -xeu idv-init.service
   ```
   Ensure that all required files are present in `/opt/idv`.
 

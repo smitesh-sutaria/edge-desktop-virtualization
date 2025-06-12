@@ -19,7 +19,9 @@ sudo chown $username:$username /opt/idv/launcher/start_all_vms.log
 sudo cp -r init /opt/idv/
 sudo touch /opt/idv/init/setup_sriov_vfs.log
 
-
 # copy service files
-sudo cp etc/systemd/system/idv-init.service /etc/systemd/system/idv-init.service
+sudo cp etc/systemd/user/idv-init.service /etc/systemd/user/idv-init.service
 sudo cp etc/systemd/user/idv-launcher.service /etc/systemd/user/idv-launcher.service
+
+# allow scripts to be run without password
+echo "$username ALL=(ALL) NOPASSWD: /usr/bin/X,/opt/idv/init/setup_sriov_vfs.sh,/opt/idv/init/setup_display.sh,/opt/idv/init/setup_file_permissions.sh,/opt/idv/launcher/start_vm.sh,/opt/idv/launcher/start_all_vms.sh,/opt/idv/launcher/stop_vm.sh,/opt/idv/launcher/stop_all_vms.sh" | sudo tee -a /etc/sudoers.d/guest > /dev/null
