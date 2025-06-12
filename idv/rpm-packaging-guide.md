@@ -32,6 +32,7 @@ sudo chmod +x idv-solution-1.0.tar.gz
 - Run the script to copy files to the RPM SOURCES directory:
 
 ```bash
+sudo chmod +x setup_rpm_source.sh
 ./setup_rpm_source.sh
 ```
 > **Note**: **Do not** run the above with sudo.
@@ -40,6 +41,7 @@ sudo chmod +x idv-solution-1.0.tar.gz
 - Run the following command to set up permissions for running scripts:
 
 ```bash
+sudo chmod +x setup_permissions.sh
 sudo ./setup_permissions.sh
 ```
 
