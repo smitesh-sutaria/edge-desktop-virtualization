@@ -1,0 +1,19 @@
+{{- if .usePVC }}
+{{- range .Values.virtualMachines }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app/name: {{ .name }}
+  name: {{ .name }}-bootdisk
+  namespace: {{ .namespace }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .storage }}
+  storageClassName: {{ .storageClassName }}
+{{- end }}
+{{- end }}
