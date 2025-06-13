@@ -124,7 +124,8 @@ sudo ./setup_permissions.sh
     ```
   
   2. Edit the `launcher/vm.conf` file:
-    - Refer the [Modify VM configuration file](modify-vm-config-file.md) for details on how to modify the VM configuration file.
+      - Refer the [Modify VM configuration file](modify-vm-config-file.md) for details on how to modify the VM configuration file.
+
 
   3. Re-enable and start `idv-launcher.service`:
     ```bash
