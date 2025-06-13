@@ -1,0 +1,25 @@
+{{- range .Values.virtualMachines }}
+{{- if .useDataVolume }}
+{{- $existingDV := lookup "cdi.kubevirt.io/v1beta1" "DataVolume" .namespace .dataVolumeName }}
+{{- if not $existingDV }}
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataVolume
+metadata:
+  name: {{ .dataVolumeName }}
+  namespace: {{ .namespace }}
+  annotations:
+    "helm.sh/resource-policy": keep
+spec:
+  source:
+    registry:
+      url: docker://{{ .bootDiskImage }}
+  pvc:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: {{ .storage }}
+{{- end }}
+{{- end }}
+{{- end }}
