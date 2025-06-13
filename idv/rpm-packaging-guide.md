@@ -24,12 +24,13 @@ This guide provides step-by-step instructions to package and run IDV services us
 - Run the following commands to create a tar file for the IDV solution:
 
 ```bash
-sudo tar --transform='s,^,idv-solution-1.0/,' -czf idv-solution-1.0.tar.gz launcher init
+sudo mkdir idv-solution-1.0
+sudo cp -r autologin.conf etc/systemd/user/idv-init.service etc/systemd/user/idv-launcher.service init/ launcher/ idv-solution-1.0/
+sudo tar -czf idv-solution-1.0.tar.gz idv-solution-1.0/
 sudo chmod +x idv-solution-1.0.tar.gz
 ```
 
 ## Step 2: Copy Files to RPM SOURCES
-- Run the script to copy files to the RPM SOURCES directory:
 
 ```bash
 sudo chmod +x setup_rpm_source.sh

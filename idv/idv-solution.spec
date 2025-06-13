@@ -4,11 +4,8 @@ Release:        1%{?dist}
 Summary:        A package to install scripts and systemd services
 
 License:        Proprietary
-Source0:        idv-solution-1.0.tar.gz
-Source1:        idv-init.service
-Source2:        idv-launcher.service
-Source3:        autologin.conf
-Source4:        setup_permissions.sh
+Source0:        %{name}-%{version}.tar.gz
+Source1:        setup_permissions.sh
 
 BuildArch:      noarch
 Requires(post): systemd
@@ -33,19 +30,19 @@ touch %{buildroot}/opt/idv/launcher/start_all_vms.log
 
 # Install the idv-init service
 mkdir -p %{buildroot}/usr/lib/systemd/user/
-install -m 644 %{SOURCE1} %{buildroot}/usr/lib/systemd/user/idv-init.service
+install -m 644 idv-init.service %{buildroot}/usr/lib/systemd/user/idv-init.service
 
 # Install the idv-launcher service
 mkdir -p %{buildroot}/usr/lib/systemd/user/
-install -m 644 %{SOURCE2} %{buildroot}/usr/lib/systemd/user/idv-launcher.service
+install -m 644 idv-launcher.service %{buildroot}/usr/lib/systemd/user/idv-launcher.service
 
 # Install the autologin.conf file
 mkdir -p %{buildroot}/etc/systemd/system/getty@tty1.service.d
-install -m 644 %{SOURCE3} %{buildroot}/etc/systemd/system/getty@tty1.service.d/autologin.conf
+install -m 644 autologin.conf %{buildroot}/etc/systemd/system/getty@tty1.service.d/autologin.conf
 
 # Install the setup_permissions.sh file
 mkdir -p %{buildroot}/usr/local/bin
-install -m 755 %{SOURCE4} %{buildroot}/usr/local/bin/setup_permissions.sh
+install -m 755 %{SOURCE1} %{buildroot}/usr/local/bin/setup_permissions.sh
 
 %files
 /opt/idv/
@@ -88,5 +85,5 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
-* Thu Jun 12 2025 Dhanya A <dhanya.a@intel.com> - 1.0-1
+* Fri Jun 13 2025 Dhanya A <dhanya.a@intel.com> - 1.0-1
 - Initial RPM package for scripts and systemd services
