@@ -5,14 +5,6 @@
 ## [Device Plugins for Kubernetes](device-plugins-for-kubernetes/README.md)
 ## [Kubevirt Patch](open-edge-platform/forked/edge-desktop-virtualization/kubevirt-patch/README.md)
 
-# applications.virtualization.maverickflats-tiberos-itep
-> Host OS (Tiber) should support Graphics SRIOV.
-
-Clone all the submodules with git command: 
-```
-git submodule update --init --recursive
-```
-
 # Hardware
 1. Intel NUC 12 Pro Kit NUC12WSHi7 Mini PC with 12th Gen Core i7-1260P Processor (12 Cores 16 Threads 4.70GHz 18MB Cache Intel Iris Xe Graphics) with 64GB DDR4 RAM, 1TB M.2 SSD, 2.5GbE LAN, Wi-Fi 6E, Bluetooth 5.3, 2x Thunderbolt 4 ports
 2. Intel NUC 12 Pro Kit NUC12WSHi5 Mini PC with 12th Gen Core i5-1240P Processor (12 Cores 16 Threads 4.40GHz 12MB Cache Intel Iris Xe Graphics) with 32GB DDR4 RAM, 1TB M.2 SSD, 2.5GbE LAN, Wi-Fi 6E, Bluetooth 5.3
