@@ -50,7 +50,9 @@ for vm in "${VM_LIST[@]}"; do
     fi
 
     usb="${vm}_usb"
-    QEMU_OPTIONS+=" -u ${!usb}"
+    if [ -n "${!usb}" ]; then
+        QEMU_OPTIONS+=" -u ${!usb}"
+    fi
 
     sudo ./start_vm.sh $QEMU_OPTIONS &
 

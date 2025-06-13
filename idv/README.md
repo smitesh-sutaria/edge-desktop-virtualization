@@ -3,111 +3,103 @@
 This file contains steps to launch virtual machines using a system service.
 
 ## Table of Contents
-- [Modify the VM configuration](#modify-the-vm-configuration)
+- [Virtual machine configuration file](#virtual-machine-configuration-file)
+- [Modify VM configuration](#modify-vm-configuration)
 - [Run IDV services via an RPM package](#run-idv-services-via-an-rpm-package)
-- [Run script to copy necessary files to `/opt` directory](#run-script-to-copy-necessary-files-to-opt-directory)
-- [Enable and start `idv-init` service](#enable-and-start-idv-init-service)
-- [Enable and start `idv-launcher` service](#enable-and-start-idv-launcher-service)
+- [Manual steps to run IDV service](#manual-steps-to-run-idv-service)
+  - [Run script to copy necessary files to `/opt` directory](#step-1-run-script-to-copy-necessary-files-to-opt-directory)
+  - [Enable and start `idv-init` service](#step-2-enable-and-start-idv-init-service)
+  - [Enable and start `idv-launcher` service](#step-3-enable-and-start-idv-launcher-service)
 - [Troubleshooting](#troubleshooting)
 
-## Modify the VM configuration
+## Virtual machine configuration file 
 
-- The `vm.conf` file in `idv/launcher` directory contains configuration parameters for the virtual machines. Modify this file to specify the number of VMs to launch and their respective settings. 
+- The `vm.conf` file in `launcher` directory consists of the following parameters. Each parameter defines a specific aspect of the virtual machine configuration: 
 
-  - Set the `guest` variable to the number of VMs to launch.
-  - Set the `OVMF_CODE_FILE` variable to the path of OVMF_CODE.fd file.
-  - Fill in the required configuration parameters for each VM in the right order. If `guest` is set to `2`, modify/set the variables starting with `vm1_*` and `vm2_*`
+| Parameter           | Description                                      | Example Value                             |
+|---------------------|--------------------------------------------------|-------------------------------------------|
+| `vm1_ram`           | Memory allocated to the VM (in GB).              | `3`                                       |
+| `vm1_os`            | Operating system of the VM.                      | `windows` or `ubuntu`                     |
+| `vm1_name`          | Name of the VM.                                  | `vm1`                                     |
+| `vm1_cores`         | Number of CPU cores allocated to the VM.         | `3`                                       |
+| `vm1_firmware_file` | Path of firmware (.fd) file.                     | `/opt/qcow2/win1.fd`                      |
+| `vm1_qcow2_file`    | Path of qcow2 file.                              | `/opt/qcow2/win1.qcow2`                   |
+| `vm1_connector0`    | Display connector for the VM.                    | `HDMI-1`                                  |
+| `vm1_usb`           | USB devices to attach (comma-separated)          | `3-1.1,3-1.2,3-1.3,3-1.4`                 |
+| `vm1_ssh`           | SSH port for the VM.                             | `4444` (for windows), `2222` (for Ubuntu) |
+| `vm1_winrdp`        | WinRDP port (Set this only for Windows VM)       | `3389`                                    |
+| `vm1_winrm`         | WinRM port (Set this only for Windows VM)        | `5986`                                    |
 
-  Example:
+- `vm1_usb` should be a comma separated list of USB devices to attach to the VM in the format: <hostbus>-<hostport>, where hostbus is the bus number and hostport is the end port to which the device is attached.
 
-  ```ini
-  # Memory in GB
-  vm1_ram=3
-  # OS to be configured
-  vm1_os=windows
-  # Name of the VM
-  vm1_name=windows_vm1
-  # Number of CPU cores
-  vm1_cores=3
-  # Path of firmware file
-  vm1_firmware_file=OVMF_VARS_windows1.fd
-  # Path of qcow2 file
-  vm1_qcow2_file=win1.qcow2
-  # Name of the display connector (monitor)
-  vm1_connector0=HDMI-1
-  # Comma separated list of USB devices to attach to the VM in the format: <hostbus>-<hostport>, where hostport is the end port to which the device is attached
-  vm1_usb=3-1.1,3-1.2,3-1.3,3-1.4
-  # SSH port for the VM
-  vm1_ssh=4444
-  # WinRDP port for the VM - Set this only for Windows VM.
-  vm1_winrdp=3389
-  # WinRM port for the VM - Set this only for Windows VM
-  vm1_winrm=5986
-  ```
+## Modify VM configuration
 
-    **Note:** Set unique values for ssh, winrdp and winrm ports to avoid conflicts when launching multiple Windows VMs.
+- Refer to the [Modify VM configuration file](modify-vm-config-file.md) for details on how to modify the VM configuration file.
 
 ## Run IDV services via an RPM package
+
 - For detailed instructions on running IDV services using an RPM package, follow the instructions in [RPM Packaging Guide](rpm-packaging-guide.md).
 
 ## Manual steps to run IDV service
 
-## Run script to copy necessary files to `/opt` directory
+- If you prefer not to use the RPM package, follow these steps:
 
-- Move to the `idv` directory and run the `copy_files.sh` file with superuser privileges using the following command
+  ## Step 1: Run script to copy necessary files to `/opt` directory
 
-  ```bash
-  cd idv
-  sudo chmod +x copy_files.sh
-  sudo ./copy_files.sh
-  ```
-  This copies all the scripts and services to appropriate directories.
-
-## Enable and start `idv-init` service
-
-  The `idv-init` service initializes the environment by enumerating SR-IOV virtual functions, starting the X server and setting up permissions required to run the scripts to launch VMs. This is a prerequisite for launching the virtual machines.
-
-- Run the following command to enable `idv-init` service
-  
-  ```bash
-  systemctl --user enable idv-init.service
-  ```
-
-- Run the following command to start `idv-init` service
-  
-  ```bash
-  systemctl --user start idv-init.service
-  ```
-
-- Verify that the service is running:
+  - Navigate to the `idv` directory and run the `copy_files.sh` file with superuser privileges using the following command
 
     ```bash
-    systemctl --user status idv-init.service
+    cd idv
+    sudo chmod +x copy_files.sh
+    sudo ./copy_files.sh
     ```
-   **Note**: After starting the idv-init service, the screen will go blank because X is running. Ensure you have SSH access to the machine for the next steps.
+    This copies all the scripts and services to appropriate directories.
 
-## Enable and start `idv-launcher` service
+  ## Step 2: Enable and start `idv-init` service
 
-  The `idv-launcher` service launches the configured virtual machines in their respective monitors.
+    The `idv-init` service initializes the environment by enumerating SR-IOV virtual functions, starting the X server and setting up permissions required to run the scripts to launch VMs. This is a prerequisite for launching the virtual machines.
 
-- Run the following command to enable `idv-launcher` service
-  
-  ```bash
-  systemctl --user enable idv-launcher.service
-  ```
+  - Run the following command to enable `idv-init` service
+    
+    ```bash
+    systemctl --user enable idv-init.service
+    ```
 
-- Run the following command to start `idv-launcher` service
-  
-  ```bash
-  systemctl --user start idv-launcher.service
-  ```
+  - Run the following command to start `idv-init` service
+    
+    ```bash
+    systemctl --user start idv-init.service
+    ```
 
-- Verify that the service is running:
+  - Verify that the service is running:
 
-  ```bash
-  systemctl --user status idv-launcher.service
-  ```
-   **Note**: Once the idv-launcher service starts, all the VMs should be launched in respective monitors.
+      ```bash
+      systemctl --user status idv-init.service
+      ```
+    **Note**: After starting the idv-init service, the screen will go blank because X is running. Ensure you have SSH access to the machine for the next steps.
+
+  ## Step 3: Enable and start `idv-launcher` service
+
+    The `idv-launcher` service launches the configured virtual machines in their respective monitors.
+
+  - Run the following command to enable `idv-launcher` service
+    
+    ```bash
+    systemctl --user enable idv-launcher.service
+    ```
+
+  - Run the following command to start `idv-launcher` service
+    
+    ```bash
+    systemctl --user start idv-launcher.service
+    ```
+
+  - Verify that the service is running:
+
+    ```bash
+    systemctl --user status idv-launcher.service
+    ```
+    **Note**: Once the idv-launcher service starts, all the VMs should be launched in respective monitors.
 
 ## Troubleshooting
 
