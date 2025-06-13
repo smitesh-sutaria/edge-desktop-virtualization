@@ -4,6 +4,7 @@ This file contains steps to launch virtual machines using a system service.
 
 ## Table of Contents
 - [Modify the VM configuration](#modify-the-vm-configuration)
+- [Run IDV services via an RPM package](#run-idv-services-via-an-rpm-package)
 - [Run script to copy necessary files to `/opt` directory](#run-script-to-copy-necessary-files-to-opt-directory)
 - [Enable and start `idv-init` service](#enable-and-start-idv-init-service)
 - [Enable and start `idv-launcher` service](#enable-and-start-idv-launcher-service)
@@ -45,6 +46,11 @@ This file contains steps to launch virtual machines using a system service.
   ```
 
     **Note:** Set unique values for ssh, winrdp and winrm ports to avoid conflicts when launching multiple Windows VMs.
+
+## Run IDV services via an RPM package
+- For detailed instructions on running IDV services using an RPM package, follow the instructions in [RPM Packaging Guide](rpm-packaging-guide.md).
+
+## Manual steps to run IDV service
 
 ## Run script to copy necessary files to `/opt` directory
 
