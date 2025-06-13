@@ -59,25 +59,25 @@ sudo ./setup_permissions.sh
 ```
 
 ## Step 4: Setup RPM Environment
-  ## Step 4.1: Install RPM
+  ### Step 4.1: Install RPM
 
     ```bash
     sudo -E dnf install rpm
     ```
 
-  ## Step 4.2: Install RPM-Build
+  ### Step 4.2: Install RPM-Build
 
     ```bash
     sudo -E dnf install rpm-build
     ```
 
-  ## Step 4.3: Create the RPM Build Environment
+  ### Step 4.3: Create the RPM Build Environment
 
     ```bash
     mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
     ```
 
-  ## Step 4.4: Configure the RPM Build Environment
+  ### Step 4.4: Configure the RPM Build Environment
 
     ```bash
     echo '%_topdir %(echo $HOME)/rpmbuild' > ~/.rpmmacros
@@ -124,7 +124,7 @@ sudo ./setup_permissions.sh
     ```
   
   2. Edit the `launcher/vm.conf` file:
-    - Refer the [Modify VM configuration file](modify-vm-config-file.md) for details on how to modify the VM configuration file. Once done, enable and start the `idv-launcher.service` using the following commands - 
+    - Refer the [Modify VM configuration file](modify-vm-config-file.md) for details on how to modify the VM configuration file.
 
   3. Re-enable and start `idv-launcher.service`:
     ```bash
