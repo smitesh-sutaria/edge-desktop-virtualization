@@ -1,0 +1,7 @@
+apiVersion: v2
+name: win11-virtual-machine
+type: application
+description: A Helm chart for deploying a Windows 11 Virtual Machine.
+version: 0.1.0
+appVersion: "0.1.0"
+kubeVersion: ">= 1.10.0-0"

@@ -1,0 +1,20 @@
+{{- range .Values.virtualMachines }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app/name: {{ .name }}
+  name: {{ .name }}-rdp
+  namespace: {{ .namespace }}
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - name: rdp
+    port: {{ .rdpPort }}
+    protocol: TCP
+    targetPort: 3389
+  selector:
+    app/name: {{ .name }}
+  type: LoadBalancer
+{{- end }}

@@ -1,0 +1,129 @@
+From 7613b128c484909ae91cdd10fcdcc2d9f18c5dda Mon Sep 17 00:00:00 2001
+From: Intel <intel.com>
+Date: Thu, 29 May 2025 17:52:41 +0530
+Subject: [PATCH] Patching Kubevirt with GTK libraries
+
+Patch virt-launcher centos image with GTK and other libaraies
+to support Intel GPU SR-IOV with Display Virtualization
+
+Note: Please add Intel GPU SR-IOV patched QEMU binary under build/qemu-system-x86_64
+and update the SHA256SUM in WORKSPACE file before continue building Kubevirt
+
+This patch was created and verified on Kubevirt release v1.5.0
+---
+ WORKSPACE                     |  9 ++++++
+ cmd/virt-launcher/BUILD.bazel | 10 ++++++
+ hack/rpm-deps.sh              | 60 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 79 insertions(+)
+
+diff --git a/WORKSPACE b/WORKSPACE
+index cf3cdbd89e..b3aa44ded3 100644
+--- a/WORKSPACE
++++ b/WORKSPACE
+@@ -152,6 +152,15 @@ http_file(
+     ],
+ )
+ 
++http_file(
++    name = "custom-qemu",
++    downloaded_file_path = "qemu-kvm",
++    sha256 = "<SHA256SUM_OF_PATCHED_QEMU>",
++    urls = [
++        "file:///root/go/src/kubevirt.io/kubevirt/build/qemu-system-x86_64",
++    ],
++)
++
+ http_archive(
+     name = "bazeldnf",
+     sha256 = "fb24d80ad9edad0f7bd3000e8cffcfbba89cc07e495c47a7d3b1f803bd527a40",
+diff --git a/cmd/virt-launcher/BUILD.bazel b/cmd/virt-launcher/BUILD.bazel
+index 0ebe807739..4505b61504 100644
+--- a/cmd/virt-launcher/BUILD.bazel
++++ b/cmd/virt-launcher/BUILD.bazel
+@@ -174,6 +174,15 @@ pkg_tar(
+     owner = "0.0",
+ )
+ 
++pkg_tar(
++    name = "custom-qemu-build",
++    srcs = ["@custom-qemu//file"],
++    mode = "0755",
++    owner = "0.0",
++    package_dir = "/usr/libexec",
++    visibility = ["//visibility:public"],
++)
++
+ container_image(
+     name = "version-container",
+     directory = "/",
+@@ -199,6 +208,7 @@ container_image(
+             ":nsswitch-tar",
+             ":qemu-hook-tar",
+             ":qemu-kvm-modules-dir-tar",
++            ":custom-qemu-build",
+             "//rpm:launcherbase_x86_64",
+         ],
+     }),
+diff --git a/hack/rpm-deps.sh b/hack/rpm-deps.sh
+index c3da8cfda5..51b6127c5c 100755
+--- a/hack/rpm-deps.sh
++++ b/hack/rpm-deps.sh
+@@ -48,6 +48,65 @@ centos_extra="
+   glibc-minimal-langpack
+   libcurl-minimal
+ "
++centos_gtk="
++  alsa-lib
++  brlapi
++  cairo
++  cairo-gobject
++  fuse3-libs
++  gdk-pixbuf2
++  gdk-pixbuf2-modules
++  gtk3-devel
++  libX11
++  libX11-common
++  libX11-xcb
++  libblkio
++  libiscsi
++  libjpeg-turbo
++  libproxy
++  libproxy-webkitgtk4
++  librados2
++  librbd1
++  libxdp-devel
++  mesa-libgbm
++  mesa-libgbm-devel
++  openjpeg2
++  pipewire
++  pipewire-alsa
++  pipewire-jack-audio-connection-kit
++  pipewire-jack-audio-connection-kit-libs
++  pipewire-libs
++  pipewire-pulseaudio
++  pulseaudio-libs
++  pulseaudio-libs-glib2
++  SDL2
++  sound-theme-freedesktop
++  vte-profile
++  vte291
++  vulkan-loader
++  vulkan-tools
++  xdg-dbus-proxy
++  xorg-x11-fonts-ISO8859-1-100dpi
++  xorg-x11-proto-devel
++"
+ 
+ # create a rpmtree for our test image with misc. tools.
+ testimage_main="
+@@ -219,6 +278,7 @@ if [ -z "${SINGLE_ARCH}" ] || [ "${SINGLE_ARCH}" == "x86_64" ]; then
+         ${bazeldnf_repos} \
+         $centos_main \
+         $centos_extra \
++        $centos_gtk \
+         $launcherbase_main \
+         $launcherbase_x86_64 \
+         $launcherbase_extra
+-- 
+2.34.1
+
