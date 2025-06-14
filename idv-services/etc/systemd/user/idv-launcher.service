@@ -1,0 +1,14 @@
+[Unit]
+Description=IDV service to launch VMs
+After=idv-init.service
+
+[Service]
+Type=simple
+Environment=DISPLAY=:0
+ExecStart=/bin/bash -c 'sleep 5 && cd /opt/idv/launcher && /usr/bin/sudo ./start_all_vms.sh >> /opt/idv/launcher/start_all_vms.log 2>&1 '
+ExecStop=/bin/bash -c 'cd /opt/idv/launcher && /usr/bin/sudo ./stop_all_vms.sh'
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target
