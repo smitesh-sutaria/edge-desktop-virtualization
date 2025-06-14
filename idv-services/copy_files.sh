@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
 if [ ! -d /opt/idv ]; then
     echo "idv directory not found. Creating directory"
     sudo mkdir /opt/idv

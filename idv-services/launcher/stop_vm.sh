@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
 # Kill QEMU process
 grep_output=$(ps aux | grep qemu | grep -i $1)
 
