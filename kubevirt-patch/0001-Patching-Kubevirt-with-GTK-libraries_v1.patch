@@ -1,4 +1,4 @@
-From 7613b128c484909ae91cdd10fcdcc2d9f18c5dda Mon Sep 17 00:00:00 2001
+From 527d3eced3be7f24873ae08109ebd3de283cdcd8 Mon Sep 17 00:00:00 2001
 From: Intel <intel.com>
 Date: Thu, 29 May 2025 17:52:41 +0530
 Subject: [PATCH] Patching Kubevirt with GTK libraries
@@ -11,10 +11,10 @@ and update the SHA256SUM in WORKSPACE file before continue building Kubevirt
 
 This patch was created and verified on Kubevirt release v1.5.0
 ---
- WORKSPACE                     |  9 ++++++
- cmd/virt-launcher/BUILD.bazel | 10 ++++++
- hack/rpm-deps.sh              | 60 +++++++++++++++++++++++++++++++++++
- 3 files changed, 79 insertions(+)
+ WORKSPACE                     |  9 ++++++++
+ cmd/virt-launcher/BUILD.bazel | 10 +++++++++
+ hack/rpm-deps.sh              | 42 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 61 insertions(+)
 
 diff --git a/WORKSPACE b/WORKSPACE
 index cf3cdbd89e..b3aa44ded3 100644
@@ -65,10 +65,10 @@ index 0ebe807739..4505b61504 100644
          ],
      }),
 diff --git a/hack/rpm-deps.sh b/hack/rpm-deps.sh
-index c3da8cfda5..51b6127c5c 100755
+index c3da8cfda5..95bb55f5bd 100755
 --- a/hack/rpm-deps.sh
 +++ b/hack/rpm-deps.sh
-@@ -48,6 +48,65 @@ centos_extra="
+@@ -48,6 +48,47 @@ centos_extra="
    glibc-minimal-langpack
    libcurl-minimal
  "
@@ -116,7 +116,7 @@ index c3da8cfda5..51b6127c5c 100755
  
  # create a rpmtree for our test image with misc. tools.
  testimage_main="
-@@ -219,6 +278,7 @@ if [ -z "${SINGLE_ARCH}" ] || [ "${SINGLE_ARCH}" == "x86_64" ]; then
+@@ -219,6 +260,7 @@ if [ -z "${SINGLE_ARCH}" ] || [ "${SINGLE_ARCH}" == "x86_64" ]; then
          ${bazeldnf_repos} \
          $centos_main \
          $centos_extra \
@@ -125,5 +125,5 @@ index c3da8cfda5..51b6127c5c 100755
          $launcherbase_x86_64 \
          $launcherbase_extra
 -- 
-2.34.1
+2.43.0
 
