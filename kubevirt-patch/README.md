@@ -191,9 +191,16 @@ The original idea to build within the Centos container comes from this [link](ht
     git checkout v1.5.0
     ```
 
+1. Apply a patch to kubevirt to update dependencies which resolve potential security issues since the original v1.5.0 kubevirt was released
+    ```sh
+    git apply your/path/to/kubevirt-patch/0001-Bump-dependency-versions-for-kubevirt-v1.5.0.patch
+    ```
+
+1. [OPTIONAL] Update kubevirt dependency images using the `make bump-images` command. Note that you may also have to update `go_version` in `WORKSPACE` if applicable.
+
 1. Apply the kubevirt patch from this repo to expand kubevirt virt-launcher image with additional dependencies to support GTK
     ```sh
-    git apply your/path/to/applications.virtualization.maverickflats-tiberos-itep/docs/0001-Patching-Kubevirt-with-GTK-libraries_v1.patch
+    git apply your/path/to/kubevirt-patch/0001-Patching-Kubevirt-with-GTK-libraries_v1.patch
     ```
 
 1. Create a directory to place the custom QEMU binary and copy it from the QEMU build
