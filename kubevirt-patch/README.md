@@ -198,7 +198,7 @@ The original idea to build within the Centos container comes from this [link](ht
 
 1. Apply the kubevirt patch from this repo to expand kubevirt virt-launcher image with additional dependencies to support GTK
     ```sh
-    git apply your/path/to/applications.virtualization.maverickflats-tiberos-itep/docs/0001-Patching-Kubevirt-with-GTK-libraries_v1.patch
+    git apply your/path/to/kubevirt-patch/0001-Patching-Kubevirt-with-GTK-libraries_v1.patch
     ```
 
 1. Create a directory to place the custom QEMU binary and copy it from the QEMU build
@@ -346,7 +346,7 @@ The original idea to build within the Centos container comes from this [link](ht
 5.  Ensure Kubernetes is installed and local cluster is running.
 6.  Import the images into the container runtime
     ```sh
-    sudo ctr -n k8s.io images import sidecar-shim.tar 
+    sudo ctr -n k8s.io images import sidecar-shim.tar
     sudo ctr -n k8s.io images import virt-api.tar
     sudo ctr -n k8s.io images import virt-controller.tar
     sudo ctr -n k8s.io images import virt-handler.tar

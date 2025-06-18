@@ -17,7 +17,7 @@ Also the Device-Plugin has been shared as a [Device-Plugin TAR](link_to_dp_tar) 
     ```
 4.  Import the images into the container runtime
     ```sh
-    sudo ctr -n k8s.io images import sidecar-shim.tar 
+    sudo ctr -n k8s.io images import sidecar-shim.tar
     sudo ctr -n k8s.io images import virt-api.tar
     sudo ctr -n k8s.io images import virt-controller.tar
     sudo ctr -n k8s.io images import virt-handler.tar
