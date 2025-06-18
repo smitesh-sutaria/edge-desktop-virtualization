@@ -177,12 +177,9 @@ The original idea to build within the Centos container comes from this [link](ht
 1. Clone the kubevirt repo:
 
     ```sh
-    mkdir ~/workspace
-
+    mkdir -p ~/workspace
     cd ~/workspace
-
     git clone https://github.com/kubevirt/kubevirt.git
-
     cd kubevirt
     ```
 
@@ -191,16 +188,16 @@ The original idea to build within the Centos container comes from this [link](ht
     git checkout v1.5.0
     ```
 
-1. Apply a patch to kubevirt to update dependencies which resolve potential security issues since the original v1.5.0 kubevirt was released
+1. Apply a patch to kubevirt to update dependencies which resolve potential security issues since the original v1.5.0 kubevirt was released. $EDV_HOME should be set to the path to the top level of this repository (e.g. edge-desktop-virtualization).
     ```sh
-    git apply your/path/to/kubevirt-patch/0001-Bump-dependency-versions-for-kubevirt-v1.5.0.patch
+    git apply $EDV_HOME/kubevirt-patch/0001-Bump-dependency-versions-for-kubevirt-v1.5.0.patch
     ```
 
 1. [OPTIONAL] Update kubevirt dependency images using the `make bump-images` command. Note that you may also have to update `go_version` in `WORKSPACE` if applicable.
 
 1. Apply the kubevirt patch from this repo to expand kubevirt virt-launcher image with additional dependencies to support GTK
     ```sh
-    git apply your/path/to/kubevirt-patch/0001-Patching-Kubevirt-with-GTK-libraries_v1.patch
+    git apply $EDV_HOME/kubevirt-patch/0001-Patching-Kubevirt-with-GTK-libraries_v1.patch
     ```
 
 1. Create a directory to place the custom QEMU binary and copy it from the QEMU build
@@ -213,13 +210,13 @@ The original idea to build within the Centos container comes from this [link](ht
 1. Obtain the `SHA` hash number of the QEMU binary
 
     ```sh
-    sha256sum ./build/qemu-system-x86_64
-    13c2760bf012a8011ddbe0c595ec3dca24249debe32bc4d1e338ec8538ad7453 ./build/qemu-system-x86_64
+    QEMU_SHA256="$(sha256sum ./build/qemu-system-x86_64 | cut -d ' ' -f 1)"
+    echo "QEMU_SHA256=$QEMU_SHA256"
     ```
 
 1. Patch the top level `WORKSPACE` file in top level `kubevirt` directory. Replace `<SHA256SUM_OF_PATCHED_QEMU>` with your sha256sum from the previous step
     ```sh
-    vim WORKSPACE
+    perl -p -i -e "s|<SHA256SUM_OF_PATCHED_QEMU>|$QEMU_SHA256|g" WORKSPACE
     ```
 
 1. Export the location of the docker registry and build tag (local docker registry in this case)

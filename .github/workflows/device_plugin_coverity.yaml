@@ -13,6 +13,9 @@ on:
     # Run at 01:35 UTC every day
     # Chosen arbitrarily and could be moved - 01:30 UTC is generally after workday ends in US and before it starts in India
     - cron: "35 1 * * *"
+  push:
+    tags:
+      - "*"
 
 permissions: read-all
 
@@ -30,6 +33,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: false
+          fetch-depth: 0 # All history, not just latest commit
+          ref: ${{ github.event.pull_request.head.sha }} # Check out the actual commit, not a fake merge commit
+
+      - name: Setup Tools & Common Variables
+        uses: ./.github/actions/setup-tools
 
       - name: Load coverity from cache
         id: cache-coverity
@@ -74,7 +82,7 @@ jobs:
         working-directory: device-plugins-for-kubernetes
         continue-on-error: false
         run: |
-          cov-build --dir $HOME/cov-int ./build.sh --ver "$GITHUB_SHA" --repo "localhost"
+          cov-build --dir $HOME/cov-int ./build.sh --ver "$EDV_VERSION" --repo "localhost"
 
       - name: Create coverity results tarball
         run: |
@@ -87,13 +95,12 @@ jobs:
           COVERITY_TOKEN: ${{ secrets.COVERITY_TOKEN }}
         run: |
           cd $HOME
-          echo "VERSION=$GITHUB_SHA"
           ls -hal cov-int.tgz
           echo "NOTE: If size above is > 500 MB, this will fail and need to be restructured to use the more advanced coverity API"
 
           curl --form token=$COVERITY_TOKEN \
             --form email=byron.marohn@intel.com \
             --form file=@cov-int.tgz \
-            --form version="$VERSION" \
-            --form description="Coverity build for edge-desktop-virtualization@$VERSION" \
+            --form version="$EDV_VERSION" \
+            --form description="Coverity build for edge-desktop-virtualization@$EDV_VERSION" \
             https://scan.coverity.com/builds?project=open-edge-platform%2Fedge-desktop-virtualization

@@ -75,4 +75,7 @@ if [[ $PUSH == "true" ]]; then
   fi
 fi
 
+# Update the deployment manifest with the newly built image version
+perl -p -i -e "s|image:.*mf-device-plugin:.*$|image: '$DOCKER_REPO/mf-device-plugin:$VER'|g" deploy/manifests/maverikflats-device-plugin.yaml
+
 echo "Build successful."
