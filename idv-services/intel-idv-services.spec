@@ -5,13 +5,12 @@
 Name:           intel-idv-services
 Version:        0.1
 Release:        1%{?dist}
-Summary:        A package to install scripts and systemd services
+Summary:        A package to install scripts and systemd services for Intelligent Desktop Virtualization
 Distribution:   Edge Microvisor Toolkit
 Vendor:         Intel Corporation
 License:        Apache-2.0
 URL:            https://github.com/open-edge-platform/edge-desktop-virtualization
 Source0:        %{name}-%{version}.tar.gz
-Source1:        setup_permissions.sh
 
 BuildArch:      noarch
 Requires(post): systemd
@@ -42,20 +41,12 @@ install -m 644 idv-launcher.service %{systemd_user_dir}/idv-launcher.service
 mkdir -p %{systemd_system_dir}/getty@tty1.service.d
 install -m 644 autologin.conf %{systemd_system_dir}/getty@tty1.service.d/autologin.conf
 
-# Install the setup_permissions.sh file
-mkdir -p %{local_bin_dir}
-install -m 755 %{SOURCE1} %{local_bin_dir}/
-
 %files
 /usr/local/bin/idv/
 /usr/lib/systemd/user/idv-*.service
-/usr/local/bin/setup_permissions.sh
 %config(noreplace) /etc/systemd/system/getty@tty1.service.d/autologin.conf
 
 %post
-# Run setup_sudoers.sh script
-/usr/local/bin/setup_permissions.sh
-
 systemctl daemon-reload
 
 USER_ID=1000
@@ -86,6 +77,9 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Thu Jun 19 2025 Dhanya A <dhanya.a@intel.com> - 0.1-5
+- Copy scripts to bin directory, use macros for standard path, remove logs file
+
 * Tue Jun 17 2025 Dhanya A <dhanya.a@intel.com> - 0.1-3
 - Remove command to create logs file.
 
