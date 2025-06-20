@@ -108,7 +108,7 @@ This file contains steps to launch virtual machines using a system service.
   ```bash
   journalctl --user -xeu idv-init.service
   ```
-  Ensure that all required files are present in `/usr/local/bin/idv`.
+  Ensure that all required files are present in `/usr/bin/idv`.
 
 
 - If the VMs do not launch after starting the `idv-launcher` service, check the service logs using the following command:
