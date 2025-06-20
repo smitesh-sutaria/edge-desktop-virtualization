@@ -17,7 +17,6 @@
 
 - To setup `idv-init` and `idv-launcher` services on an immutable image, the following has to be done via `cloud-init` - 
   1. Run the [setup_display](init/setup_display.sh) script to add xorg configuration files.
-  2. Modify `launcher/vm.conf` file. Refer [Modify VM Configuration](#modify-vm-configuration) section.
   2. Enable `idv-init.service` and `idv-launcher.service`. Refer the [Enable IDV Services](#enable-idv-services) section for the commands to be run to enable both the services.
   3. Start `idv-init.service` and `idv-launcher.service`. Refer the [Start `idv-init.service`](#start-idv-init-service) and [Start `idv-launcher.service`](#start-idv-launcher-service) sections for the commands to be run to start each service.
 
