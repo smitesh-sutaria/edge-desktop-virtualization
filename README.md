@@ -95,5 +95,5 @@ https://github.com/ThunderSoft-SRIOV/sriov/blob/main/docs/deploy-windows-vm.md#m
 
 ### Further steps
 
-For further steps to launch VMs, refer the README [here](idv/README.md)
+For further steps to launch VMs, refer the README [here](idv-services/README.md)
 
