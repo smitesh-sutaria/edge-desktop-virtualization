@@ -1,18 +1,23 @@
-Name:           idv-solution
-Version:        1.0
-Release:        1%{?dist}
-Summary:        A package to install scripts and systemd services
+%define systemd_user_dir %{buildroot}/usr/lib/systemd/user
+%define systemd_system_dir %{buildroot}/etc/systemd/system
+%define local_bin_dir %{buildroot}/usr/local/bin
 
-License:        Proprietary
+Name:           intel-idv-services
+Version:        0.1
+Release:        1%{?dist}
+Summary:        A package to install scripts and systemd services for Intelligent Desktop Virtualization
+Distribution:   Edge Microvisor Toolkit
+Vendor:         Intel Corporation
+License:        Apache-2.0
+URL:            https://github.com/open-edge-platform/edge-desktop-virtualization
 Source0:        %{name}-%{version}.tar.gz
-Source1:        setup_permissions.sh
 
 BuildArch:      noarch
 Requires(post): systemd
 Requires(preun): systemd
 
 %description
-This package installs the scripts folder to /opt/idv, enables and starts a root-level systemd service, and enables and starts a user-level systemd service.
+This package installs the scripts and services that are needed to run IDV solution
 
 %prep
 %setup -q
@@ -20,42 +25,29 @@ This package installs the scripts folder to /opt/idv, enables and starts a root-
 %build
 
 %install
-# Copy the scripts folder to /opt/idv
-mkdir -p %{buildroot}/opt/idv
-cp -r init %{buildroot}/opt/idv
-cp -r launcher %{buildroot}/opt/idv
-
-# Create log file
-touch %{buildroot}/opt/idv/launcher/start_all_vms.log
+# Copy the scripts folder to /usr/local/bin/idv
+mkdir -p %{local_bin_dir}/idv
+cp -r init /%{local_bin_dir}/idv
+cp -r launcher %{local_bin_dir}/idv
 
 # Install the idv-init service
-mkdir -p %{buildroot}/usr/lib/systemd/user/
-install -m 644 idv-init.service %{buildroot}/usr/lib/systemd/user/idv-init.service
+mkdir -p %{systemd_user_dir}
+install -m 644 idv-init.service %{systemd_user_dir}/idv-init.service
 
 # Install the idv-launcher service
-mkdir -p %{buildroot}/usr/lib/systemd/user/
-install -m 644 idv-launcher.service %{buildroot}/usr/lib/systemd/user/idv-launcher.service
+install -m 644 idv-launcher.service %{systemd_user_dir}/idv-launcher.service
 
 # Install the autologin.conf file
-mkdir -p %{buildroot}/etc/systemd/system/getty@tty1.service.d
-install -m 644 autologin.conf %{buildroot}/etc/systemd/system/getty@tty1.service.d/autologin.conf
-
-# Install the setup_permissions.sh file
-mkdir -p %{buildroot}/usr/local/bin
-install -m 755 %{SOURCE1} %{buildroot}/usr/local/bin/setup_permissions.sh
+mkdir -p %{systemd_system_dir}/getty@tty1.service.d
+install -m 644 autologin.conf %{systemd_system_dir}/getty@tty1.service.d/autologin.conf
 
 %files
-/opt/idv/
-/usr/lib/systemd/user/idv-init.service
-/usr/lib/systemd/user/idv-launcher.service
-/usr/local/bin/setup_permissions.sh
+/usr/local/bin/idv/
+/usr/lib/systemd/user/idv-*.service
 %config(noreplace) /etc/systemd/system/getty@tty1.service.d/autologin.conf
 
 %post
 systemctl daemon-reload
-
-# Run setup_sudoers.sh script
-/usr/local/bin/setup_permissions.sh
 
 USER_ID=1000
 USER=$(getent passwd 1000 | cut -d: -f1)
@@ -69,6 +61,7 @@ if [ -d "$XDG_RUNTIME_DIR" ]; then
 fi
 
 %preun
+set -e
 # Stop and disable the idv-init service before uninstalling
 if [ $1 -eq 0 ]; then
     USER_ID=$(id -u $SUDO_USER)
@@ -80,10 +73,20 @@ if [ $1 -eq 0 ]; then
         sudo -u $SUDO_USER XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR systemctl --user stop idv-launcher.service
         sudo -u $SUDO_USER XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR systemctl --user disable idv-launcher.service
     fi
-
-    rm -rf /opt/idv/
 fi
 
 %changelog
-* Fri Jun 13 2025 Dhanya A <dhanya.a@intel.com> - 1.0-1
+* Fri Jun 20 2025 Dhanya A <dhanya.a@intel.com> - 0.1-6
+- Update comment in spec file
+
+* Thu Jun 19 2025 Dhanya A <dhanya.a@intel.com> - 0.1-5
+- Copy scripts to bin directory, use macros for standard path, remove logs file
+
+* Tue Jun 17 2025 Dhanya A <dhanya.a@intel.com> - 0.1-3
+- Remove command to create logs file.
+
+* Mon Jun 16 2025 Dhanya A <dhanya.a@intel.com> - 0.1-2
+- Initial Edge Microvisor Toolkit import from Fedora 43 (license: MIT). License verified.
+
+* Fri Jun 13 2025 Dhanya A <dhanya.a@intel.com> - 0.1-1
 - Initial RPM package for scripts and systemd services
