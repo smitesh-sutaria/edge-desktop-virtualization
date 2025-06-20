@@ -162,7 +162,7 @@ sudo ./setup_permissions.sh
   ```bash
   journalctl --user -u idv-init.service
   ```
-  Ensure that all required files are present in `/opt/idv`.
+  Ensure that all required files are present in `/usr/local/bin/idv`.
 
 - If the VMs do not launch after starting the `idv-launcher` service, check the service logs using the following command:
 
@@ -170,9 +170,9 @@ sudo ./setup_permissions.sh
   journalctl --user -u idv-launcher.service
   ```
 
-  You can also check the `start_all_vms.log` in `/opt/idv/launcher` directory for errors using the command:
+  You can also check the journalctl logs for errors using the command:
 
   ```bash
-  sudo cat /opt/idv/launcher/start_all_vms.log
+  sudo cat journalctl -t idv-services
   ```  
   Ensure that the `vm.conf` file is correctly configured and all required files (e.g., firmware and qcow2 files) are present and the file paths are valid.

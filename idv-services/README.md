@@ -57,7 +57,7 @@ This file contains steps to launch virtual machines using a system service.
 
   ## Step 2: Enable and start `idv-init` service
 
-    The `idv-init` service initializes the environment by enumerating SR-IOV virtual functions, starting the X server and setting up permissions required to run the scripts to launch VMs. This is a prerequisite for launching the virtual machines.
+    The `idv-init` service initializes the environment by enumerating SR-IOV virtual functions, starting the X server. This is a prerequisite for launching the virtual machines.
 
   - Run the following command to enable `idv-init` service
     
@@ -108,18 +108,12 @@ This file contains steps to launch virtual machines using a system service.
   ```bash
   journalctl --user -xeu idv-init.service
   ```
-  Ensure that all required files are present in `/opt/idv`.
+  Ensure that all required files are present in `/usr/local/bin/idv`.
 
 
 - If the VMs do not launch after starting the `idv-launcher` service, check the service logs using the following command:
 
   ```bash
-  journalctl --user -u idv-launcher.service
-  ```
-
-  You can also check the `start_all_vms.log` in `/opt/idv/launcher` directory for errors using the command:
-
-  ```bash
-  sudo cat /opt/idv/launcher/start_all_vms.log
+  sudo journalctl -t idv-services
   ```  
   Ensure that the `vm.conf` file is correctly configured and all required files (e.g., firmware and qcow2 files) are present and the file paths are valid.
