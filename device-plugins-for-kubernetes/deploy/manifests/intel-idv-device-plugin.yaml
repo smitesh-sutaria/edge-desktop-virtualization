@@ -15,6 +15,7 @@ spec:
       initContainers:
         - name: set-permissions
           image: busybox:latest
+          imagePullPolicy: IfNotPresent
           command:
             - sh
             - -c
