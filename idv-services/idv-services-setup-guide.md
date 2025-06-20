@@ -1,13 +1,27 @@
 # This document contains steps to enable and start idv services on an EMT image.
 
+- If you are using an EMT image with the prebuilt `intel-idv-services` package, you can follow this guide to start the IDV services.
+
 # Table of Contents
 
-1. [Modify VM Configuration](#modify-vm-configuration)
-2. [Reload System Daemon](#reload-system-daemon)
-3. [Enable IDV Services](#enable-idv-services)
-4. [Start `idv-init.service`](#start-idv-init-service)
-5. [Start `idv-launcher.service`](#start-idv-launcher-service)
-6. [Troubleshooting](#troubleshooting)
+1. [Steps to setup idv services on an immutable EMT image](#steps-to-setup-idv-services-on-an-immutable-emt-image)
+2. [Steps to setup idv services on a mutable EMT image](#steps-to-setup-idv-services-on-a-mutable-emt-image)
+    1. [Modify VM Configuration](#modify-vm-configuration)
+    2. [Reload System Daemon](#reload-system-daemon)
+    3. [Enable IDV Services](#enable-idv-services)
+    4. [Start `idv-init.service`](#start-idv-init-service)
+    5. [Start `idv-launcher.service`](#start-idv-launcher-service)
+3. [Troubleshooting](#troubleshooting)
+
+### Steps to setup idv services on an immutable EMT image
+
+- To setup `idv-init` and `idv-launcher` services on an immutable image, the following has to be done via `cloud-init` - 
+  1. Run the [setup_display](init/setup_display.sh) script to add xorg configuration files.
+  2. Modify `launcher/vm.conf` file. Refer [Modify VM Configuration](#modify-vm-configuration) section.
+  2. Enable `idv-init.service` and `idv-launcher.service`. Refer the [Enable IDV Services](#enable-idv-services) section for the commands to be run to enable both the services.
+  3. Start `idv-init.service` and `idv-launcher.service`. Refer the [Start `idv-init.service`](#start-idv-init-service) and [Start `idv-launcher.service`](#start-idv-launcher-service) sections for the commands to be run to start each service.
+
+### Steps to setup idv services on a mutable EMT image
 
 ## Modify VM configuration
 
@@ -63,7 +77,9 @@
     ```
     **Note**: Once the idv-launcher service starts, all the VMs should be launched in respective monitors.
 
-## Troubleshooting
+**Note**: Autologin is enabled for the `guest` user. If the `idv-init` and `idv-launcher` services were enabled in the previous steps, they will automatically start upon autologin of the `guest` user.
+
+### Troubleshooting
 
 - If the `idv-init` service fails to start, check the service logs using the following command:
   
