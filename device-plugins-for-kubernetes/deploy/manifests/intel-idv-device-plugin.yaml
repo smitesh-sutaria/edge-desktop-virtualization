@@ -73,9 +73,9 @@ spec:
             - name: usb-mount
               mountPath: /dev/bus/usb
       containers:
-        - name: mvf-device-plugin
-          image: 'localhost:5000/mf-device-plugin:v1'
-          imagePullPolicy: Always
+        - name: intel-idv-device-plugin
+          image: 'localhost:5000/intel-idv-device-plugin:v1'
+          imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: device-plugin
               mountPath: /var/lib/kubelet/device-plugins

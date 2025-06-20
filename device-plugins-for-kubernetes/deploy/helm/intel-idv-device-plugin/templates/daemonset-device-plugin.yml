@@ -77,10 +77,10 @@ spec:
             - name: usb-mount
               mountPath: /dev/bus/usb
       containers:
-        {{- if .Values.mvfPluginEnabled }}
-        - name: mvf-device-plugin
+        {{- if .Values.intelIdvPluginEnabled }}
+        - name: intel-idv-device-plugin
           image: {{ include "maverikflats-device-plugin.fullimage" . }}
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: device-plugin
               mountPath: /var/lib/kubelet/device-plugins
