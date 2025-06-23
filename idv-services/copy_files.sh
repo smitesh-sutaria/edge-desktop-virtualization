@@ -14,9 +14,6 @@ username=$(getent passwd 1000 | cut -d: -f1)
 
 # create/copy launcher files
 sudo cp -r launcher /usr/bin/idv/
-sudo touch /usr/bin/idv/launcher/start_all_vms.log
-sudo chmod +x /usr/bin/idv/launcher/start_all_vms.log
-sudo chown $username:$username /usr/bin/idv/launcher/start_all_vms.log
 
 # create/copy init files
 sudo cp -r init /usr/bin/idv/

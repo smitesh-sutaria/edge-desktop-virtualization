@@ -143,7 +143,7 @@ sudo ./setup_permissions.sh
 
 ### Post-Reboot Instructions
 
-- If the machine is rebooted, navigate to the `idv/` directory and run the following command to reset permissions:
+- If the machine is rebooted, navigate to the `idv-services/` directory and run the following command to reset permissions:
 
   ```bash
   sudo ./setup_permissions.sh
@@ -173,6 +173,6 @@ sudo ./setup_permissions.sh
   You can also check the journalctl logs for errors using the command:
 
   ```bash
-  sudo cat journalctl -t idv-services
+  sudo journalctl -t idv-services
   ```  
   Ensure that the `vm.conf` file is correctly configured and all required files (e.g., firmware and qcow2 files) are present and the file paths are valid.
