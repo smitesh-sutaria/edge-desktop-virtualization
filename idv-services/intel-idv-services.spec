@@ -38,10 +38,6 @@ install -m 644 idv-launcher.service %{buildroot}%{_userunitdir}/idv-launcher.ser
 mkdir -p %{buildroot}%{_sysconfdir}/systemd/system/getty@tty1.service.d
 install -m 644 autologin.conf %{buildroot}%{_sysconfdir}/systemd/system/getty@tty1.service.d/autologin.conf
 
-# Default presets for user
-mkdir -p %{buildroot}%{_prefix}/lib/systemd/user-preset
-install -m 644 %{SOURCE1} -t %{buildroot}%{_prefix}/lib/systemd/user-preset/
-
 %files
 /usr/bin/idv/*
 /usr/lib/systemd/user/idv-*.service
