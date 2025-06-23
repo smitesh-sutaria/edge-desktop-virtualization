@@ -27,6 +27,19 @@ Also the Device-Plugin has been shared as a [Device-Plugin TAR](https://github.c
     sudo ctr -n k8s.io images import device-plugin.tar
     sudo ctr -n k8s.io images import busybox.tar
     ```
+
+    Alternatively 
+    ```sh
+    sudo k3s ctr i import virt-operator.tar
+    sudo k3s ctr i import virt-api.tar
+    sudo k3s ctr i import virt-controller.tar
+    sudo k3s ctr i import virt-handler.tar
+    sudo k3s ctr i import virt-launcher.tar
+    sudo k3s ctr i import sidecar-shim.tar
+
+    sudo k3s ctr i import device-plugin.tar
+    sudo k3s ctr i import busybox.tar
+    ```
 5.  Verify the images are imported correctly
     ```sh
     sudo crictl images | grep localhost
