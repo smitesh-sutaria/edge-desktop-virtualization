@@ -1,11 +1,11 @@
 # Kubevirt installation using TAR files
-This version of Kubevirt is built on release tag v1.5.0 along with GTK library support for enabling Display Virtualization and Intel Graphics SR-IOV patched QEMU version 8.2.1 that supports local display of edge node. Hence tagged the version as v1.5.0_DV and is shared as a [Kubevirt TAR](link_to_kubevier_tar)
+This version of Kubevirt is built on release tag v1.5.0 along with GTK library support for enabling Display Virtualization and Intel Graphics SR-IOV patched QEMU version 8.2.1 that supports local display of edge node. Hence tagged the version as v1.5.0_DV and is shared as a [Kubevirt TAR](https://github.com/open-edge-platform/edge-desktop-virtualization/releases/download/pre-release-v0.1/intel-idv-kubevirt-v0.1.tar.gz)
 
-Also the Device-Plugin has been shared as a [Device-Plugin TAR](link_to_dp_tar) to support enabling Display Virtualization on local display of edge node
+Also the Device-Plugin has been shared as a [Device-Plugin TAR](https://github.com/open-edge-platform/edge-desktop-virtualization/releases/download/pre-release-v0.1/intel-idv-device-plugin-v0.1.tar.gz) to support enabling Display Virtualization on local display of edge node
 
 ## Steps
 1.  Ensure Kubernetes is installed and local cluster is running.
-2.  Download [Kubevirt TAR](link_to_kubevier_tar) and [Device-Plugin TAR](link_to_dp_tar) to the host system
+2.  Download [Kubevirt TAR](https://github.com/open-edge-platform/edge-desktop-virtualization/releases/download/pre-release-v0.1/intel-idv-kubevirt-v0.1.tar.gz) and [Device-Plugin TAR](https://github.com/open-edge-platform/edge-desktop-virtualization/releases/download/pre-release-v0.1/intel-idv-device-plugin-v0.1.tar.gz) to the host system
 3.  Extract TAR files
     ```sh
     mkdir -p ~/display-virtualization
