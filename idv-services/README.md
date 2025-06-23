@@ -107,7 +107,7 @@ This file contains steps to launch virtual machines using a system service.
 - To, enable auto-login for the `guest` user, place the [autologin.conf](autologin.conf) file in the `/etc/systemd/system/getty@tty1.service.d` directory. Run the following command from the `idv-services/` directory - 
   
   ```bash
-  # Create `getty@tty1.service.d` if it doesn't exists
+  # Create `getty@tty1.service.d` if it doesn't exist
   sudo mkdir /etc/systemd/system/getty@tty1.service.d
   sudo cp autologin.conf /etc/systemd/system/getty@tty1.service.d/
   ```
