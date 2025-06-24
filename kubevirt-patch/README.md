@@ -417,7 +417,7 @@ The original idea to build within the Centos container comes from this [link](ht
     kubevirt.kubevirt.io/kubevirt   19d   Deployed
     ```
 10.  Enable Virt-Handler to discover Graphics VFs
-    Update KubeVirt custom resource configuration to enable virt-handler to discover graphics VFs on the host. All discovered VFs will be published as *allocatable* resource
+     Update KubeVirt custom resource configuration to enable virt-handler to discover graphics VFs on the host. All discovered VFs will be published as *allocatable* resource
 
     **Update Graphics Device ID in `kubevirt-cr-gfx-sriov.yaml` if not found**
       - Read the Device ID of Intel Graphics Card from Host, Ex: for RPL
@@ -459,7 +459,7 @@ The original idea to build within the Centos container comes from this [link](ht
     > The value of **Requests** and **Limits** will increase upon successful resource allocation to running pods/VMs
 
 11.  Install CDI
-    ```sh
-    kubectl apply -f https://github.com/kubevirt/containerized-data-importer/releases/download/v1.60.3/cdi-operator.yaml
-    kubectl apply -f https://github.com/kubevirt/containerized-data-importer/releases/download/v1.60.3/cdi-cr.yaml
-    ```
+     ```sh
+     kubectl apply -f https://github.com/kubevirt/containerized-data-importer/releases/download/v1.60.3/cdi-operator.yaml
+     kubectl apply -f https://github.com/kubevirt/containerized-data-importer/releases/download/v1.60.3/cdi-cr.yaml
+     ```
