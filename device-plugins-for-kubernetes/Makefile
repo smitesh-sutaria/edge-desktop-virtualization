@@ -41,7 +41,7 @@ docker-push:
 	docker push $(DOCKER_IMAGE)
 
 deploy:
-	helm install $(HELM_CHART_NAME) deploy/helm/maverikflats-device-plugin
+	helm install $(HELM_CHART_NAME) deploy/helm/intel-idv-device-plugin
 
 undeploy:
 	helm uninstall $(HELM_CHART_NAME)

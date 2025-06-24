@@ -1,25 +1,25 @@
 {{- if .Values.devicePlugin.enabled }}
 ---
-{{- $daemonsetName := printf "%s" (include "maverikflats-device-plugin.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- $daemonsetName := printf "%s" (include "intel-idv-device-plugin.fullname" .) | trunc 63 | trimSuffix "-" }}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ $daemonsetName }}
   namespace: kube-system
   labels:
-    {{- include "maverikflats-device-plugin.labels" . | nindent 4 }}
+    {{- include "intel-idv-device-plugin.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      {{- include "maverikflats-device-plugin.selectorLabels" . | nindent 6 }}
+      {{- include "intel-idv-device-plugin.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "maverikflats-device-plugin.templateLabels" . | nindent 8 }}
+        {{- include "intel-idv-device-plugin.templateLabels" . | nindent 8 }}
     spec:
       initContainers:
         - name: set-permissions
-          image: busybox:latest
+          image: busybox:glibc
           imagePullPolicy: IfNotPresent
           command:
             - sh
@@ -80,7 +80,7 @@ spec:
       containers:
         {{- if .Values.intelIdvPluginEnabled }}
         - name: intel-idv-device-plugin
-          image: {{ include "maverikflats-device-plugin.fullimage" . }}
+          image: {{ include "intel-idv-device-plugin.fullimage" . }}
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: device-plugin
