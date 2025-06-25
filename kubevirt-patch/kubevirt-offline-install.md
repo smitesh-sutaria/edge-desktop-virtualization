@@ -14,6 +14,7 @@ Also the Device-Plugin has been shared as a [Device-Plugin TAR](https://github.c
     tar -xzvf dv-device-plugin.tar.gz ~/display-virtualization
 
     cd ~/display-virtualization
+    zstd -d *.zst
     ```
 4.  Import the images into the container runtime
     ```sh
@@ -50,14 +51,15 @@ Also the Device-Plugin has been shared as a [Device-Plugin TAR](https://github.c
     localhost:5000/virt-handler                           v1.5.0_DV           a9bd1a37e2e0c       90.7MB
     localhost:5000/virt-launcher                          v1.5.0_DV           c69ddc6b90387       403MB
     localhost:5000/virt-operator                          v1.5.0_DV           99462ddb3a866       39.8MB
-    localhost:5000/mf-device-plugin                       v1                  156ba1fcaf549       21.3MB
+    localhost:5000/device-plugin                          v1                  156ba1fcaf549       21.3MB
     localhost:5000/busybox                                latest              ff7a7936e9306       2.21MB
     ```
 6.  Deploy Kubevirt and Device Plugin
     ```sh
     kubectl apply -f kubevirt-operator.yaml
     kubectl apply -f kubevirt-cr.yaml
-    kubectl apply -f device-plugin.yaml
+    kubectl apply -f kubevirt-cr-gfx-sriov.yaml
+    kubectl apply -f intel-idv-device-plugin.yaml
     ```
 7.  Verify Deployment
     ```sh

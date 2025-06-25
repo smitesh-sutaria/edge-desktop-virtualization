@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # Default values
-DEFAULT_VER="v1"
+DEFAULT_VER="v1.1"
 DEFAULT_DOCKER_REPO="127.0.0.1:5000"
 DEFAULT_PUSH="false"
 VER="$DEFAULT_VER"

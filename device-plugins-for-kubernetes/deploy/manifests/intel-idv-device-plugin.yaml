@@ -75,7 +75,7 @@ spec:
               mountPath: /dev/bus/usb
       containers:
         - name: intel-idv-device-plugin
-          image: 'localhost:5000/intel-idv-device-plugin:v1'
+          image: 'localhost:5000/intel-idv-device-plugin:v1.1'
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: device-plugin
