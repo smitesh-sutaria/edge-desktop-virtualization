@@ -19,11 +19,11 @@ VFSCHED_TIMEOUT=500000
 
 function setup_sriov_vf() {
   # Setup iGPU SRIOV VF
-  printAndLogDatedInfoMsg "Starting SR-IOV VF setup"
+  echo "Starting SR-IOV VF setup"
   local sriov_vfs
   # get the number of VFs
   sriov_vfs=$(cat /sys/class/drm/card0/device/sriov_numvfs)
-  printAndLogDatedInfoMsg "Number of VFs: $sriov_vfs"
+  echo "Number of VFs: $sriov_vfs"
   if [[ "$sriov_vfs" -eq 0 ]]; then
       # VFs are not yet configured
       echo "VFs are not yet configured"
