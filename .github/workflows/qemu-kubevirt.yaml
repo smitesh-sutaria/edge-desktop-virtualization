@@ -63,6 +63,7 @@ jobs:
           wget -N --no-check-certificate https://download.qemu.org/qemu-8.2.1.tar.xz
           tar -xf qemu-8.2.1.tar.xz
           cd qemu-8.2.1
+          git init
 
           cp  -r ../qemu_8.2.1+ppa1-noble9.debian/debian/patches/sriov/ .
 
@@ -78,7 +79,7 @@ jobs:
           set -e
           cd /src
           rm -rf build
-          ./configure --prefix=/usr --enable-kvm --disable-xen --enable-libusb --enable-debug-info --enable-debug  --enable-sdl --enable-vhost-net --enable-spice --disable-debug-tcg  --enable-opengl  --enable-gtk  --enable-virtfs --target-list=x86_64-softmmu --audio-drv-list=pa --firmwarepath=/usr/share/qemu-firmware:/usr/share/ipxe/qemu:/usr/share/seavgabios:/usr/share/seabios:/usr/share/qemu-kvm/ --disable-spice
+          ./configure --prefix=/usr --enable-kvm --disable-xen --enable-libusb --enable-debug-info --enable-debug  --enable-sdl --enable-vhost-net --enable-spice --disable-debug-tcg  --enable-opengl  --enable-gtk  --enable-virtfs --target-list=x86_64-softmmu --audio-drv-list=pa --firmwarepath=/usr/share/qemu-firmware:/usr/share/ipxe/qemu:/usr/share/seavgabios:/usr/share/seabios:/usr/share/qemu-kvm/ --disable-spice --disable-docs
           mkdir -p build
           cd build
           ninja
