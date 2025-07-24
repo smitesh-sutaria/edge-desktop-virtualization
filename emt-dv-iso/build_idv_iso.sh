@@ -20,7 +20,7 @@ sudo usermod -aG docker $USER
 
 # build the toolkit
 cd toolkit
-wget 
+wget https://raw.githubusercontent.com/open-edge-platform/edge-desktop-virtualization/refs/heads/emt-dv-iso/emt-dv-iso/idv.json
 cp idv.json ./imageconfigs
 
 sudo make toolchain REBUILD_TOOLS=y VALIDATE_TOOLCHAIN_GPG=n
