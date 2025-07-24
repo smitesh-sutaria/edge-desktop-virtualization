@@ -20,6 +20,7 @@ sudo ./build_idv_iso.sh
 
 ### Refer the demo below
 
+https://github.com/user-attachments/assets/8e3f609b-9632-4ea6-807d-1560856a20db
 
 ## Manual Steps
 
