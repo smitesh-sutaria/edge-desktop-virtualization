@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
 GIT_REPO=https://github.com/open-edge-platform/edge-microvisor-toolkit.git
 DEFAULT_TAG=3.0.20250718
 IDV_JSON=
