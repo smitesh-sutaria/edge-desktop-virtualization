@@ -27,7 +27,7 @@ cp idv.json edge-microvisor-toolkit/toolkit/imageconfigs/
 cd edge-microvisor-toolkit/toolkit
 sudo make toolchain REBUILD_TOOLS=y
 ```
-### Step 5: Build the ISO for UCC IDV
+### Step 5: Build the ISO for desktop virtualization (IDV) 
 ```sh
 sudo make iso -j8 REBUILD_TOOLS=y REBUILD_PACKAGES=n CONFIG_FILE=./imageconfigs/idv.json
 ```
