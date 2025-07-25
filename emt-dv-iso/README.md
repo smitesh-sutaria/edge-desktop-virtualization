@@ -3,7 +3,8 @@
 
 - [Building EMT ISO with Desktop Virtualization (graphics SR-IOV)](#building-emt-iso-with-desktop-virtualization-graphics-sr-iov)
   - [Using Standalone Build Script (Automated)](#using-standalone-build-script-automated)
-    - [Run the script as sudo](#run-the-script-as-sudo)
+    - [Run the script with default parameters](#run-the-script-with-default-parameters)
+    - [Run the scripts with custom parameters](#run-the-scripts-with-custom-parameters)
     - [ISO file will be generated in the same path](#iso-file-will-be-generated-in-the-same-path)
     - [Refer the demo below](#refer-the-demo-below)
   - [Manual Steps](#manual-steps)
@@ -21,10 +22,25 @@
 
 > Prerequisite : Ubuntu 22.04 or Ubuntu 24.04
 
-### Run the script as sudo
+### Run the script with default parameters
 ```sh
 sudo ./build_idv_iso.sh
 ```
+Command line arguments are optional. Below default values will be used :
+- Latest emt release tag
+- idv.json from this repo
+
+### Run the scripts with custom parameters
+
+Build script supports 2 custom parameters (optional):
+1. [-t tag-name] : This is the git release tag-name against which build should run.
+2. [-f image-config-json-file] : This is the emt image config .json file. One can generate the custom images using this config file.
+
+For ex:
+```sh
+sudo ./build_idv_iso.sh -t 3.0.20250718 -f ./idv.json
+```
+
 ### ISO file will be generated in the same path
 
 <p align="left">
