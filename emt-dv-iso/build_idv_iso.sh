@@ -36,9 +36,15 @@ TAG=$DEFAULT_TAG
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 function launch_build() {
-    echo -e "${BLUE}Current working directory is: ${GREEN}$DIR ${ENDCOLOR}"
-    echo -e "${BLUE}Number of CPUs on this system : ${GREEN}$(nproc)${ENDCOLOR}"
-    echo -e ${BLUE}"Available ISO Files : " ${GREEN} $DIR/*.iso ${ENDCOLOR}
+    echo -e "${RED}------------------------- Build Details -----------------------------------${ENDCOLOR}"
+    echo -e "${BLUE}Current working directory : ${GREEN}$DIR ${ENDCOLOR}"
+    echo -e "${BLUE}No. of CPUs on the system : ${GREEN}$(nproc)${ENDCOLOR}"
+    #echo -e ${BLUE}"Available ISO Files : " ${GREEN} $DIR/*.iso ${ENDCOLOR}
+    echo -e "${BLUE}git repo to be used       : ${GREEN}$GIT_REPO ${ENDCOLOR}"
+    echo -e "${BLUE}tag (a release tag)       : ${GREEN}$TAG ${ENDCOLOR}"
+    echo -e "${BLUE}image config Json Path    : ${GREEN}$IDV_JSON_PATH ${ENDCOLOR}"
+    echo -e "${BLUE}Json git fetch path (if above Json Path is NULL) : ${GREEN}$DEFAULT_IDV_JSON_GIT_FETCH ${ENDCOLOR}"
+    echo -e "${RED}--------------------------------------------------------------------------${ENDCOLOR}"
 
     # clone the emt repo
     echo -e "${BLUE}Cloning the EMT repo @${GREEN}${GIT_REPO}${ENDCOLOR}"
