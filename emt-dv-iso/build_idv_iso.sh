@@ -25,8 +25,8 @@ IDV_JSON_PATH=""
 # Register the current directory
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# optional argument 1. To build against a specific tag.
-TAG=${1:-$DEFAULT_TAG}
+# If no TAG is provided by user, lets use the default tag
+TAG=$DEFAULT_TAG
 
 function launch_build() {
     echo -e "${BLUE}Current working directory is: ${GREEN}$DIR ${ENDCOLOR}"
@@ -82,10 +82,41 @@ function cleanup() {
     echo -e ${BLUE}"Total Build runtime: ${GREEN}$runtime seconds"${ENDCOLOR}
 }
 
+while getopts ':t:f:h' opt; do
+  case "$opt" in
+    t)
+      tag_arg="$OPTARG"
+      TAG=$tag_arg
+      echo "Processing option 't' with '${TAG}' argument"
+      ;;
+
+    f)
+      file_arg="$OPTARG"
+      IDV_JSON_PATH=$(realpath "$file_arg")
+      echo "Processing option 'f' with '${IDV_JSON_PATH}' argument"
+      ;;
+
+    h)
+      echo "Usage: $(basename $0) [-t tag-name] [-f image-config-json-file]"
+      exit 0
+      ;;
+
+    :)
+      echo -e "option requires an argument.\nUsage: $(basename $0) [-t tag-name] [-f image-config-json-file]"
+      exit 1
+      ;;
+
+    ?)
+      echo -e "Invalid command option.\nUsage: $(basename $0) [-t tag-name] [-f image-config-json-file]"
+      exit 1
+      ;;
+  esac
+done
+shift "$(($OPTIND -1))"
+
 trap cleanup EXIT
 trap cleanup ERR
 
 #---------------------- main ------------------------
 
 launch_build
-#cleanup
