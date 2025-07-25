@@ -3,6 +3,8 @@
 # Copyright (C) 2025 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
+set -eE
+
 GIT_REPO=https://github.com/open-edge-platform/edge-microvisor-toolkit.git
 DEFAULT_TAG=3.0.20250718
 IDV_JSON_PATH=""
@@ -31,7 +33,7 @@ function launch_build() {
         cp idv.json ./imageconfigs
     else
         cp $IDV_JSON_PATH ./imageconfigs/idv.json
-
+    fi
     sudo make toolchain REBUILD_TOOLS=y VALIDATE_TOOLCHAIN_GPG=n
 
     # build the iso image
@@ -43,6 +45,9 @@ function launch_build() {
     # cleanup
     cd ../../
     sudo rm -rf edge-microvisor-toolkit
+
 }
+
+#---------------------- main ------------------------#
 
 launch_build
