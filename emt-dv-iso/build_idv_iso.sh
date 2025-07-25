@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 set -eE
-
+start_time=$(date +%s)
 # Define color variables for readability
 RED='\e[31m'
 GREEN='\e[32m'
@@ -29,7 +29,9 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TAG=${1:-$DEFAULT_TAG}
 
 function launch_build() {
-    echo -e ${BLUE}"Current working directory is: " ${GREEN}$DIR ${ENDCOLOR}
+    echo -e "${BLUE}Current working directory is: ${GREEN}$DIR ${ENDCOLOR}"
+    echo -e "${BLUE}Number of CPUs on this system : ${GREEN}$(nproc)${ENDCOLOR}"
+
     # clone the emt repo
     echo -e "${BLUE}Cloning the EMT repo @${GREEN}${GIT_REPO}${ENDCOLOR}"
     git clone $GIT_REPO
@@ -58,19 +60,26 @@ function launch_build() {
         echo -e "${BLUE}JSON input provided is : ${GREEN}.${ENDCOLOR}"
         cp $IDV_JSON_PATH ./imageconfigs/idv.json
     fi
-    sudo make toolchain REBUILD_TOOLS=y VALIDATE_TOOLCHAIN_GPG=n
+    sudo make -j$(nproc) toolchain REBUILD_TOOLS=y VALIDATE_TOOLCHAIN_GPG=n
 
     # build the iso image
-    sudo make iso -j8 REBUILD_TOOLS=y REBUILD_PACKAGES=n VALIDATE_TOOLCHAIN_GPG=n CONFIG_FILE=./imageconfigs/idv.json
+    sudo make iso -j$(nproc) REBUILD_TOOLS=y REBUILD_PACKAGES=n VALIDATE_TOOLCHAIN_GPG=n CONFIG_FILE=./imageconfigs/idv.json
 
     # copy the generated iso to same parent folder
     cp ../out/images/idv/*.iso ../../.
+
+    echo -e ${GREEN}"Build Successful!"
+    echo -e "${BLUE}Generated ISO available at : ${GREEN}$DIR${ENDCOLOR}"
+    echo -e ${BLUE}"Available ISO Files : " ${GREEN} $DIR/*.iso ${ENDCOLOR}
 }
 
 function cleanup() {
     echo -e "${GREEN}Performing cleanup ${ENDCOLOR}"
     cd $DIR
     sudo rm -rf edge-microvisor-toolkit
+    end_time=$(date +%s)
+    runtime=$((end_time - start_time))
+    echo -e ${BLUE}"Total Build runtime: ${GREEN}$runtime seconds"${ENDCOLOR}
 }
 
 trap cleanup EXIT
@@ -79,4 +88,4 @@ trap cleanup ERR
 #---------------------- main ------------------------
 
 launch_build
-cleanup
+#cleanup
