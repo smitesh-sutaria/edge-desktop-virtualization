@@ -18,11 +18,11 @@
                 "packagelists/intel-wireless.json"
             ],
             "Packages": [
-		"lsb-release",
-		"nbd",
-		"ntfs-3g",
-		"ntfs-3g-system-compression",
-		"ntfs-3g-libs",
+                "lsb-release",
+                "nbd",
+                "ntfs-3g",
+                "ntfs-3g-system-compression",
+                "ntfs-3g-libs",
                 "igt-gpu-tools"
 	        ],
             "KernelCommandLine": {
