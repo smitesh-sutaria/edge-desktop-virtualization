@@ -1,5 +1,8 @@
-# This is a workflow that is triggered to build EMT desktop virtualization (IDV) ISO
+---
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
 
+# This is a workflow that is triggered to build EMT desktop virtualization (IDV) ISO
 name: EMT IDV ISO Builder
 permissions:
   contents: read

@@ -62,7 +62,9 @@ The image configuration is part of this repo [here](./idv.json)
 
 [Build Requirements](https://github.com/open-edge-platform/edge-microvisor-toolkit/blob/3.0/toolkit/docs/building/prerequisites-ubuntu.md#build-requirements-on-ubuntu)
 
+> The steps and build requirements are common across ubuntu-24.04 and ubuntu-22.04
 > It is recommended to built against a stable/release tag.
+
 
 ### Step 1: clone the EMT repo
 ```sh
@@ -70,21 +72,26 @@ git clone https://github.com/open-edge-platform/edge-microvisor-toolkit
 ```
 ### Step 2: Checkout the tag
 ```sh
+cd edge-microvisor-toolkit
 git checkout tags/<tag_name>
 ```
 ### Step 3: Copy the idv.json to edge-microvisor-toolkit/toolkit/imageconfigs/
 ```sh
-cp idv.json edge-microvisor-toolkit/toolkit/imageconfigs/
+wget https://github.com/open-edge-platform/edge-desktop-virtualization/blob/main/emt-dv-iso/idv.json
+cp idv.json toolkit/imageconfigs/
 ```
+> One can copy any custom idv.json file as per the requirement.
+
 ### Step 4: Build the tools
 ```sh
-cd edge-microvisor-toolkit/toolkit
+cd toolkit
 sudo make toolchain REBUILD_TOOLS=y
 ```
 ### Step 5: Build the ISO for desktop virtualization (IDV) 
 ```sh
 sudo make iso -j8 REBUILD_TOOLS=y REBUILD_PACKAGES=n CONFIG_FILE=./imageconfigs/idv.json
 ```
+> ISO file will be generated @ 'edge-microvisor-toolkit/out/images'
 
 ### Troubleshoot
 
