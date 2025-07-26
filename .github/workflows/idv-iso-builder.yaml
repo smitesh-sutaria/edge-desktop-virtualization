@@ -51,7 +51,7 @@ jobs:
         #cd toolkit
         #wget https://raw.githubusercontent.com/smitesh-sutaria/edge-microvisor-toolkit/refs/heads/3.0/toolkit/imageconfigs/idv.json
         #wget https://raw.githubusercontent.com/smitesh-sutaria/edge-microvisor-toolkit/refs/heads/3.0/toolkit/imageconfigs/idv-m.json
-        mv idv.json ./imageconfigs/
+        #mv idv.json ./imageconfigs/
         # mv ./imageconfigs/idv.json ./imageconfigs/full.json
         # mv ./imageconfigs/full.json ./imageconfigs/idv.json
         #sudo make toolchain REBUILD_TOOLS=y VALIDATE_TOOLCHAIN_GPG=n
