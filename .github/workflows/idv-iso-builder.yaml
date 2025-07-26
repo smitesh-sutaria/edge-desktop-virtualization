@@ -1,7 +1,8 @@
 # This is a workflow that is triggered to build EMT desktop virtualization (IDV) ISO
 
 name: EMT IDV ISO Builder
-
+permissions:
+  contents: read
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
 on:
