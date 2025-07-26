@@ -27,14 +27,14 @@
 sudo ./build_idv_iso.sh
 ```
 Command line arguments are optional. Below default values will be used :
-- Latest emt release tag
-- idv.json from this repo
+- Latest emt release tag : [3.0.20250718](https://github.com/open-edge-platform/edge-microvisor-toolkit/releases/tag/3.0.20250718)
+- [idv.json](https://github.com/open-edge-platform/edge-desktop-virtualization/blob/main/emt-dv-iso/idv.json)
 
 ### Run the scripts with custom parameters
 
 Build script supports 2 custom parameters (optional):
-1. [-t tag-name] : This is the git release tag-name against which build should run.
-2. [-f image-config-json-file] : This is the emt image config .json file. One can generate the custom images using this config file.
+1. [-t *tag-name*] : This is the git release tag-name against which build should run.
+2. [-f *image-config-json-file*] : This is the emt image config .json file. One can generate the custom images using this config file.
 
 For ex:
 ```sh
