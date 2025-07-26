@@ -2,7 +2,7 @@
 # Building EMT ISO with Desktop Virtualization (graphics SR-IOV)
 
 - [Building EMT ISO with Desktop Virtualization (graphics SR-IOV)](#building-emt-iso-with-desktop-virtualization-graphics-sr-iov)
-  - [Using Standalone Build Script (Automated)](#using-standalone-build-script-automated)
+  - [Using Standalone (One-click) Build Script](#using-standalone-one-click-build-script)
     - [Run the script with default parameters](#run-the-script-with-default-parameters)
     - [Run the scripts with custom parameters](#run-the-scripts-with-custom-parameters)
     - [ISO file will be generated in the same path](#iso-file-will-be-generated-in-the-same-path)
@@ -18,7 +18,7 @@
       - [Clean build](#clean-build)
       - [Working with Proxies](#working-with-proxies)
 
-## Using Standalone Build Script (Automated)
+## Using Standalone (One-click) Build Script
 
 > Prerequisite : Ubuntu 22.04 or Ubuntu 24.04
 
