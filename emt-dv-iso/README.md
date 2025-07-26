@@ -75,6 +75,8 @@ git clone https://github.com/open-edge-platform/edge-microvisor-toolkit
 cd edge-microvisor-toolkit
 git checkout tags/<tag_name>
 ```
+> The release tags can be found [here](https://github.com/open-edge-platform/edge-microvisor-toolkit/releases)
+
 ### Step 3: Copy the idv.json to edge-microvisor-toolkit/toolkit/imageconfigs/
 ```sh
 wget https://github.com/open-edge-platform/edge-desktop-virtualization/blob/main/emt-dv-iso/idv.json
